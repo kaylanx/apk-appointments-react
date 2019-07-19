@@ -146,14 +146,16 @@ class ListTable extends WP_List_Table
         /*
          * array(3) { ["d"]=> string(10) "2015-04-22" ["t"]=> string(2) "16" ["c"]=> string(2) "NO" }
          */
-        var_dump($item);
+        //  var_dump($item);
 //        return sprintf(
 //            '<input type="checkbox" name="appointment[]" value="%1$s|%2$s|%3$s" />',
 //            $item['d'],$item['t'],$item['c']);
         return sprintf(
-            '<input type="checkbox" name="%1$s[]" value="%2$s" />',
+            '<input type="checkbox" name="%1$s[%2$s,%3$s,%4$s]" value="" />',
             /*$1%s*/ $this->_args['singular'],  //Let's simply repurpose the table's singular label ("video")
-            /*$2%s*/ $item->id             //The value of the checkbox should be the record's id
+            /*$2%s*/ $item['d'],
+            /*$3%s*/ $item['t'],
+            /*$4%s*/ $item['c']
         );
 
         /*
