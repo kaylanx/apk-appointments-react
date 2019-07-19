@@ -20,10 +20,12 @@ const getDisabledDates = (appointmentsJson) => {
 const getBookedHoursForDate = (date, appointmentsJson) => {
     let bookedTimes = [];
     appointmentsJson.forEach(function (appointment) {
-        const appointmentDate = convertStringToDate(appointment['date'])
-        if (appointment.hasOwnProperty('time')) {
-            if (date.getTime() === appointmentDate.getTime()) {
-                bookedTimes.push(appointment['time']);
+        const appointmentDate = convertStringToDate(appointment['date']);
+        if (date.getTime() === appointmentDate.getTime()) {
+            if (appointment.hasOwnProperty('times')) {
+                appointment['times'].forEach(function (time) {
+                    bookedTimes.push(time);
+                });
             }
         }
     });

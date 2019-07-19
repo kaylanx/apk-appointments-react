@@ -6,11 +6,12 @@
  * Time: 14:57
  * To change this template use File | Settings | File Templates.
  */
+namespace APK\Appointments;
 
 /**
  * Admin Options
  */
-class APK_Appointments_Options_Page
+class OptionsPage
 {
 
     /**
@@ -47,12 +48,7 @@ class APK_Appointments_Options_Page
     {
 
         // Set class property
-        $this->options = get_option('apk_appointments_options');
-
-        if ($this->options === false) {
-            $appointments = array();
-            add_option('apk_appointments_options', $appointments, null, 'no');
-        }
+        $this->options = get_option(APK_APPOINTMENTS_OPTION);
 
 //        var_dump($_GET);
 //        var_dump($_REQUEST);
@@ -69,7 +65,7 @@ class APK_Appointments_Options_Page
         &appointment[]=2015-04-22|16|NO&
         appointment[]=2015-04-23||YES
         &action2=-1&option_page=apk_appointments_option_group&action=update&_wpnonce=30951f69fe&_wp_http_referer=/wp-admin/options-general.php?page=class-apk-options-page.php&action=delete&date&time=-&settings-updated=true&
-        apk_appointments_options[appointment_date]=&apk_appointments_options[appointment_time]=-
+        APK_APPOINTMENTS_OPTION[appointment_date]=&APK_APPOINTMENTS_OPTION[appointment_time]=-
          */
 
         if (isset($_GET['action']) && $_GET['action'] == 'delete') {
@@ -99,8 +95,8 @@ class APK_Appointments_Options_Page
 
             $appointments = array_filter($appointments);
 
-            update_option('apk_appointments_options', $appointments);
-            $this->options = get_option('apk_appointments_options');
+            update_option(APK_APPOINTMENTS_OPTION, $appointments);
+            $this->options = get_option(APK_APPOINTMENTS_OPTION);
         }
 
 
@@ -108,7 +104,7 @@ class APK_Appointments_Options_Page
         <div class="wrap">
             <h2>Appointments</h2>
             <?php
-            $appointmentListTable = new APK_Appointment_List_Table();
+            $appointmentListTable = new ListTable();
             $appointmentListTable->prepare_items();
             ?>
             <div id="icon-users" class="icon32"></div>
@@ -136,7 +132,7 @@ class APK_Appointments_Options_Page
     {
         register_setting(
             'apk_appointments_option_group', // Option group
-            'apk_appointments_options', // Option name
+            APK_APPOINTMENTS_OPTION, // Option name
             array($this, 'sanitize') // Sanitize
         );
 
@@ -208,7 +204,6 @@ class APK_Appointments_Options_Page
      */
     public function sanitize($input)
     {
-
         if (isset($_GET['action']) && $_GET['action'] == 'delete') {
             $new_input = $input;
         } else {
@@ -216,11 +211,11 @@ class APK_Appointments_Options_Page
 
             if (isset($input['appointment_date']) && isset($input['appointment_time'])) {
 
-                $appointments = get_option('apk_appointments_options');
+                $appointments = get_option(APK_APPOINTMENTS_OPTION);
 
                 $appointment_date = sanitize_text_field($input['appointment_date']);
-                $appointment_time = sanitize_text_field($input['appointment_time']);
-                $shop_closed = sanitize_text_field($input['shop_closed']);
+                $appointment_time = (int)sanitize_text_field($input['appointment_time']);
+                $shop_closed = sanitize_text_field($input['shop_closed']) == 'on' ? true : false;
 
 
                 foreach ($appointments as $index => $appointment) {

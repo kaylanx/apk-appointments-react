@@ -6,25 +6,36 @@ Description: APK Appointments plug-in.
 Version: 1.0.0
 Author: Andy Kayley
 Author URI: http://kayley.name
-*/
-defined( 'ABSPATH' ) or die( 'Plugin file cannot be accessed directly.' );
+ */
+defined('ABSPATH') or die('Plugin file cannot be accessed directly.');
 
+define( 'APK_APPOINTMENT_PLUGIN_FILE', __FILE__ );
+define( 'APK_APPOINTMENTS_OPTION', 'apk_appointments_options' );
 
-// WP_List_Table is not loaded automatically so we need to load it in our application
-if( ! class_exists( 'APK_List_Table' ) ) {
-    //require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
-    require_once( ABSPATH . 'wp-content/plugins/apk-appointments/includes/class-wp-list-table.php' );
+function apk_appointments_activation_hook() {
+    $option = get_option(APK_APPOINTMENTS_OPTION);
+    if ($option === false) {
+        add_option(APK_APPOINTMENTS_OPTION, array(), null, 'no');
+    }
 }
+register_activation_hook(APK_APPOINTMENT_PLUGIN_FILE, 'apk_appointments_activation_hook');
 
-require_once(ABSPATH . 'wp-content/plugins/apk-appointments/includes/class-apk-appointment-list-table.php');
-require_once(ABSPATH . 'wp-content/plugins/apk-appointments/includes/class-apk-appointments-options-page.php');
-require_once(ABSPATH . 'wp-content/plugins/apk-appointments/includes/class-apk-appointments-shortcode.php');
-
-
-if( is_admin() ) {
-    new APK_Appointments_Options_Page;
+function apk_appointments_deactivation_hook() {
 }
-new APK_Appointments_Shortcode;
+register_deactivation_hook(APK_APPOINTMENT_PLUGIN_FILE, 'apk_appointments_deactivation_hook');
 
+function apk_appointments_uninstall_hook() {
+    delete_option(APK_APPOINTMENTS_OPTION);
+}
+register_uninstall_hook(APK_APPOINTMENT_PLUGIN_FILE, 'apk_appointments_uninstall_hook');
 
+require_once __DIR__ . '/includes/class-apk-appointment-list-table.php';
+require_once __DIR__ . '/includes/class-apk-appointments-options-page.php';
 
+use APK\Appointments\OptionsPage;
+
+if (is_admin()) {
+    new APK\Appointments\OptionsPage;
+} else {
+    include(__DIR__ . '/includes/class-apk-appointments-shortcode.php');
+}

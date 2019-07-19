@@ -5,13 +5,19 @@
  * Date: 19/4/15
  * Time: 14:55
  */
+namespace APK\Appointments;
 
+if ( ! class_exists( 'WP_List_Table' ) ) {
+	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+}
+
+use WP_List_Table;
 
 /**
  * Create a new table class that will extend the WP_List_Table
  * @property mixed _column_headers
  */
-class APK_Appointment_List_Table extends APK_WP_List_Table
+class ListTable extends WP_List_Table
 {
 
     function __construct(){
@@ -140,11 +146,10 @@ class APK_Appointment_List_Table extends APK_WP_List_Table
         /*
          * array(3) { ["d"]=> string(10) "2015-04-22" ["t"]=> string(2) "16" ["c"]=> string(2) "NO" }
          */
-//        var_dump($item);
+        var_dump($item);
 //        return sprintf(
 //            '<input type="checkbox" name="appointment[]" value="%1$s|%2$s|%3$s" />',
 //            $item['d'],$item['t'],$item['c']);
-
         return sprintf(
             '<input type="checkbox" name="%1$s[]" value="%2$s" />',
             /*$1%s*/ $this->_args['singular'],  //Let's simply repurpose the table's singular label ("video")
