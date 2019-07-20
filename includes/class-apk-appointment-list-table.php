@@ -46,7 +46,8 @@ class ListTable extends WP_List_Table {
         $hidden = $this->get_hidden_columns();
         $sortable = $this->get_sortable_columns();
 
-        $data = $this->table_data();
+        $appointments = get_option('apk_appointments_options');
+        $data = $this->table_data($appointments);
         usort($data, array(&$this, 'sort_data'));
 
         $this->_column_headers = array($columns, $hidden, $sortable);
@@ -156,9 +157,7 @@ class ListTable extends WP_List_Table {
      *
      * @return Array
      */
-    private function table_data() {
-        $appointments = get_option('apk_appointments_options');
-
+    private function table_data($appointments) {
         $data_model = array();
 
         foreach ($appointments as $appointment) {
@@ -228,7 +227,6 @@ class ListTable extends WP_List_Table {
     }
 
     private function time_description($time_value) {
-        // 9AM => 8PM
         $times = array(
             "9" => "9 AM",
             "10" => "10 AM",

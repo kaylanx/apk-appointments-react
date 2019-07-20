@@ -83,6 +83,21 @@ class ListTableTest extends WP_UnitTestCase
         $this->assertAppointmentTimesKeyGivesCorrectDisplayValue('20', '8 PM');
     }
 
+    public function test_table_data() {
+        $listTable = new ListTable();
+        $appointments = array();
+        $appointments[] = $this->get_appointment_option_not_closed();
+        $appointments[] = $this->get_appointment_option_closed();
+        
+        $reflector = new ReflectionObject($listTable);
+        $method = $reflector->getMethod('table_data');
+        $method->setAccessible(true);
+        $dataModel = $method->invoke($listTable, $appointments);
+
+        var_dump($dataModel);
+        $this->assertEquals(['TODO'],$dataModel);
+    }
+
     private function assertAppointmentTimesKeyGivesCorrectDisplayValue($key, $display_value) {
         $listTable = new ListTable();
         $appointment = $this->get_appointment_not_closed();
@@ -101,6 +116,21 @@ class ListTableTest extends WP_UnitTestCase
     private function get_appointment_closed() {
         $wpOptionAppointment[ListTable::COLUMN_DATE] = '2015-04-22';
         $wpOptionAppointment[ListTable::COLUMN_CLOSED] = 'YES';
+        return $wpOptionAppointment;
+    }
+
+
+    private function get_appointment_option_not_closed() {
+        $wpOptionAppointment['date'] = '2015-04-22';
+        $wpOptionAppointment['times'] = [16];
+        $wpOptionAppointment['closed'] = false;
+        return $wpOptionAppointment;
+    }
+
+    private function get_appointment_option_closed() {
+        $wpOptionAppointment['date'] = '2015-04-22';
+        $wpOptionAppointment['times'] = [];
+        $wpOptionAppointment['closed'] = true;
         return $wpOptionAppointment;
     }
 }
