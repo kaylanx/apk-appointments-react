@@ -17,27 +17,31 @@ use WP_List_Table;
  * Create a new table class that will extend the WP_List_Table
  * @property mixed _column_headers
  */
-class ListTable extends WP_List_Table
-{
+class ListTable extends WP_List_Table {
+    const APPOINTMENT_SINGULAR = 'appointment';
+    const APPOINTMENT_PLURAL = 'appointments';
 
-    function __construct(){
+    const COLUMN_CHECKBOX = 'cb';
+    const COLUMN_DATE = 'd';
+    const COLUMN_TIME = 't';
+    const COLUMN_CLOSED = 'c';
+
+    function __construct() {
         //Set parent defaults
         parent::__construct( array(
-            'singular'  => 'appointment',     //singular name of the listed records
-            'plural'    => 'appointments',    //plural name of the listed records
+            'singular'  => self::APPOINTMENT_SINGULAR,     //singular name of the listed records
+            'plural'    => self::APPOINTMENT_PLURAL,    //plural name of the listed records
             'ajax'      => false              //does this table support ajax?
         ) );
 
     }
-
 
     /**
      * Prepare the items for the table to process
      *
      * @return Void
      */
-    public function prepare_items()
-    {
+    public function prepare_items() {
         $columns = $this->get_columns();
         $hidden = $this->get_hidden_columns();
         $sortable = $this->get_sortable_columns();
@@ -49,7 +53,6 @@ class ListTable extends WP_List_Table
         $this->items = $data;
 
         $this->process_bulk_action();
-
     }
 
     /**
@@ -57,22 +60,15 @@ class ListTable extends WP_List_Table
      *
      * @return Array
      */
-    public function get_columns()
-    {
+    public function get_columns() {
         $columns = array(
-            'cb' => '<input type="checkbox" />',
-            'd' => 'Date',
-            't' => 'Time',
-            'c' => 'Closed?'
+            self::COLUMN_CHECKBOX => '<input type="checkbox" />',
+            self::COLUMN_DATE => 'Date',
+            self::COLUMN_TIME => 'Time',
+            self::COLUMN_CLOSED => 'Closed?'
         );
 
         return $columns;
-    }
-
-    public function column_d($item)
-    {
-        $actions = array('delete' => sprintf('<a href="?page=%s&action=%s&date=%s&time=%s">Delete</a>', $_REQUEST['page'], 'delete', $item['d'], $item['t']));
-        return sprintf('%1$s %2$s', $item['d'], $this->row_actions($actions));
     }
 
     /**
@@ -80,9 +76,67 @@ class ListTable extends WP_List_Table
      *
      * @return Array
      */
-    public function get_hidden_columns()
-    {
+    public function get_hidden_columns() {
         return array();
+    }
+
+    /**
+     * Define what data to show on each column of the table
+     *
+     * @param  Array $item        Data
+     * @param  String $column_name - Current column name
+     *
+     * @return Mixed
+     */
+    public function column_default($item, $column_name) {
+        switch ($column_name) {
+            case self::COLUMN_CHECKBOX:
+                return '';
+            case self::COLUMN_DATE:
+                return $item[$column_name];
+            case self::COLUMN_TIME:
+                return $this->time_description($item[$column_name]);
+            case self::COLUMN_CLOSED:
+                return $item[$column_name];
+            default:
+                return print_r($item, true);
+        }
+    }
+
+    // self::COLUMN_CHECKBOX
+    function column_cb($item) {
+        /*
+         * array(3) { ["d"]=> string(10) "2015-04-22" ["t"]=> string(2) "16" ["c"]=> string(2) "NO" }
+         */
+        //  var_dump($item);
+//        return sprintf(
+//            '<input type="checkbox" name="appointment[]" value="%1$s|%2$s|%3$s" />',
+//            $item[COLUMN_DATE],$item[COLUMN_TIME],$item[COLUMN_CLOSED]);
+        return sprintf(
+            '<input type="checkbox" name="%1$s[%2$s,%3$s,%4$s]" value="" />',
+            /*$1%s*/ $this->_args['singular'], 
+            /*$2%s*/ $item[self::COLUMN_DATE],
+            /*$3%s*/ $item[self::COLUMN_TIME],
+            /*$4%s*/ $item[self::COLUMN_CLOSED]
+        );
+
+        /*
+         *
+         *         $actions = array('delete' => sprintf('<a href="?page=%s&action=%s&date=%s&time=%s">Delete</a>', $_REQUEST['page'], 'delete', $item[COLUMN_DATE], $item[COLUMN_TIME]));
+        return sprintf('%1$s %2$s', $item[COLUMN_DATE], $this->row_actions($actions));
+         */
+    }
+
+    // self::COLUMN_DATE
+    public function column_d($item) {
+        $actions = array(
+            'delete' => sprintf('<a href="?page=%s&action=%s&date=%s&time=%s">Delete</a>', 
+            $_REQUEST['page'], 
+            'delete', 
+            $item[self::COLUMN_DATE], 
+            $item[self::COLUMN_TIME])
+        );
+        return sprintf('%1$s %2$s', $item[self::COLUMN_DATE], $this->row_actions($actions));
     }
 
     /**
@@ -90,9 +144,8 @@ class ListTable extends WP_List_Table
      *
      * @return Array
      */
-    public function get_sortable_columns()
-    {
-        return array('d' => array('d', false));
+    public function get_sortable_columns() {
+        return array(self::COLUMN_DATE => array(self::COLUMN_DATE, false));
     }
 
     /**
@@ -100,8 +153,7 @@ class ListTable extends WP_List_Table
      *
      * @return Array
      */
-    private function table_data()
-    {
+    private function table_data() {
         $appointments = get_option('apk_appointments_options');
 
         $data_model = array();
@@ -116,16 +168,16 @@ class ListTable extends WP_List_Table
             if (!$shop_closed) {
                 $appointment_times = $appointment['times'];
                 foreach ($appointment_times as $time) {
-                    $table_appointment['d'] = $appointment_date;
-                    $table_appointment['t'] = $time;
-                    $table_appointment['c'] = 'NO';
+                    $table_appointment[self::COLUMN_DATE] = $appointment_date;
+                    $table_appointment[self::COLUMN_TIME] = $time;
+                    $table_appointment[self::COLUMN_CLOSED] = 'NO';
                     $data_model[] = $table_appointment;
                 }
             }
             else {
-                $table_appointment['d'] = $appointment_date;
-                $table_appointment['t'] = '';
-                $table_appointment['c'] = 'YES';
+                $table_appointment[self::COLUMN_DATE] = $appointment_date;
+                $table_appointment[self::COLUMN_TIME] = '';
+                $table_appointment[self::COLUMN_CLOSED] = 'YES';
                 $data_model[] = $table_appointment;
             }
         }
@@ -133,36 +185,11 @@ class ListTable extends WP_List_Table
         return $data_model;
     }
 
-    function get_bulk_actions()
-    {
+    function get_bulk_actions() {
         $actions = array();
         $actions['delete'] = '<a href="#">'.__( 'Delete' ).'</a>';
 
         return $actions;
-    }
-
-    function column_cb($item)
-    {
-        /*
-         * array(3) { ["d"]=> string(10) "2015-04-22" ["t"]=> string(2) "16" ["c"]=> string(2) "NO" }
-         */
-        //  var_dump($item);
-//        return sprintf(
-//            '<input type="checkbox" name="appointment[]" value="%1$s|%2$s|%3$s" />',
-//            $item['d'],$item['t'],$item['c']);
-        return sprintf(
-            '<input type="checkbox" name="%1$s[%2$s,%3$s,%4$s]" value="" />',
-            /*$1%s*/ $this->_args['singular'],  //Let's simply repurpose the table's singular label ("video")
-            /*$2%s*/ $item['d'],
-            /*$3%s*/ $item['t'],
-            /*$4%s*/ $item['c']
-        );
-
-        /*
-         *
-         *         $actions = array('delete' => sprintf('<a href="?page=%s&action=%s&date=%s&time=%s">Delete</a>', $_REQUEST['page'], 'delete', $item['d'], $item['t']));
-        return sprintf('%1$s %2$s', $item['d'], $this->row_actions($actions));
-         */
     }
 
     function process_bulk_action() {
@@ -176,7 +203,6 @@ class ListTable extends WP_List_Table
             if ( ! wp_verify_nonce( $nonce, $action ) ) {
                 wp_die( 'Nope! Security check failed!' );
             }
-
         }
 
         $action = $this->current_action();
@@ -196,38 +222,9 @@ class ListTable extends WP_List_Table
                 return;
                 break;
         }
-
-
-
     }
 
-
-    /**
-     * Define what data to show on each column of the table
-     *
-     * @param  Array $item        Data
-     * @param  String $column_name - Current column name
-     *
-     * @return Mixed
-     */
-    public function column_default($item, $column_name)
-    {
-        switch ($column_name) {
-            case 'cb':
-                return '';
-            case 'd':
-                return $item[$column_name];
-            case 't':
-                return $this->time_description($item[$column_name]);
-            case 'c':
-                return $item[$column_name];
-            default:
-                return print_r($item, true);
-        }
-    }
-
-    public function time_description($time_value)
-    {
+    public function time_description($time_value) {
         // 9AM => 8PM
         $times = array(
             "9" => "9 AM",
@@ -252,10 +249,9 @@ class ListTable extends WP_List_Table
      *
      * @return Mixed
      */
-    private function sort_data($a, $b)
-    {
+    private function sort_data($a, $b) {
         // Set defaults
-        $orderby = 'd';
+        $orderby = self::COLUMN_DATE;
         $order = 'asc';
 
         // If orderby is set, use this as the sort column
