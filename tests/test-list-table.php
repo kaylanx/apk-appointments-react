@@ -33,4 +33,9 @@ class ListTableTest extends WP_UnitTestCase
         $this->assertEquals('Time', $columns[ListTable::COLUMN_TIME]);
         $this->assertEquals('Closed?', $columns[ListTable::COLUMN_CLOSED]);
     }
+
+    public function test_there_are_no_hidden_columns() {
+        $listTable = new ListTable();
+        $this->assertEquals(0, count($listTable->get_hidden_columns()));
+    }
 }
