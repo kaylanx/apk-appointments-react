@@ -89,9 +89,12 @@ class ListTable extends WP_List_Table {
      * @return Mixed
      */
     public function column_default($item, $column_name) {
+
+        if (!array_key_exists($column_name, $item)) {
+            return '';
+        }
+
         switch ($column_name) {
-            case self::COLUMN_CHECKBOX:
-                return '';
             case self::COLUMN_DATE:
                 return $item[$column_name];
             case self::COLUMN_TIME:
@@ -99,7 +102,7 @@ class ListTable extends WP_List_Table {
             case self::COLUMN_CLOSED:
                 return $item[$column_name];
             default:
-                return print_r($item, true);
+                return '';
         }
     }
 
@@ -224,7 +227,7 @@ class ListTable extends WP_List_Table {
         }
     }
 
-    public function time_description($time_value) {
+    private function time_description($time_value) {
         // 9AM => 8PM
         $times = array(
             "9" => "9 AM",
@@ -241,7 +244,10 @@ class ListTable extends WP_List_Table {
             "20" => "8 PM",
         );
 
-        return $times[$time_value];
+        if (array_key_exists($time_value, $times)) {
+            return $times[$time_value];
+        }
+        return '';
     }
 
     /**
