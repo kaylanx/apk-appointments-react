@@ -86,7 +86,7 @@ class ListTableTest extends WP_UnitTestCase
     public function test_table_data() {
         $listTable = new ListTable();
         $appointments = array();
-        $appointments[] = $this->get_appointment_option_not_closed();
+        $appointments[] = $this->get_appointment_option_not_closed('2015-04-22', [14, 15, 16], false);
         $appointments[] = $this->get_appointment_option_closed();
         
         $reflector = new ReflectionObject($listTable);
@@ -94,8 +94,17 @@ class ListTableTest extends WP_UnitTestCase
         $method->setAccessible(true);
         $dataModel = $method->invoke($listTable, $appointments);
 
-        var_dump($dataModel);
-        $this->assertEquals(['TODO'],$dataModel);
+        $this->assertEquals(4, count($dataModel));
+        $this->assertThatAppointmentOptionTransformedToTableDisplayRows($dataModel[0], '2015-04-22', 14, 'NO');
+        $this->assertThatAppointmentOptionTransformedToTableDisplayRows($dataModel[1], '2015-04-22', 15, 'NO');
+        $this->assertThatAppointmentOptionTransformedToTableDisplayRows($dataModel[2], '2015-04-22', 16, 'NO');
+        $this->assertThatAppointmentOptionTransformedToTableDisplayRows($dataModel[3], '2015-04-23', NULL, 'YES');
+    }
+
+    private function assertThatAppointmentOptionTransformedToTableDisplayRows($actualAppointment, $expectedDate, $expectedTime, $expectedClosed) {
+        $this->assertEquals($expectedDate, $actualAppointment[ListTable::COLUMN_DATE]);
+        $this->assertEquals($expectedTime, $actualAppointment[ListTable::COLUMN_TIME]);
+        $this->assertEquals($expectedClosed, $actualAppointment[ListTable::COLUMN_CLOSED]);
     }
 
     private function assertAppointmentTimesKeyGivesCorrectDisplayValue($key, $display_value) {
@@ -106,29 +115,28 @@ class ListTableTest extends WP_UnitTestCase
         $this->assertEquals($display_value, $timeColumnDisplayValue);
     }
 
-    private function get_appointment_not_closed() {
-        $wpOptionAppointment[ListTable::COLUMN_DATE] = '2015-04-22';
-        $wpOptionAppointment[ListTable::COLUMN_TIME] = 16;
-        $wpOptionAppointment[ListTable::COLUMN_CLOSED] = 'NO';
+    private function get_appointment_not_closed($date = '2015-04-22', $time = 16, $closed = 'NO') {
+        $wpOptionAppointment[ListTable::COLUMN_DATE] = $date;
+        $wpOptionAppointment[ListTable::COLUMN_TIME] = $time;
+        $wpOptionAppointment[ListTable::COLUMN_CLOSED] = $closed;
         return $wpOptionAppointment;
     }
 
     private function get_appointment_closed() {
-        $wpOptionAppointment[ListTable::COLUMN_DATE] = '2015-04-22';
+        $wpOptionAppointment[ListTable::COLUMN_DATE] = '2015-04-23';
         $wpOptionAppointment[ListTable::COLUMN_CLOSED] = 'YES';
         return $wpOptionAppointment;
     }
 
-
-    private function get_appointment_option_not_closed() {
-        $wpOptionAppointment['date'] = '2015-04-22';
-        $wpOptionAppointment['times'] = [16];
-        $wpOptionAppointment['closed'] = false;
+    private function get_appointment_option_not_closed($date = '2015-04-22', $times = [16], $closed = false) {
+        $wpOptionAppointment['date'] = $date;
+        $wpOptionAppointment['times'] = $times;
+        $wpOptionAppointment['closed'] = $closed;
         return $wpOptionAppointment;
     }
 
     private function get_appointment_option_closed() {
-        $wpOptionAppointment['date'] = '2015-04-22';
+        $wpOptionAppointment['date'] = '2015-04-23';
         $wpOptionAppointment['times'] = [];
         $wpOptionAppointment['closed'] = true;
         return $wpOptionAppointment;
