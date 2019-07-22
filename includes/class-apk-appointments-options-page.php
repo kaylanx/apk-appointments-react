@@ -13,105 +13,67 @@ namespace APK\Appointments;
  */
 class OptionsPage
 {
-
-    /**
-     * Holds the values to be used in the field callbacks...
-     */
-    private $options;
+	private $appointmentListTable;
 
     /**
      * Start up
      */
-    function __construct()
-    {
-        add_action('admin_menu', array($this, 'admin_menu'));
-        add_action('admin_enqueue_scripts', array($this, 'enqueue_date_picker'));
+    function __construct() {
         add_action('admin_init', array($this, 'page_init'));
+        add_filter('set-screen-option', [ __CLASS__, 'set_screen' ], 10, 3);
+        add_action('admin_menu', array($this, 'plugin_menu'));
+        add_action('admin_enqueue_scripts', array($this, 'enqueue_date_picker'));
     }
+
+    public static function set_screen( $status, $option, $value ) {
+		return $value;
+	}
 
     /**
      * Add options page
      */
-    function admin_menu()
-    {
-        add_options_page('APK Appointments',
-            'APK Appointments',
-            'manage_options',
-            basename(__FILE__),
-            array($this, 'apk_appointments_options_page'));
+    public function plugin_menu() {
+		$hook = add_menu_page(
+			'APK Shop Appointments',
+			'Appointments',
+			'manage_options',
+            'apk-appointments',
+            [ $this, 'apk_appointments_options_page' ],
+            'dashicons-calendar-alt'
+		);
+
+		add_action( "load-$hook", [ $this, 'screen_option' ] );
     }
+    
+    	/**
+	 * Screen options
+	 */
+	public function screen_option() {
+
+		$option = 'per_page';
+		$args   = [
+			'label'   => 'Appointments',
+			'default' => 5,
+			'option'  => 'appointments_per_page'
+		];
+
+		add_screen_option( $option, $args );
+
+		$this->appointmentListTable = new ListTable();
+	}
 
     /**
      * Options page callback
      */
     function apk_appointments_options_page()
     {
-
-        // Set class property
-        $this->options = get_option(APK_APPOINTMENTS_OPTION);
-
-//        var_dump($_GET);
-//        var_dump($_REQUEST);
-//        var_dump($_POST);
-
-        /*
-        _wpnonce=86e44ca8e3&
-        _wp_http_referer=/wp-admin/options-general.php?
-        page=class-apk-options-page.php&
-        action=delete&
-        date&time=-&
-        settings-updated=true
-        &action=delete
-        &appointment[]=2015-04-22|16|NO&
-        appointment[]=2015-04-23||YES
-        &action2=-1&option_page=apk_appointments_option_group&action=update&_wpnonce=30951f69fe&_wp_http_referer=/wp-admin/options-general.php?page=class-apk-options-page.php&action=delete&date&time=-&settings-updated=true&
-        APK_APPOINTMENTS_OPTION[appointment_date]=&APK_APPOINTMENTS_OPTION[appointment_time]=-
-         */
-
-        if (isset($_GET['action']) && $_GET['action'] == 'delete') {
-
-            $appointments = $this->options;
-
-            foreach ($appointments as $index => $appointment) {
-
-                if ($appointment['date'] == $_GET['date']) {
-                    $times = $appointment['times'];
-
-                    if ($appointment['closed'] || count($times) == 1) {
-                        unset($appointments[$index]);
-                    }
-                    else {
-                        foreach ($times as $time_index => $time) {
-                            if ($time == $_GET['time']) {
-                                unset($times[$time_index]);
-                                $appointment['times'] = $times;
-                                $appointments[$index] = $appointment;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            $appointments = array_filter($appointments);
-
-            update_option(APK_APPOINTMENTS_OPTION, $appointments);
-            $this->options = get_option(APK_APPOINTMENTS_OPTION);
-        }
-
-
+        $this->appointmentListTable->prepare_items();
         ?>
         <div class="wrap">
             <h2>Appointments</h2>
-            <?php
-            $appointmentListTable = new ListTable();
-            $appointmentListTable->prepare_items();
-            ?>
-            <div id="icon-users" class="icon32"></div>
             <form method="post">
-                <?php $appointmentListTable->display(); ?>
+                <?php $this->appointmentListTable->display(); ?>
             </form>
-
             <form method="post" action="options.php">
                 <?php
                 // This prints out all hidden setting fields...
@@ -144,14 +106,6 @@ class OptionsPage
         );
 
         add_settings_field(
-            'appointments', // ID
-            '', // Title
-            array($this, 'appointments_callback'), // callback
-            basename(__FILE__), // Page
-            'appointments_section_id' // Section
-        );
-
-        add_settings_field(
             'appointment_date', // ID
             'Appointment Date', // Title
             array($this, 'appointment_date_callback'), // callback
@@ -180,9 +134,7 @@ class OptionsPage
     /**
      * Enqueue the date picker
      */
-    public function enqueue_date_picker()
-    {
-
+    public function enqueue_date_picker() {
         wp_enqueue_script(
             'field-date-js',
             plugins_url() . '/apk-appointments/js/field-date.js',
@@ -261,22 +213,16 @@ class OptionsPage
     /**
      * Print the Section text
      */
-    public function print_section_info()
-    {
-
-
+    public function print_section_info() {
+        print('Enter appointment details below:');
     }
 
-    public function appointment_date_callback($args)
-    {
+    public function appointment_date_callback($args) {
         extract($args);
-
         print('<input type="date" id="datepicker" name="apk_appointments_options[appointment_date]" class="apk-appointment-date" />');
     }
 
-    public function appointment_time_callback()
-    {
-
+    public function appointment_time_callback() {
         print('<select id="appointment_time" name="apk_appointments_options[appointment_time]">
 			   	  <option value="9">9:00 AM</option>
    	  			  <option value="10">10:00 AM</option>
@@ -294,13 +240,7 @@ class OptionsPage
 			   </select>');
     }
 
-    public function shop_closed_callback()
-    {
+    public function shop_closed_callback() {
         print('<input type="checkbox" name="apk_appointments_options[shop_closed]" />');
-    }
-
-    public function appointments_callback()
-    {
-        // Do nothing.
     }
 }

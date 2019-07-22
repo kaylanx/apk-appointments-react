@@ -133,14 +133,19 @@ class ListTable extends WP_List_Table {
 
     // self::COLUMN_DATE
     public function column_d($item) {
-        $actions = array(
-            'delete' => sprintf('<a href="?page=%s&action=%s&date=%s&time=%s">Delete</a>', 
-            $_REQUEST['page'], 
-            'delete', 
-            $item[self::COLUMN_DATE], 
-            $item[self::COLUMN_TIME])
-        );
-        return sprintf('%1$s %2$s', $item[self::COLUMN_DATE], $this->row_actions($actions));
+        $delete_nonce = wp_create_nonce( 'apk_delete_appointment' );
+		$title = '<strong>' . $item[self::COLUMN_DATE] . '</strong>';
+		$actions = [
+			'delete' => sprintf( 
+                '<a href="?page=%s&action=%s&date=%s&time=%s&_wpnonce=%s">Delete</a>', 
+                esc_attr($_REQUEST['page']),
+                'delete',
+                $item[self::COLUMN_DATE], 
+                absint($item[self::COLUMN_TIME]),
+                $delete_nonce 
+            )
+		];
+		return $title . $this->row_actions( $actions );
     }
 
     /**
@@ -195,7 +200,76 @@ class ListTable extends WP_List_Table {
     }
 
     function process_bulk_action() {
+        //Detect when a bulk action is being triggered...
+		if ( 'delete' === $this->current_action() ) {
+			// In our file that handles the request, verify the nonce.
+			$nonce = esc_attr( $_REQUEST['_wpnonce'] );
+			if ( ! wp_verify_nonce( $nonce, 'apk_delete_appointment' ) ) {
+				die( 'Go get a life script kiddies' );
+			}
+			else {
+                $this->delete_appointment($_GET['date'], absint( $_GET['time'] ));
+		        // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
+                // add_query_arg() return the current url
+                
 
+// https://wordpress.stackexchange.com/questions/212143/redirect-after-delete-post-in-frontend
+
+		        wp_redirect( esc_url_raw(add_query_arg()) );
+                exit;
+                // exit( wp_redirect( admin_url( 'options-general.php?page=class-apk-appointments-options-page.php' ) ) );
+			}
+		}
+		// If the delete bulk action is triggered
+		if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' )
+		     || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
+		) {
+			$delete_ids = esc_sql( $_POST['bulk-delete'] );
+			// loop over the array of record IDs and delete them
+			foreach ( $delete_ids as $id ) {
+				// self::delete_customer( $id );
+			}
+			// esc_url_raw() is used to prevent converting ampersand in url to "#038;"
+		        // add_query_arg() return the current url
+		    //     wp_redirect( esc_url_raw(add_query_arg()) );
+            // exit;
+            exit( wp_redirect( admin_url( 'options-general.php?page=class-apk-appointments-options-page.php' ) ) );
+
+		}
+    }
+    
+    private function delete_appointment($date, $time) {
+        $appointments = get_option(APK_APPOINTMENTS_OPTION);
+
+        foreach ($appointments as $index => $appointment) {
+
+            if ($appointment['date'] == $date) {
+                $times = $appointment['times'];
+
+                if ($appointment['closed'] || count($times) == 1) {
+                    unset($appointments[$index]);
+                }
+                else {
+                    foreach ($times as $time_index => $saved_time) {
+                        if ($saved_time == $time) {
+                            unset($times[$time_index]);
+                            $appointment['times'] = $times;
+                            $appointments[$index] = $appointment;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        $appointments = array_filter($appointments);
+
+        update_option(APK_APPOINTMENTS_OPTION, $appointments);
+    }
+
+    function OLD_METHOD_process_bulk_action_OLD_METHOD() {
+
+        var_dump($_POST);
         // security check!
         if ( isset( $_POST['_wpnonce'] ) && ! empty( $_POST['_wpnonce'] ) ) {
 
