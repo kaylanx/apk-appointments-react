@@ -79,7 +79,7 @@ class OptionsPage
                 // This prints out all hidden setting fields...
                 settings_fields('apk_appointments_option_group');
                 do_settings_sections(basename(__FILE__));
-                submit_button();
+                submit_button('Add appointment');
                 ?>
             </form>
         </div>
