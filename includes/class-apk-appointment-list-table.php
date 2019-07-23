@@ -18,6 +18,8 @@ use WP_List_Table;
  * @property mixed _column_headers
  */
 class ListTable extends WP_List_Table {
+
+    const PLUGIN_HOME_URI = '/wp-admin/admin.php?page=apk-appointments';
     const APPOINTMENT_SINGULAR = 'appointment';
     const APPOINTMENT_PLURAL = 'appointments';
 
@@ -209,31 +211,26 @@ class ListTable extends WP_List_Table {
 			}
 			else {
                 $this->delete_appointment($_GET['date'], absint( $_GET['time'] ));
-		        // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
-                // add_query_arg() return the current url
-                
-
-// https://wordpress.stackexchange.com/questions/212143/redirect-after-delete-post-in-frontend
-
-		        wp_redirect( esc_url_raw(add_query_arg()) );
+                $escaped_url = esc_url_raw(self::PLUGIN_HOME_URI);
+                wp_redirect($escaped_url);
                 exit;
-                // exit( wp_redirect( admin_url( 'options-general.php?page=class-apk-appointments-options-page.php' ) ) );
 			}
-		}
+        }
 		// If the delete bulk action is triggered
 		if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' )
 		     || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
 		) {
-			$delete_ids = esc_sql( $_POST['bulk-delete'] );
+            $delete_ids = esc_sql( $_POST['bulk-delete'] );
+            
+            // var_dump($delete_ids);
 			// loop over the array of record IDs and delete them
 			foreach ( $delete_ids as $id ) {
 				// self::delete_customer( $id );
 			}
 			// esc_url_raw() is used to prevent converting ampersand in url to "#038;"
-		        // add_query_arg() return the current url
-		    //     wp_redirect( esc_url_raw(add_query_arg()) );
-            // exit;
-            exit( wp_redirect( admin_url( 'options-general.php?page=class-apk-appointments-options-page.php' ) ) );
+		    // add_query_arg() return the current url
+		    wp_redirect( esc_url_raw(self::PLUGIN_HOME_URI) );
+            exit;
 
 		}
     }
