@@ -55,7 +55,7 @@ class ListTable extends WP_List_Table {
         $this->_column_headers = array($columns, $hidden, $sortable);
         $this->items = $data;
 
-        $this->process_bulk_action();
+        $this->process_action();
     }
 
     /**
@@ -195,14 +195,19 @@ class ListTable extends WP_List_Table {
     }
 
     function get_bulk_actions() {
-        $actions = array();
-        $actions['delete'] = '<a href="#">'.__( 'Delete' ).'</a>';
+		$actions = [
+			'bulk-delete' => 'Delete'
+		];
 
-        return $actions;
+		return $actions;
+	}
+
+    function process_action() {
+        $this->process_single_delete();
+        $this->process_bulk_delete();
     }
 
-    function process_bulk_action() {
-        //Detect when a bulk action is being triggered...
+    private function process_single_delete() {
 		if ( 'delete' === $this->current_action() ) {
 			// In our file that handles the request, verify the nonce.
 			$nonce = esc_attr( $_REQUEST['_wpnonce'] );
@@ -216,24 +221,27 @@ class ListTable extends WP_List_Table {
                 exit;
 			}
         }
-		// If the delete bulk action is triggered
+    }
+
+    private function process_bulk_delete() {
 		if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' )
-		     || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
-		) {
-            $delete_ids = esc_sql( $_POST['bulk-delete'] );
+        || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
+        ) {
+            $delete_ids = esc_sql( $_POST['appointment'] );
             
-            // var_dump($delete_ids);
-			// loop over the array of record IDs and delete them
-			foreach ( $delete_ids as $id ) {
-				// self::delete_customer( $id );
-			}
-			// esc_url_raw() is used to prevent converting ampersand in url to "#038;"
-		    // add_query_arg() return the current url
-		    wp_redirect( esc_url_raw(self::PLUGIN_HOME_URI) );
+            var_dump($delete_ids);
+            // loop over the array of record IDs and delete them
+            foreach ( $delete_ids as $id ) {
+                // self::delete_customer( $id );
+            }
+            // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
+            // add_query_arg() return the current url
+            wp_redirect( esc_url_raw(self::PLUGIN_HOME_URI) );
             exit;
 
-		}
+        }
     }
+
     
     private function delete_appointment($date, $time) {
         $appointments = get_option(APK_APPOINTMENTS_OPTION);
@@ -262,39 +270,6 @@ class ListTable extends WP_List_Table {
         $appointments = array_filter($appointments);
 
         update_option(APK_APPOINTMENTS_OPTION, $appointments);
-    }
-
-    function OLD_METHOD_process_bulk_action_OLD_METHOD() {
-
-        var_dump($_POST);
-        // security check!
-        if ( isset( $_POST['_wpnonce'] ) && ! empty( $_POST['_wpnonce'] ) ) {
-
-            $nonce  = filter_input( INPUT_POST, '_wpnonce', FILTER_SANITIZE_STRING );
-            $action = 'bulk-' . $this->_args['plural'];
-
-            if ( ! wp_verify_nonce( $nonce, $action ) ) {
-                wp_die( 'Nope! Security check failed!' );
-            }
-        }
-
-        $action = $this->current_action();
-
-        switch ( $action ) {
-
-            case 'delete':
-                wp_die( 'Delete something' );
-                break;
-
-            case 'save':
-                wp_die( 'Save something' );
-                break;
-
-            default:
-                // do nothing or something else
-                return;
-                break;
-        }
     }
 
     private function time_description($time_value) {
