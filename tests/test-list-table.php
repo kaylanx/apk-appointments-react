@@ -8,7 +8,7 @@ class ListTableTest extends WP_UnitTestCase
 {
     public function test_when_checkbox_column_is_rendered_then_checkbox_html_returned() {
         $listTable = new ListTable();
-        $expectedHtml = '<input type="checkbox" name="appointment[2015-04-22,16,NO]" value="" />';
+        $expectedHtml = '<input type="checkbox" name="appointment[2015-04-22]" value="2015-04-22,16,NO" />';
         $actualHtml = $listTable->column_cb($this->get_appointment_not_closed());
 
         $this->assertEquals($expectedHtml, $actualHtml);

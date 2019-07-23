@@ -211,8 +211,7 @@ class ListTable extends WP_List_Table {
     }
 /*
 TEST DATA
-a:4:{i:0;a:3:{s:4:"date";s:10:"2019-07-17";s:5:"times";a:2:{i:0;i:13;i:1;i:13;}s:6:"closed";b:0;}i:1;a:3:{s:4:"date";s:10:"2019-07-05";s:5:"times";a:1:{i:0;i:16;}s:6:"closed";b:0;}i:2;a:3:{s:4:"date";s:10:"2019-07-27";s:5:"times";a:1:{i:0;i:18;}s:6:"closed";b:0;}i:4;a:3:{s:4:"date";s:10:"2019-07-31";s:5:"times";a:0:{}s:6:"closed";b:1;}}
-
+a:4:{i:0;a:3:{s:4:"date";s:10:"2019-07-23";s:5:"times";a:1:{i:0;i:13;}s:6:"closed";b:0;}i:1;a:3:{s:4:"date";s:10:"2019-07-18";s:5:"times";a:1:{i:0;i:16;}s:6:"closed";b:0;}i:2;a:3:{s:4:"date";s:10:"2019-07-17";s:5:"times";a:1:{i:0;i:13;}s:6:"closed";b:0;}i:3;a:3:{s:4:"date";s:10:"2019-07-31";s:5:"times";a:0:{}s:6:"closed";b:1;}}
 */
     private function process_bulk_delete() {
 		if ((isset($_POST['action']) && $_POST['action'] == 'bulk-delete')
@@ -246,6 +245,12 @@ a:4:{i:0;a:3:{s:4:"date";s:10:"2019-07-17";s:5:"times";a:2:{i:0;i:13;i:1;i:13;}s
 
         $appointments = get_option(APK_APPOINTMENTS_OPTION);
 
+        $appointments = $this->remove_date_or_times($date, $time, $appointments);
+
+        update_option(APK_APPOINTMENTS_OPTION, $appointments);
+    }
+
+    private function remove_date_or_times($date, $time, $appointments) {
         foreach ($appointments as $index => $appointment) {
 
             if ($appointment['date'] == $date) {
@@ -268,8 +273,6 @@ a:4:{i:0;a:3:{s:4:"date";s:10:"2019-07-17";s:5:"times";a:2:{i:0;i:13;i:1;i:13;}s
         }
 
         $appointments = array_filter($appointments);
-
-        update_option(APK_APPOINTMENTS_OPTION, $appointments);
     }
 
     private function time_description($time_value) {
