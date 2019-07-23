@@ -272,7 +272,7 @@ a:4:{i:0;a:3:{s:4:"date";s:10:"2019-07-23";s:5:"times";a:1:{i:0;i:13;}s:6:"close
             }
         }
 
-        $appointments = array_filter($appointments);
+        return array_filter($appointments);
     }
 
     private function time_description($time_value) {

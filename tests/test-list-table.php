@@ -83,6 +83,23 @@ class ListTableTest extends WP_UnitTestCase
         $this->assertAppointmentTimesKeyGivesCorrectDisplayValue('20', '8 PM');
     }
 
+    public function test_remove_date_or_times() {
+        $listTable = new ListTable();
+
+        $reflector = new ReflectionObject($listTable);
+        $method = $reflector->getMethod('remove_date_or_times');
+        $method->setAccessible(true);
+
+        $appointments = array();
+        $appointments[] = $this->get_appointment_option_not_closed();
+        $appointments[] = $this->get_appointment_option_not_closed('2019-07-23', [11, 12, 13], false);
+        $appointments[] = $this->get_appointment_option_closed();
+        $actual_appointments = $method->invoke($listTable, '2019-07-23', 12, $appointments);
+
+        var_dump($actual_appointments);
+        $this->assertTrue(false); // TODO - THE ASSERTIONS
+    }
+
     public function test_table_data() {
         $listTable = new ListTable();
         $appointments = array();
