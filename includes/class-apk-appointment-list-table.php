@@ -35,7 +35,6 @@ class ListTable extends WP_List_Table {
             'plural'    => self::APPOINTMENT_PLURAL,    //plural name of the listed records
             'ajax'      => false              //does this table support ajax?
         ) );
-
     }
 
     /**
@@ -111,26 +110,13 @@ class ListTable extends WP_List_Table {
 
     // self::COLUMN_CHECKBOX
     function column_cb($item) {
-        /*
-         * array(3) { ["d"]=> string(10) "2015-04-22" ["t"]=> string(2) "16" ["c"]=> string(2) "NO" }
-         */
-        //  var_dump($item);
-//        return sprintf(
-//            '<input type="checkbox" name="appointment[]" value="%1$s|%2$s|%3$s" />',
-//            $item[COLUMN_DATE],$item[COLUMN_TIME],$item[COLUMN_CLOSED]);
         return sprintf(
-            '<input type="checkbox" name="%1$s[%2$s,%3$s,%4$s]" value="" />',
+            '<input type="checkbox" name="%1$s[%2$s]" value="%2$s,%3$s,%4$s" />',
             /*$1%s*/ $this->_args['singular'], 
             /*$2%s*/ $item[self::COLUMN_DATE],
             /*$3%s*/ $item[self::COLUMN_TIME],
             /*$4%s*/ $item[self::COLUMN_CLOSED]
         );
-
-        /*
-         *
-         *         $actions = array('delete' => sprintf('<a href="?page=%s&action=%s&date=%s&time=%s">Delete</a>', $_REQUEST['page'], 'delete', $item[COLUMN_DATE], $item[COLUMN_TIME]));
-        return sprintf('%1$s %2$s', $item[COLUMN_DATE], $this->row_actions($actions));
-         */
     }
 
     // self::COLUMN_DATE
@@ -177,21 +163,22 @@ class ListTable extends WP_List_Table {
             if (!$shop_closed) {
                 $appointment_times = $appointment['times'];
                 foreach ($appointment_times as $time) {
-                    $table_appointment[self::COLUMN_DATE] = $appointment_date;
-                    $table_appointment[self::COLUMN_TIME] = $time;
-                    $table_appointment[self::COLUMN_CLOSED] = 'NO';
-                    $data_model[] = $table_appointment;
+                    $data_model[] = $this->create_appointment($appointment_date, $time, 'NO');
                 }
             }
             else {
-                $table_appointment[self::COLUMN_DATE] = $appointment_date;
-                $table_appointment[self::COLUMN_TIME] = '';
-                $table_appointment[self::COLUMN_CLOSED] = 'YES';
-                $data_model[] = $table_appointment;
+                $data_model[] = $this->create_appointment($appointment_date, '', 'YES');
             }
         }
 
         return $data_model;
+    }
+
+    private function create_appointment($date, $time, $closed) {
+        $table_appointment[self::COLUMN_DATE] = $date;
+        $table_appointment[self::COLUMN_TIME] = $time;
+        $table_appointment[self::COLUMN_CLOSED] = $closed;
+        return $table_appointment;
     }
 
     function get_bulk_actions() {
@@ -208,11 +195,11 @@ class ListTable extends WP_List_Table {
     }
 
     private function process_single_delete() {
-		if ( 'delete' === $this->current_action() ) {
+		if ('delete' === $this->current_action()) {
 			// In our file that handles the request, verify the nonce.
-			$nonce = esc_attr( $_REQUEST['_wpnonce'] );
-			if ( ! wp_verify_nonce( $nonce, 'apk_delete_appointment' ) ) {
-				die( 'Go get a life script kiddies' );
+			$nonce = esc_attr($_REQUEST['_wpnonce']);
+			if (!wp_verify_nonce( $nonce, 'apk_delete_appointment')) {
+				die('Go get a life script kiddies');
 			}
 			else {
                 $this->delete_appointment($_GET['date'], absint( $_GET['time'] ));
@@ -222,28 +209,41 @@ class ListTable extends WP_List_Table {
 			}
         }
     }
+/*
+TEST DATA
+a:4:{i:0;a:3:{s:4:"date";s:10:"2019-07-17";s:5:"times";a:2:{i:0;i:13;i:1;i:13;}s:6:"closed";b:0;}i:1;a:3:{s:4:"date";s:10:"2019-07-05";s:5:"times";a:1:{i:0;i:16;}s:6:"closed";b:0;}i:2;a:3:{s:4:"date";s:10:"2019-07-27";s:5:"times";a:1:{i:0;i:18;}s:6:"closed";b:0;}i:4;a:3:{s:4:"date";s:10:"2019-07-31";s:5:"times";a:0:{}s:6:"closed";b:1;}}
 
+*/
     private function process_bulk_delete() {
-		if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' )
-        || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
-        ) {
-            $delete_ids = esc_sql( $_POST['appointment'] );
+		if ((isset($_POST['action']) && $_POST['action'] == 'bulk-delete')
+        || (isset( $_POST['action2']) && $_POST['action2'] == 'bulk-delete')) {
+            $appointments_to_delete = esc_sql( $_POST['appointment'] );
             
-            var_dump($delete_ids);
+            // write_log($_POST);
+            // write_log($appointments_to_delete);
             // loop over the array of record IDs and delete them
-            foreach ( $delete_ids as $id ) {
-                // self::delete_customer( $id );
+            foreach ($appointments_to_delete as $string_appointment) {
+                // write_log(gettype($string_appointment));
+                // write_log($string_appointment);
+                $appointment_to_delete = explode(',', $string_appointment);
+                // write_log($appointment_to_delete);
+                $this->delete_appointment($appointment_to_delete[0], absint( $appointment_to_delete[1] ));
             }
             // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
             // add_query_arg() return the current url
             wp_redirect( esc_url_raw(self::PLUGIN_HOME_URI) );
             exit;
-
         }
     }
-
     
     private function delete_appointment($date, $time) {
+
+        write_log(gettype($date));
+        write_log($date);
+
+        write_log(gettype($time));
+        write_log($time);
+
         $appointments = get_option(APK_APPOINTMENTS_OPTION);
 
         foreach ($appointments as $index => $appointment) {
@@ -323,3 +323,13 @@ class ListTable extends WP_List_Table {
         return -$result;
     }
 }
+
+if ( ! function_exists('write_log')) {
+    function write_log ( $log )  {
+       if ( is_array( $log ) || is_object( $log ) ) {
+          error_log( print_r( $log, true ) );
+       } else {
+          error_log( $log );
+       }
+    }
+ }
