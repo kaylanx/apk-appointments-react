@@ -83,21 +83,70 @@ class ListTableTest extends WP_UnitTestCase
         $this->assertAppointmentTimesKeyGivesCorrectDisplayValue('20', '8 PM');
     }
 
-    public function test_remove_date_or_times() {
-        $listTable = new ListTable();
+    public function test_remove_date_or_times_remove_one_time() {
+        $appointments = $this->get_appointments_options();
+        $actual_appointments = $this->remove_date_or_times('2019-07-23', 12, $appointments);
+        $this->assertEquals(3, count($actual_appointments));
 
-        $reflector = new ReflectionObject($listTable);
-        $method = $reflector->getMethod('remove_date_or_times');
-        $method->setAccessible(true);
+        $this->assertAppointmentPartsEquals('2015-04-22', [16], false, $actual_appointments[0]);
+        $this->assertAppointmentPartsEquals('2019-07-23', [11, 13], false, $actual_appointments[1]);
+        $this->assertAppointmentPartsEquals('2015-04-23', [], true, $actual_appointments[2]);
+    }
 
+    public function test_remove_date_or_times_remove_closed() {
+        $appointments = $this->get_appointments_options();
+        $actual_appointments = $this->remove_date_or_times('2015-04-23', 12, $appointments);
+        $this->assertEquals(2, count($actual_appointments));
+
+        $this->assertAppointmentPartsEquals('2015-04-22', [16], false, $actual_appointments[0]);
+        $this->assertAppointmentPartsEquals('2019-07-23', [11, 12, 13], false, $actual_appointments[1]);
+    }
+
+    public function test_remove_date_or_times_remove_date_with_one_time_closed() {
+        $appointments = $this->get_appointments_options();
+        $actual_appointments = $this->remove_date_or_times('2015-04-22', 16, $appointments);
+
+        $this->assertEquals(2, count($actual_appointments));
+        $this->assertAppointmentPartsEquals('2019-07-23', [11, 12, 13], false, $actual_appointments[0]);
+        $this->assertAppointmentPartsEquals('2015-04-23', [], true, $actual_appointments[1]);
+    }
+
+    public function test_remove_date_or_times_remove_date_with_3_appointments() {
+        $appointments = $this->get_appointments_options();
+        $actual_appointments = $this->remove_date_or_times('2019-07-23', 11, $appointments);
+        $actual_appointments = $this->remove_date_or_times('2019-07-23', 12, $actual_appointments);
+        $actual_appointments = $this->remove_date_or_times('2019-07-23', 13, $actual_appointments);
+
+        $this->assertEquals(2, count($actual_appointments));
+        $this->assertAppointmentPartsEquals('2015-04-22', [16], false, $actual_appointments[0]);
+        $this->assertAppointmentPartsEquals('2015-04-23', [], true, $actual_appointments[1]);
+    }
+
+    public function test_remove_date_or_times_remove_all() {
+        $appointments = $this->get_appointments_options();
+        $actual_appointments = $this->remove_date_or_times('2015-04-22', 16, $appointments);
+        $actual_appointments = $this->remove_date_or_times('2019-07-23', 11, $actual_appointments);
+        $actual_appointments = $this->remove_date_or_times('2019-07-23', 12, $actual_appointments);
+        $actual_appointments = $this->remove_date_or_times('2019-07-23', 13, $actual_appointments);
+        $actual_appointments = $this->remove_date_or_times('2015-04-23', 1, $actual_appointments);
+
+        $this->assertEquals(0, count($actual_appointments));
+    }
+
+    private function get_appointments_options() {
         $appointments = array();
         $appointments[] = $this->get_appointment_option_not_closed();
         $appointments[] = $this->get_appointment_option_not_closed('2019-07-23', [11, 12, 13], false);
         $appointments[] = $this->get_appointment_option_closed();
-        $actual_appointments = $method->invoke($listTable, '2019-07-23', 12, $appointments);
+        return $appointments;
+    }
 
-        var_dump($actual_appointments);
-        $this->assertTrue(false); // TODO - THE ASSERTIONS
+    private function remove_date_or_times($date, $time, $appointments) {
+        $listTable = new ListTable();
+        $reflector = new ReflectionObject($listTable);
+        $method = $reflector->getMethod('remove_date_or_times');
+        $method->setAccessible(true);
+        return $method->invoke($listTable, $date, $time, $appointments);
     }
 
     public function test_table_data() {
@@ -130,6 +179,12 @@ class ListTableTest extends WP_UnitTestCase
         $appointment[ListTable::COLUMN_TIME] = $key;
         $timeColumnDisplayValue = $listTable->column_default($appointment, ListTable::COLUMN_TIME);
         $this->assertEquals($display_value, $timeColumnDisplayValue);
+    }
+
+    private function assertAppointmentPartsEquals($expected_date, $expected_times, $expected_closed, $actual_appointment) {
+        $this->assertEquals($expected_date, $actual_appointment['date']);
+        $this->assertEquals($expected_times, $actual_appointment['times']);
+        $this->assertEquals($expected_closed, $actual_appointment['closed']);
     }
 
     private function get_appointment_not_closed($date = '2015-04-22', $time = 16, $closed = 'NO') {

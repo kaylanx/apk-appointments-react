@@ -251,18 +251,17 @@ a:4:{i:0;a:3:{s:4:"date";s:10:"2019-07-23";s:5:"times";a:1:{i:0;i:13;}s:6:"close
     }
 
     private function remove_date_or_times($date, $time, $appointments) {
+        
         foreach ($appointments as $index => $appointment) {
-
             if ($appointment['date'] == $date) {
                 $times = $appointment['times'];
-
                 if ($appointment['closed'] || count($times) == 1) {
-                    unset($appointments[$index]);
+                    array_splice($appointments, $index, 1);
                 }
                 else {
                     foreach ($times as $time_index => $saved_time) {
                         if ($saved_time == $time) {
-                            unset($times[$time_index]);
+                            array_splice($times, $time_index, 1);
                             $appointment['times'] = $times;
                             $appointments[$index] = $appointment;
                             break;
