@@ -47,9 +47,11 @@ class ListTable extends WP_List_Table {
         $hidden = $this->get_hidden_columns();
         $sortable = $this->get_sortable_columns();
 
-        $appointments = get_option('apk_appointments_options');
+        $appointments = get_option(APK_APPOINTMENTS_OPTION);
         $data = $this->table_data($appointments);
         usort($data, array(&$this, 'sort_data'));
+
+        wp_create_nonce('bulk-delete');
 
         $this->_column_headers = array($columns, $hidden, $sortable);
         $this->items = $data;
@@ -111,7 +113,9 @@ class ListTable extends WP_List_Table {
     // self::COLUMN_CHECKBOX
     function column_cb($item) {
         return sprintf(
-            '<input type="checkbox" name="%1$s[%2$s]" value="%2$s,%3$s,%4$s" />',
+            '<input type="checkbox" name="%1$s[]" value="%2$s,%3$s,%4$s" />',
+
+            // '<input type="checkbox" name="%1$s[%2$s]" value="%2$s,%3$s,%4$s" />',
             /*$1%s*/ $this->_args['singular'], 
             /*$2%s*/ $item[self::COLUMN_DATE],
             /*$3%s*/ $item[self::COLUMN_TIME],
@@ -202,7 +206,7 @@ class ListTable extends WP_List_Table {
 				die('Go get a life script kiddies');
 			}
 			else {
-                $this->delete_appointment($_GET['date'], absint( $_GET['time'] ));
+                $this->delete_appointment($_GET['date'], absint($_GET['time']));
                 $escaped_url = esc_url_raw(self::PLUGIN_HOME_URI);
                 wp_redirect($escaped_url);
                 exit;
@@ -218,30 +222,38 @@ a:4:{i:0;a:3:{s:4:"date";s:10:"2019-07-23";s:5:"times";a:1:{i:0;i:13;}s:6:"close
         || (isset( $_POST['action2']) && $_POST['action2'] == 'bulk-delete')) {
             $appointments_to_delete = esc_sql( $_POST['appointment'] );
             
-            // write_log($_POST);
+         write_log($_POST);
             // write_log($appointments_to_delete);
             // loop over the array of record IDs and delete them
+            $appointments = get_option(APK_APPOINTMENTS_OPTION);
+
             foreach ($appointments_to_delete as $string_appointment) {
                 // write_log(gettype($string_appointment));
                 // write_log($string_appointment);
                 $appointment_to_delete = explode(',', $string_appointment);
                 // write_log($appointment_to_delete);
-                $this->delete_appointment($appointment_to_delete[0], absint( $appointment_to_delete[1] ));
+                $appointments = $this->remove_date_or_times($appointment_to_delete[0], absint($appointment_to_delete[1]), $appointments);
             }
+
+            write_log("About to save appointments");
+            write_log($appointments);
+            $updated = update_option(APK_APPOINTMENTS_OPTION, $appointments);
+            write_log("Updated = {$updated}");
+
             // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
             // add_query_arg() return the current url
-            wp_redirect( esc_url_raw(self::PLUGIN_HOME_URI) );
+            wp_redirect(esc_url_raw(self::PLUGIN_HOME_URI));
             exit;
         }
     }
     
     private function delete_appointment($date, $time) {
 
-        write_log(gettype($date));
-        write_log($date);
+        // write_log(gettype($date));
+        // write_log($date);
 
-        write_log(gettype($time));
-        write_log($time);
+        // write_log(gettype($time));
+        // write_log($time);
 
         $appointments = get_option(APK_APPOINTMENTS_OPTION);
 
@@ -251,7 +263,7 @@ a:4:{i:0;a:3:{s:4:"date";s:10:"2019-07-23";s:5:"times";a:1:{i:0;i:13;}s:6:"close
     }
 
     private function remove_date_or_times($date, $time, $appointments) {
-        
+
         foreach ($appointments as $index => $appointment) {
             if ($appointment['date'] == $date) {
                 $times = $appointment['times'];
@@ -325,13 +337,3 @@ a:4:{i:0;a:3:{s:4:"date";s:10:"2019-07-23";s:5:"times";a:1:{i:0;i:13;}s:6:"close
         return -$result;
     }
 }
-
-if ( ! function_exists('write_log')) {
-    function write_log ( $log )  {
-       if ( is_array( $log ) || is_object( $log ) ) {
-          error_log( print_r( $log, true ) );
-       } else {
-          error_log( $log );
-       }
-    }
- }

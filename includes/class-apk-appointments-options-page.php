@@ -68,7 +68,10 @@ class OptionsPage
     function apk_appointments_options_page()
     {
         $this->appointmentListTable->prepare_items();
+        // echo 'XDebug = '.phpversion('xdebug');
+        // echo phpinfo();
         ?>
+        
         <div class="wrap">
             <h2>Appointments</h2>
             <form method="post">
