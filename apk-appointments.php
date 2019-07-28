@@ -14,7 +14,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       APK Appointments
- * Plugin URI:        http://kayley.name/apk-appointments/apk-appointments-uri/
+ * Plugin URI:        http://kayley.name/apk-appointments/
  * Description:       Allows the user to create a form with appointments that can be chosen from a date picker.
  * Version:           1.0.0
  * Author:            Andy Kayley
