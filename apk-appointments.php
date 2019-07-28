@@ -56,17 +56,19 @@ function action_update_option_apk_appointments_options( $array ) {
 	write_log( 'action_update_option_apk_appointments_options' );
 	write_log( $array );
 }
-add_action( 'update_option_apk_appointments_options', 'action_update_option_apk_appointments_options', 10, 1 );
+// add_action( 'update_option_apk_appointments_options', 'action_update_option_apk_appointments_options', 10, 1 );
 
 /**
- * Define the sanitize_<option_name> callback.
+ * Sanitises apk_appointments_options option values.
  *
- * @param mixed[] $value Don't know what this is?.
- * @param mixed[] $option Don't know what this is?.
+ * @param string $value  The unsanitised value.
+ * @param string $option The name of the option.
+ * @return string Sanitized value.
  */
 function sanitize_apk_appointments_options( $value, $option ) {
 	write_log( $value );
 	write_log( $option );
+	return $value;
 }
 add_filter( 'sanitize_option_apk_appointments_options', 'sanitize_apk_appointments_options', 10, 2 );
 

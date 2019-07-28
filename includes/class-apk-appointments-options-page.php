@@ -97,8 +97,7 @@ class OptionsPage
     {
         register_setting(
             'apk_appointments_option_group', // Option group
-            APK_APPOINTMENTS_OPTION, // Option name
-            array($this, 'sanitize') // Sanitize
+            APK_APPOINTMENTS_OPTION // Option name
         );
 
         add_settings_section(
@@ -157,7 +156,7 @@ class OptionsPage
      * @param array $input Contains all settings fields as array keys
      * @return array sanitized $input
      */
-    public function sanitize($input)
+    public function __sanitize($input)
     {
         if (isset($_GET['action']) && $_GET['action'] == 'delete') {
             $new_input = $input;
