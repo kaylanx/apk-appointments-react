@@ -1,0 +1,15 @@
+{
+    "require": {
+        "squizlabs/php_codesniffer": "*"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "phpcs --config-set installed_paths ~/DevTools/wpcs",
+            "phpcs --config-set default_standard Wordpress"
+        ],
+        "post-update-cmd": [
+            "phpcs --config-set installed_paths ~/DevTools/wpcs",
+            "phpcs --config-set default_standard Wordpress"
+        ]
+    }
+}

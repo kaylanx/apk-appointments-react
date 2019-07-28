@@ -1,77 +1,99 @@
 <?php
-
 /**
- * The plugin bootstrap file
+ * APK Appointments
  *
- * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
- *
- * @link              http://kayley.name/apk-appointments
- * @since             1.0.0
- * @package           APK_Appointments
+ * @package     APK_Appointments
+ * @author      Andy Kayley
+ * @copyright   2019 Andy Kayley
+ * @license     GPL-2.0-or-later
  *
  * @wordpress-plugin
- * Plugin Name:       APK Appointments
- * Plugin URI:        http://kayley.name/apk-appointments/
- * Description:       Allows the user to create a form with appointments that can be chosen from a date picker.
- * Version:           1.0.0
- * Author:            Andy Kayley
- * Author URI:        http://kayley.name/apk-appointments/
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       apk-appointments
- * Domain Path:       /languages
+ * Plugin Name: APK Appointments
+ * Plugin URI: http://kayley.name
+ * Description: APK Appointments plug-in.
+ * Version: 1.0.0
+ * Author: Andy Kayley
+ * Author URI: http://kayley.name
  */
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+defined( 'ABSPATH' ) || die( 'Plugin file cannot be accessed directly.' );
+
+define( 'APK_APPOINTMENT_PLUGIN_FILE', __FILE__ );
+define( 'APK_APPOINTMENTS_OPTION', 'apk_appointments_options' );
+
+/**
+ * Hook that runs when the plugin is activated.  Will setup an empty list of appointments in the database.
+ */
+function apk_appointments_activation_hook() {
+	$option = get_option( APK_APPOINTMENTS_OPTION );
+	if ( ! $option ) {
+		add_option( APK_APPOINTMENTS_OPTION, array(), '', 'no' );
+	}
 }
-
-require_once plugin_dir_path( __FILE__ ) . 'includes/apk-appointments-defines.php';
+register_activation_hook( APK_APPOINTMENT_PLUGIN_FILE, 'apk_appointments_activation_hook' );
 
 /**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-apk-appointments-activator.php
+ * Hook that runs when the plugin is dectivated.
  */
-function activate_apk_appointments() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-apk-appointments-activator.php';
-	APK_Appointments_Activator::activate();
+function apk_appointments_deactivation_hook() {
 }
+register_deactivation_hook( APK_APPOINTMENT_PLUGIN_FILE, 'apk_appointments_deactivation_hook' );
 
 /**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-apk-appointments-deactivator.php
+ * Hook that runs when the plugin is uninstalled.  Will remove the appointments from the database.
  */
-function deactivate_apk_appointments() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-apk-appointments-deactivator.php';
-	APK_Appointments_Deactivator::deactivate();
+function apk_appointments_uninstall_hook() {
+	delete_option( APK_APPOINTMENTS_OPTION );
 }
-
-register_activation_hook( __FILE__, 'activate_apk_appointments' );
-register_deactivation_hook( __FILE__, 'deactivate_apk_appointments' );
+register_uninstall_hook( APK_APPOINTMENT_PLUGIN_FILE, 'apk_appointments_uninstall_hook' );
 
 /**
- * The core plugin class that is used to define internationalization,
- * admin-specific hooks, and public-facing site hooks.
- */
-require plugin_dir_path( __FILE__ ) . 'includes/class-apk-appointments.php';
-
-/**
- * Begins execution of the plugin.
+ * Define the update_option_<option_name> callback.
  *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
- *
- * @since    1.0.0
+ * @param mixed[] $array Don't know what this is?.
  */
-function run_apk_appointments() {
-
-	$plugin = new APK_Appointments();
-	$plugin->run();
-
+function action_update_option_apk_appointments_options( $array ) {
+	write_log( 'action_update_option_apk_appointments_options' );
+	write_log( $array );
 }
-run_apk_appointments();
+// add_action( 'update_option_apk_appointments_options', 'action_update_option_apk_appointments_options', 10, 1 );
+
+/**
+ * Sanitises apk_appointments_options option values.
+ *
+ * @param string $value  The unsanitised value.
+ * @param string $option The name of the option.
+ * @return string Sanitized value.
+ */
+function sanitize_apk_appointments_options( $value, $option ) {
+	write_log( $value );
+	write_log( $option );
+	return $value;
+}
+add_filter( 'sanitize_option_apk_appointments_options', 'sanitize_apk_appointments_options', 10, 2 );
+
+if ( ! function_exists( 'write_log' ) ) {
+	/**
+	 * Writes log text to error_log will use print_r if it's an object.
+	 *
+	 * @param string $log The text to log.
+	 */
+	function write_log( $log ) {
+		if ( is_array( $log ) || is_object( $log ) ) {
+			error_log( print_r( $log, true ) );
+		} else {
+			error_log( $log );
+		}
+	}
+}
+
+require_once __DIR__ . '/includes/class-apk-appointment-list-table.php';
+require_once __DIR__ . '/includes/class-apk-appointments-options-page.php';
+
+use APK\Appointments\OptionsPage;
+
+if ( is_admin() ) {
+	new APK\Appointments\OptionsPage();
+} else {
+	include __DIR__ . '/includes/class-apk-appointments-shortcode.php';
+}
