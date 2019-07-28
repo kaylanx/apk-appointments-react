@@ -13,11 +13,11 @@
  * @package           APK_Appointments
  *
  * @wordpress-plugin
- * Plugin Name:       WordPress Plugin Boilerplate
+ * Plugin Name:       APK Appointments
  * Plugin URI:        http://kayley.name/apk-appointments/apk-appointments-uri/
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Allows the user to create a form with appointments that can be chosen from a date picker.
  * Version:           1.0.0
- * Author:            Your Name or Your Company
+ * Author:            Andy Kayley
  * Author URI:        http://kayley.name/apk-appointments/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
