@@ -18,6 +18,7 @@
 
 defined( 'ABSPATH' ) || die( 'Plugin file cannot be accessed directly.' );
 
+define( 'APK_APPOINTMENT_PLUGIN_FILE', __FILE__ );
 require_once __DIR__ . '/includes/apk-appointments-defines.php';
 
 /**
