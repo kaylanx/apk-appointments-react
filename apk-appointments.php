@@ -74,18 +74,11 @@ if ( ! function_exists( 'write_log' ) ) {
 
 require_once __DIR__ . '/includes/class-apk-appointment-list-table.php';
 require_once __DIR__ . '/includes/class-apk-appointments-options-page.php';
-include_once ABSPATH . 'wp-includes/pluggable.php';
 
 use APK\Appointments\OptionsPage;
 
 if ( is_admin() ) {
-	// if ( current_user_can( 'edit_post' ) ) {
-		new APK\Appointments\OptionsPage();
-	// } else {
-	// 	?-->
-	// 	<H1>Do one!</H1>
-	// 	<--?php
-	// }
+	new APK\Appointments\OptionsPage();
 } else {
 	include __DIR__ . '/includes/class-apk-appointments-shortcode.php';
 }
