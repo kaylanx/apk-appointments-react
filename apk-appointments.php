@@ -18,8 +18,7 @@
 
 defined( 'ABSPATH' ) || die( 'Plugin file cannot be accessed directly.' );
 
-define( 'APK_APPOINTMENT_PLUGIN_FILE', __FILE__ );
-define( 'APK_APPOINTMENTS_OPTION', 'apk_appointments_options' );
+require_once __DIR__ . '/includes/apk-appointments-defines.php';
 
 /**
  * Hook that runs when the plugin is activated.  Will setup an empty list of appointments in the database.
@@ -31,21 +30,6 @@ function apk_appointments_activation_hook() {
 	}
 }
 register_activation_hook( APK_APPOINTMENT_PLUGIN_FILE, 'apk_appointments_activation_hook' );
-
-/**
- * Hook that runs when the plugin is dectivated.
- */
-function apk_appointments_deactivation_hook() {
-}
-register_deactivation_hook( APK_APPOINTMENT_PLUGIN_FILE, 'apk_appointments_deactivation_hook' );
-
-/**
- * Hook that runs when the plugin is uninstalled.  Will remove the appointments from the database.
- */
-function apk_appointments_uninstall_hook() {
-	delete_option( APK_APPOINTMENTS_OPTION );
-}
-register_uninstall_hook( APK_APPOINTMENT_PLUGIN_FILE, 'apk_appointments_uninstall_hook' );
 
 /**
  * Define the update_option_<option_name> callback.
@@ -89,11 +73,18 @@ if ( ! function_exists( 'write_log' ) ) {
 
 require_once __DIR__ . '/includes/class-apk-appointment-list-table.php';
 require_once __DIR__ . '/includes/class-apk-appointments-options-page.php';
+include_once ABSPATH . 'wp-includes/pluggable.php';
 
 use APK\Appointments\OptionsPage;
 
 if ( is_admin() ) {
-	new APK\Appointments\OptionsPage();
+	// if ( current_user_can( 'edit_post' ) ) {
+		new APK\Appointments\OptionsPage();
+	// } else {
+	// 	?-->
+	// 	<H1>Do one!</H1>
+	// 	<--?php
+	// }
 } else {
 	include __DIR__ . '/includes/class-apk-appointments-shortcode.php';
 }
