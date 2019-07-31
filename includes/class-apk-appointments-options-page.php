@@ -12,7 +12,8 @@ namespace APK\Appointments;
  * Admin Options
  */
 class OptionsPage {
-	private $appointmentListTable;
+    
+    private $appointmentListTable;
 
     /**
      * Start up
@@ -23,15 +24,10 @@ class OptionsPage {
     public function display() {
 
         // add_action('admin_init', array($this, 'page_init'));
-        add_action('admin_init', array($this, 'create_list_table'));
         add_filter('set-screen-option', [ __CLASS__, 'set_screen' ], 10, 3);
         // add_action('admin_menu', array($this, 'plugin_menu'));
         // add_action('admin_enqueue_scripts', array($this, 'enqueue_date_picker'));
 
-    }
-
-    public function create_list_table() {
-        $this->appointmentListTable = new ListTable();
     }
 
     public static function set_screen( $status, $option, $value ) {
@@ -71,6 +67,8 @@ class OptionsPage {
     //     );
 	//     add_action( "load-$addnew", [ $this, 'screen_option' ] );
     // }
+
+    
     
     /**
 	 * Screen options
@@ -84,7 +82,9 @@ class OptionsPage {
 			'option'  => 'appointments_per_page'
 		];
 
-		add_screen_option( $option, $args );
+        add_screen_option( $option, $args );
+        
+        $this->appointmentListTable = new ListTable();
 	}
 
     /**
