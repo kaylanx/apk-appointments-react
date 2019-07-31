@@ -77,10 +77,6 @@ require_once __DIR__ . '/includes/class-apk-appointments-options-page.php';
 require_once __DIR__ . '/includes/class-apk-appointments-appointment-creator.php';
 require_once __DIR__ . '/includes/class-apk-appointments-menu-creator.php';
 
-use APK_Appointments_Appointment_Creator;
-use APK_Appointments_Options_Page;
-use APK_Appointments_Menu_Creator;
-
 if ( is_admin() ) {
 	$options_page        = new APK_Appointments_Options_Page();
 	$appointment_creator = new APK_Appointments_Appointment_Creator();
@@ -89,8 +85,6 @@ if ( is_admin() ) {
 
 	if ( array_key_exists( 'page', $_GET ) && 'apk-appointments-new' === $_GET['page'] ) {
 		$appointment_creator->display();
-	} else {
-		$options_page->display();
 	}
 } else {
 	include __DIR__ . '/includes/class-apk-appointments-shortcode.php';

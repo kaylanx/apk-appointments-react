@@ -4,60 +4,58 @@
  * User: andy
  * Date: 19/4/15
  * Time: 14:57
- * To change this template use File | Settings | File Templates.
+ *
+ * @package     APK_Appointments
  */
 
 /**
  * Admin Options
  */
 class APK_Appointments_Options_Page {
-    
-    private $appointmentListTable;
 
-    /**
-     * Start up
-     */
-    function __construct() {
-    }
+	/**
+	 * The APK_Appointments_List_Table instance.
+	 *
+	 * @var APK_Appointments_List_Table
+	 */
+	private $appointments_list_table;
 
-    public function display() {
-        add_filter( 'set-screen-option', array( __CLASS__, 'set_screen' ), 10, 3 );
-    }
-
-    public static function set_screen( $status, $option, $value ) {
-		return $value;
+	/**
+	 * Start up
+	 */
+	public function __construct() {
 	}
 
-    /**
+	/**
 	 * Screen options
 	 */
 	public function screen_option() {
 
 		$option = 'per_page';
-		$args   = [
+		$args   = array(
 			'label'   => 'Appointments',
 			'default' => 5,
-			'option'  => 'appointments_per_page'
-		];
+			'option'  => 'appointments_per_page',
+		);
 
-        add_screen_option( $option, $args );
-        
-        $this->appointmentListTable = new APK_Appointments_List_Table();
+		add_screen_option( $option, $args );
+
+		$this->appointments_list_table = new APK_Appointments_List_Table();
 	}
 
-    /**
-     * Options page callback
-     */
-    function apk_appointments_options_page() {
+	/**
+	 * Options page callback
+	 */
+	public function apk_appointments_options_page() {
 
-        $this->appointmentListTable->prepare_items();
-        ?>
-        <div class="wrap">
-            <h2>Appointments</h2>
-            <form method="post">
-                <?php $this->appointmentListTable->display(); ?>
-            </form>
-        </div>
-       <?php
-    }
+		$this->appointments_list_table->prepare_items();
+		?>
+		<div class="wrap">
+			<h2>Appointments</h2>
+			<form method="post">
+				<?php $this->appointments_list_table->display(); ?>
+			</form>
+		</div>
+		<?php
+	}
 }
