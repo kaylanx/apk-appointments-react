@@ -6,9 +6,8 @@
  * Time: 14:57
  * To change this template use File | Settings | File Templates.
  */
-namespace APK\Appointments;
 
-class AppointmentCreator {
+class APK_Appointments_Appointment_Creator {
 	private $appointmentListTable;
 
     /**

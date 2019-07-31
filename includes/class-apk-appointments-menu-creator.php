@@ -6,12 +6,11 @@
  * Time: 14:57
  * To change this template use File | Settings | File Templates.
  */
-namespace APK\Appointments;
 
 /**
  * Admin Options
  */
-class MenuCreator {
+class APK_Appointments_Menu_Creator {
 
     private $options_page;
     private $appointment_creator;

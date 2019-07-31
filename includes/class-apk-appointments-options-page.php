@@ -6,12 +6,11 @@
  * Time: 14:57
  * To change this template use File | Settings | File Templates.
  */
-namespace APK\Appointments;
 
 /**
  * Admin Options
  */
-class OptionsPage {
+class APK_Appointments_Options_Page {
     
     private $appointmentListTable;
 
@@ -22,54 +21,13 @@ class OptionsPage {
     }
 
     public function display() {
-
-        // add_action('admin_init', array($this, 'page_init'));
-        add_filter('set-screen-option', [ __CLASS__, 'set_screen' ], 10, 3);
-        // add_action('admin_menu', array($this, 'plugin_menu'));
-        // add_action('admin_enqueue_scripts', array($this, 'enqueue_date_picker'));
-
+        add_filter( 'set-screen-option', array( __CLASS__, 'set_screen' ), 10, 3 );
     }
 
     public static function set_screen( $status, $option, $value ) {
 		return $value;
 	}
 
-    // /**
-    //  * Add options page
-    //  */
-    // public function plugin_menu() {
-	// 	$hook = add_menu_page(
-	// 		'APK Shop Appointments',
-	// 		'Appointments',
-	// 		'manage_options',
-    //         'apk-appointments',
-    //         [ $this, 'apk_appointments_options_page' ],
-    //         'dashicons-calendar-alt'
-    //     );
-    //     add_action( "load-$hook", [ $this, 'screen_option' ] );
-
-    //     $edit = add_submenu_page( 
-    //         'apk-appointments',
-	// 	    'Appointments',
-    //         'Appointments',
-    //         'edit_pages',
-    //         'apk-appointments'
-    //     );
-	//     add_action( "load-$edit", [ $this, 'screen_option' ] );
-
-	//     $addnew = add_submenu_page( 
-    //         'apk-appointments',
-	// 	    'Add New Appointment',
-    //         'Add New',
-    //         'edit_pages',
-    //         'apk-appointments-new',
-    //         [ $this, 'apk_add_appointment_form' ]
-    //     );
-	//     add_action( "load-$addnew", [ $this, 'screen_option' ] );
-    // }
-
-    
-    
     /**
 	 * Screen options
 	 */
@@ -84,7 +42,7 @@ class OptionsPage {
 
         add_screen_option( $option, $args );
         
-        $this->appointmentListTable = new ListTable();
+        $this->appointmentListTable = new APK_Appointments_List_Table();
 	}
 
     /**
@@ -93,8 +51,6 @@ class OptionsPage {
     function apk_appointments_options_page() {
 
         $this->appointmentListTable->prepare_items();
-        // echo 'XDebug = '.phpversion('xdebug');
-        // echo phpinfo();
         ?>
         <div class="wrap">
             <h2>Appointments</h2>

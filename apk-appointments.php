@@ -77,24 +77,20 @@ require_once __DIR__ . '/includes/class-apk-appointments-options-page.php';
 require_once __DIR__ . '/includes/class-apk-appointments-appointment-creator.php';
 require_once __DIR__ . '/includes/class-apk-appointments-menu-creator.php';
 
-use APK\Appointments\AppointmentCreator;
-use APK\Appointments\OptionsPage;
-use APK\Appointments\MenuCreator;
-
+use APK_Appointments_Appointment_Creator;
+use APK_Appointments_Options_Page;
+use APK_Appointments_Menu_Creator;
 
 if ( is_admin() ) {
-	$options_page = new OptionsPage();
-	$appointment_creator = new AppointmentCreator();
-	$menu_creator = new MenuCreator( $options_page, $appointment_creator );
-	add_action( 'admin_menu', [ $menu_creator, 'plugin_menu' ] );
+	$options_page        = new APK_Appointments_Options_Page();
+	$appointment_creator = new APK_Appointments_Appointment_Creator();
+	$menu_creator        = new APK_Appointments_Menu_Creator( $options_page, $appointment_creator );
+	add_action( 'admin_menu', array( $menu_creator, 'plugin_menu' ) );
 
-	if ( array_key_exists('page', $_GET ) && $_GET['page'] == 'apk-appointments-new' ) {
+	if ( array_key_exists( 'page', $_GET ) && 'apk-appointments-new' === $_GET['page'] ) {
 		$appointment_creator->display();
-		// add_action( 'admin_init', [ $appointment_creator, 'display' ] );
-
 	} else {
-		// $options_page->display();
-		add_action( 'admin_init', [ $options_page, 'display' ] );
+		$options_page->display();
 	}
 } else {
 	include __DIR__ . '/includes/class-apk-appointments-shortcode.php';
