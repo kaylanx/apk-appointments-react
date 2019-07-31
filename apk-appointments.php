@@ -74,11 +74,28 @@ if ( ! function_exists( 'write_log' ) ) {
 
 require_once __DIR__ . '/includes/class-apk-appointment-list-table.php';
 require_once __DIR__ . '/includes/class-apk-appointments-options-page.php';
+require_once __DIR__ . '/includes/class-apk-appointments-appointment-creator.php';
+require_once __DIR__ . '/includes/class-apk-appointments-menu-creator.php';
 
+use APK\Appointments\AppointmentCreator;
 use APK\Appointments\OptionsPage;
+use APK\Appointments\MenuCreator;
+
 
 if ( is_admin() ) {
-	new APK\Appointments\OptionsPage();
+	$options_page = new OptionsPage();
+	$appointment_creator = new AppointmentCreator();
+	$menu_creator = new MenuCreator( $options_page, $appointment_creator );
+	add_action( 'admin_menu', [ $menu_creator, 'plugin_menu' ] );
+
+	if ( array_key_exists('page', $_GET ) && $_GET['page'] == 'apk-appointments-new' ) {
+		$appointment_creator->display();
+		// add_action( 'admin_init', [ $appointment_creator, 'display' ] );
+
+	} else {
+		// $options_page->display();
+		add_action( 'admin_init', [ $options_page, 'display' ] );
+	}
 } else {
 	include __DIR__ . '/includes/class-apk-appointments-shortcode.php';
 }
