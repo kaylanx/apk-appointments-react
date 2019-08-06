@@ -14,9 +14,9 @@
 class APK_Appointments_Options_Page {
 
 	/**
-	 * The APK_Appointments_List_Table instance.
+	 * The APK_Appointment_List_Table instance.
 	 *
-	 * @var APK_Appointments_List_Table
+	 * @var APK_Appointment_List_Table
 	 */
 	private $appointments_list_table;
 
@@ -40,7 +40,7 @@ class APK_Appointments_Options_Page {
 
 		add_screen_option( $option, $args );
 
-		$this->appointments_list_table = new APK_Appointments_List_Table();
+		$this->appointments_list_table = new APK_Appointment_List_Table();
 	}
 
 	/**
