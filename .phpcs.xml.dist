@@ -46,4 +46,11 @@
 			<property name="blank_line_check" value="true"/>
 		</properties>
 	</rule>
+	<rule ref="WordPress.Security.ValidatedSanitizedInput">
+		<properties>
+			<property name="customSanitizingFunctions" type="array">
+				<element value="sanitize_appointment_data"/>
+			</property>
+		</properties>
+	</rule>
 </ruleset>

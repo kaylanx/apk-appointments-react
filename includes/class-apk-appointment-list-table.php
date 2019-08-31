@@ -12,6 +12,17 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 }
 
 /**
+ * Gets the sanitized value for a appointments.
+ *
+ * @param array $appointments the appointment array to sanitize.
+ *
+ * @return array
+ */
+function sanitize_appointment_data( $appointments ) {
+	return $appointments;
+}
+
+/**
  * Create a new table class that will extend the WP_List_Table
  *
  * @property mixed _column_headers
@@ -53,7 +64,7 @@ class APK_Appointment_List_Table extends WP_List_Table {
 		$data         = $this->table_data( $appointments );
 		usort( $data, array( &$this, 'sort_data' ) );
 
-		wp_create_nonce( 'bulk-delete' );
+		wp_create_nonce( 'apk-bulk-delete' );
 
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 		$this->items           = $data;
@@ -137,12 +148,12 @@ class APK_Appointment_List_Table extends WP_List_Table {
 	 * @return string The html for the checkbox.
 	 */
 	public function column_d( $row ) {
-		$delete_nonce = wp_create_nonce( 'apk_delete_appointment' );
+		$delete_nonce = wp_create_nonce( 'apk-delete' );
 		$title        = '<strong>' . $row[ self::COLUMN_DATE ] . '</strong>';
 		$actions      = array(
 			'delete' => sprintf(
 				'<a href="?page=%s&action=%s&date=%s&time=%s&_wpnonce=%s">Delete</a>',
-				get_param( 'page' ),
+				$this->get_param( 'page' ),
 				'delete',
 				$row[ self::COLUMN_DATE ],
 				absint( $row[ self::COLUMN_TIME ] ),
@@ -226,11 +237,12 @@ class APK_Appointment_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Returns the bulk actions that are available for this table.
+	 * Get an associative array ( option_name => option_title ) with the list
+	 * of bulk actions available on this table.
 	 *
-	 * @return Array dictionary of actions.
+	 * @return array
 	 */
-	private function get_bulk_actions() {
+	protected function get_bulk_actions() {
 		$actions = array(
 			'bulk-delete' => 'Delete',
 		);
@@ -251,36 +263,38 @@ class APK_Appointment_List_Table extends WP_List_Table {
 	 */
 	private function process_single_delete() {
 		if ( 'delete' === $this->current_action() ) {
-			if ( $this->check_nonce( $this->current_action(), 'delete' ) ) {
+			if ( $this->check_nonce( 'action', 'delete' ) || $this->check_nonce( 'action2', 'delete' ) ) {
 				if ( isset( $_GET['date'], $_GET['time'] ) ) {
 					$this->delete_appointment( sanitize_text_field( wp_unslash( $_GET['date'] ) ), absint( wp_unslash( $_GET['time'] ) ) );
+
+					$escaped_url = esc_url_raw( self::PLUGIN_HOME_URI );
+					wp_safe_redirect( $escaped_url );
+					exit;
 				}
 			}
 		}
-
-		$escaped_url = esc_url_raw( self::PLUGIN_HOME_URI );
-		wp_safe_redirect( $escaped_url );
-		exit;
 	}
 	/**
 	 * TEST DATA
 	 * a:4:{i:0;a:3:{s:4:"date";s:10:"2019-07-23";s:5:"times";a:1:{i:0;i:13;}s:6:"closed";b:0;}i:1;a:3:{s:4:"date";s:10:"2019-07-18";s:5:"times";a:1:{i:0;i:16;}s:6:"closed";b:0;}i:2;a:3:{s:4:"date";s:10:"2019-07-17";s:5:"times";a:1:{i:0;i:13;}s:6:"closed";b:0;}i:3;a:3:{s:4:"date";s:10:"2019-07-31";s:5:"times";a:0:{}s:6:"closed";b:1;}}
 	 */
 	private function process_bulk_delete() {
-		if ( $this->check_nonce( 'action', 'bulk-delete' )
-		|| $this->check_nonce( 'action2', 'bulk-delete' ) ) {
-			$appointments_to_delete = $this->get_post_param_with_nonce_check( 'appointment' );
-			$appointments           = get_option( APK_APPOINTMENTS_OPTION );
+		if ( 'bulk-delete' === $this->current_action() ) {
+			if ( $this->check_nonce( 'action', 'bulk-delete' )
+			|| $this->check_nonce( 'action2', 'bulk-delete' ) ) {
+				$appointments_to_delete = $this->get_post_param_with_nonce_check( 'appointment' );
+				$appointments           = get_option( APK_APPOINTMENTS_OPTION );
 
-			foreach ( $appointments_to_delete as $string_appointment ) {
-				$appointment_to_delete = explode( ',', $string_appointment );
-				$appointments          = $this->remove_date_or_times( $appointment_to_delete[0], absint( $appointment_to_delete[1] ), $appointments );
+				foreach ( $appointments_to_delete as $string_appointment ) {
+					$appointment_to_delete = explode( ',', $string_appointment );
+					$appointments          = $this->remove_date_or_times( $appointment_to_delete[0], absint( $appointment_to_delete[1] ), $appointments );
+				}
+
+				$updated = update_option( APK_APPOINTMENTS_OPTION, $appointments );
+
+				wp_redirect( esc_url_raw( self::PLUGIN_HOME_URI ) );
+				exit;
 			}
-
-			$updated = update_option( APK_APPOINTMENTS_OPTION, $appointments );
-
-			wp_redirect( esc_url_raw( self::PLUGIN_HOME_URI ) );
-			exit;
 		}
 	}
 
@@ -291,7 +305,8 @@ class APK_Appointment_List_Table extends WP_List_Table {
 	 * @param string $value a value we want to check from the $_POST specified by the key.
 	 */
 	private function check_nonce( $key, $value ) {
-		return isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'apk_delete_appointment' ) && ( isset( $_POST[ $key ] ) && $value === $_POST[ $key ] );
+		$nonce_value = 'delete' === $value ? $value : 'bulk-' . $this->_args['plural'];
+		return isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), $nonce_value ) && ( isset( $_REQUEST[ $key ] ) && $value === $_REQUEST[ $key ] );
 	}
 
 	/**
@@ -302,7 +317,8 @@ class APK_Appointment_List_Table extends WP_List_Table {
 	 * @return array
 	 */
 	private function get_post_param_with_nonce_check( $key ) {
-		return isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'apk_delete_appointment' ) && isset( $_POST[ $key ] ) ? esc_sql( sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) ) : array();
+		return isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'bulk-' . $this->_args['plural'] )
+		  && isset( $_POST[ $key ] ) ? esc_sql( sanitize_appointment_data( wp_unslash( $_POST[ $key ] ) ) ) : array();
 	}
 
 	/**
