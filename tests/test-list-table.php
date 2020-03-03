@@ -1,8 +1,6 @@
 <?php
 // fwrite(STDERR, print_r($generatedJson, TRUE));
 
-use APK_Appointment_List_Table;
-
 $GLOBALS['hook_suffix'] = 'x';
 class ListTableTest extends WP_UnitTestCase
 {

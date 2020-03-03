@@ -11,5 +11,8 @@
             "phpcs --config-set installed_paths ~/DevTools/wpcs",
             "phpcs --config-set default_standard Wordpress"
         ]
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7"
     }
 }

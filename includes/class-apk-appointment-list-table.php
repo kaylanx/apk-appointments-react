@@ -276,7 +276,7 @@ class APK_Appointment_List_Table extends WP_List_Table {
 	}
 	/**
 	 * TEST DATA
-	 * a:4:{i:0;a:3:{s:4:"date";s:10:"2019-07-23";s:5:"times";a:1:{i:0;i:13;}s:6:"closed";b:0;}i:1;a:3:{s:4:"date";s:10:"2019-07-18";s:5:"times";a:1:{i:0;i:16;}s:6:"closed";b:0;}i:2;a:3:{s:4:"date";s:10:"2019-07-17";s:5:"times";a:1:{i:0;i:13;}s:6:"closed";b:0;}i:3;a:3:{s:4:"date";s:10:"2019-07-31";s:5:"times";a:0:{}s:6:"closed";b:1;}}
+	 * a:4:{i:0;a:3:{s:4:"date";s:10:"2020-03-23";s:5:"times";a:1:{i:0;i:13;}s:6:"closed";b:0;}i:1;a:3:{s:4:"date";s:10:"2020-03-18";s:5:"times";a:1:{i:0;i:16;}s:6:"closed";b:0;}i:2;a:3:{s:4:"date";s:10:"2020-03-17";s:5:"times";a:1:{i:0;i:13;}s:6:"closed";b:0;}i:3;a:3:{s:4:"date";s:10:"2020-03-28";s:5:"times";a:0:{}s:6:"closed";b:1;}}
 	 */
 	private function process_bulk_delete() {
 		if ( 'bulk-delete' === $this->current_action() ) {
