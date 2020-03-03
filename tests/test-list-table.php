@@ -1,20 +1,19 @@
 <?php
-// fwrite(STDERR, print_r($generatedJson, TRUE));
 
 $GLOBALS['hook_suffix'] = 'x';
-class ListTableTest extends WP_UnitTestCase {
+class List_TableTest extends WP_UnitTestCase {
 
 	public function test_when_checkbox_column_is_rendered_then_checkbox_html_returned() {
-		$listTable    = new APK_Appointment_List_Table();
-		$expectedHtml = '<input type="checkbox" name="appointment[]" value="2015-04-22,16,NO" />';
-		$actualHtml   = $listTable->column_cb( $this->get_appointment_not_closed() );
+		$list_table    = new APK_Appointment_List_Table();
+		$expected_html = '<input type="checkbox" name="appointment[]" value="2015-04-22,16,NO" />';
+		$actual_html   = $list_table->column_cb( $this->get_appointment_not_closed() );
 
-		$this->assertEquals( $expectedHtml, $actualHtml );
+		$this->assertEquals( $expected_html, $actual_html );
 	}
 
 	public function test_when_get_columns_called_column_names_are_correct() {
-		$listTable = new APK_Appointment_List_Table();
-		$columns   = $listTable->get_columns();
+		$list_table = new APK_Appointment_List_Table();
+		$columns    = $list_table->get_columns();
 		$this->assertEquals( 4, count( $columns ) );
 		$this->assertTrue( array_key_exists( APK_Appointment_List_Table::COLUMN_CHECKBOX, $columns ) );
 		$this->assertTrue( array_key_exists( APK_Appointment_List_Table::COLUMN_DATE, $columns ) );
@@ -28,38 +27,38 @@ class ListTableTest extends WP_UnitTestCase {
 	}
 
 	public function test_there_are_no_hidden_columns() {
-		$listTable = new APK_Appointment_List_Table();
-		$this->assertEquals( 0, count( $listTable->get_hidden_columns() ) );
+		$list_table = new APK_Appointment_List_Table();
+		$this->assertEquals( 0, count( $list_table->get_hidden_columns() ) );
 	}
 
 	public function test_column_values_for_checkbox() {
-		$listTable                  = new APK_Appointment_List_Table();
-		$checkBoxColumnDisplayValue = $listTable->column_default( $this->get_appointment_not_closed(), APK_Appointment_List_Table::COLUMN_CHECKBOX );
-		$this->assertEquals( '', $checkBoxColumnDisplayValue );
+		$list_table                     = new APK_Appointment_List_Table();
+		$check_box_column_display_value = $list_table->column_default( $this->get_appointment_not_closed(), APK_Appointment_List_Table::COLUMN_CHECKBOX );
+		$this->assertEquals( '', $check_box_column_display_value );
 	}
 
 	public function test_column_values_for_date() {
-		$listTable              = new APK_Appointment_List_Table();
-		$dateColumnDisplayValue = $listTable->column_default( $this->get_appointment_not_closed(), APK_Appointment_List_Table::COLUMN_DATE );
-		$this->assertEquals( '2015-04-22', $dateColumnDisplayValue );
+		$list_table                = new APK_Appointment_List_Table();
+		$date_column_display_value = $list_table->column_default( $this->get_appointment_not_closed(), APK_Appointment_List_Table::COLUMN_DATE );
+		$this->assertEquals( '2015-04-22', $date_column_display_value );
 	}
 
 	public function test_column_values_for_closed_when_not_closed() {
-		$listTable                = new APK_Appointment_List_Table();
-		$closedColumnDisplayValue = $listTable->column_default( $this->get_appointment_not_closed(), APK_Appointment_List_Table::COLUMN_CLOSED );
-		$this->assertEquals( 'NO', $closedColumnDisplayValue );
+		$list_table                  = new APK_Appointment_List_Table();
+		$closed_column_display_value = $list_table->column_default( $this->get_appointment_not_closed(), APK_Appointment_List_Table::COLUMN_CLOSED );
+		$this->assertEquals( 'NO', $closed_column_display_value );
 	}
 
 	public function test_column_values_for_closed_when_closed() {
-		$listTable                = new APK_Appointment_List_Table();
-		$closedColumnDisplayValue = $listTable->column_default( $this->get_appointment_closed(), APK_Appointment_List_Table::COLUMN_CLOSED );
-		$this->assertEquals( 'YES', $closedColumnDisplayValue );
+		$list_table                  = new APK_Appointment_List_Table();
+		$closed_column_display_value = $list_table->column_default( $this->get_appointment_closed(), APK_Appointment_List_Table::COLUMN_CLOSED );
+		$this->assertEquals( 'YES', $closed_column_display_value );
 	}
 
 	public function test_column_values_for_time_when_closed() {
-		$listTable              = new APK_Appointment_List_Table();
-		$timeColumnDisplayValue = $listTable->column_default( $this->get_appointment_closed(), APK_Appointment_List_Table::COLUMN_TIME );
-		$this->assertEquals( '', $timeColumnDisplayValue );
+		$list_table                = new APK_Appointment_List_Table();
+		$time_column_display_value = $list_table->column_default( $this->get_appointment_closed(), APK_Appointment_List_Table::COLUMN_TIME );
+		$this->assertEquals( '', $time_column_display_value );
 	}
 
 	public function test_column_values_for_time_when_appointment_at_8_then_empty_string() {
@@ -140,43 +139,43 @@ class ListTableTest extends WP_UnitTestCase {
 	}
 
 	private function remove_date_or_times( $date, $time, $appointments ) {
-		$listTable = new APK_Appointment_List_Table();
-		$reflector = new ReflectionObject( $listTable );
-		$method    = $reflector->getMethod( 'remove_date_or_times' );
+		$list_table = new APK_Appointment_List_Table();
+		$reflector  = new ReflectionObject( $list_table );
+		$method     = $reflector->getMethod( 'remove_date_or_times' );
 		$method->setAccessible( true );
-		return $method->invoke( $listTable, $date, $time, $appointments );
+		return $method->invoke( $list_table, $date, $time, $appointments );
 	}
 
 	public function test_table_data() {
-		$listTable      = new APK_Appointment_List_Table();
+		$list_table     = new APK_Appointment_List_Table();
 		$appointments   = array();
 		$appointments[] = $this->get_appointment_option_not_closed( '2015-04-22', array( 14, 15, 16 ), false );
 		$appointments[] = $this->get_appointment_option_closed();
 
-		$reflector = new ReflectionObject( $listTable );
+		$reflector = new ReflectionObject( $list_table );
 		$method    = $reflector->getMethod( 'table_data' );
 		$method->setAccessible( true );
-		$dataModel = $method->invoke( $listTable, $appointments );
+		$data_model = $method->invoke( $list_table, $appointments );
 
-		$this->assertEquals( 4, count( $dataModel ) );
-		$this->assertThatAppointmentOptionTransformedToTableDisplayRows( $dataModel[0], '2015-04-22', 14, 'NO' );
-		$this->assertThatAppointmentOptionTransformedToTableDisplayRows( $dataModel[1], '2015-04-22', 15, 'NO' );
-		$this->assertThatAppointmentOptionTransformedToTableDisplayRows( $dataModel[2], '2015-04-22', 16, 'NO' );
-		$this->assertThatAppointmentOptionTransformedToTableDisplayRows( $dataModel[3], '2015-04-23', null, 'YES' );
+		$this->assertEquals( 4, count( $data_model ) );
+		$this->assertThatAppointmentOptionTransformedToTableDisplayRows( $data_model[0], '2015-04-22', 14, 'NO' );
+		$this->assertThatAppointmentOptionTransformedToTableDisplayRows( $data_model[1], '2015-04-22', 15, 'NO' );
+		$this->assertThatAppointmentOptionTransformedToTableDisplayRows( $data_model[2], '2015-04-22', 16, 'NO' );
+		$this->assertThatAppointmentOptionTransformedToTableDisplayRows( $data_model[3], '2015-04-23', null, 'YES' );
 	}
 
-	private function assertThatAppointmentOptionTransformedToTableDisplayRows( $actualAppointment, $expectedDate, $expectedTime, $expectedClosed ) {
-		$this->assertEquals( $expectedDate, $actualAppointment[ APK_Appointment_List_Table::COLUMN_DATE ] );
-		$this->assertEquals( $expectedTime, $actualAppointment[ APK_Appointment_List_Table::COLUMN_TIME ] );
-		$this->assertEquals( $expectedClosed, $actualAppointment[ APK_Appointment_List_Table::COLUMN_CLOSED ] );
+	private function assertThatAppointmentOptionTransformedToTableDisplayRows( $actual_appointment, $expected_date, $expected_time, $expected_closed ) {
+		$this->assertEquals( $expected_date, $actual_appointment[ APK_Appointment_List_Table::COLUMN_DATE ] );
+		$this->assertEquals( $expected_time, $actual_appointment[ APK_Appointment_List_Table::COLUMN_TIME ] );
+		$this->assertEquals( $expected_closed, $actual_appointment[ APK_Appointment_List_Table::COLUMN_CLOSED ] );
 	}
 
 	private function assertAppointmentTimesKeyGivesCorrectDisplayValue( $key, $display_value ) {
-		$listTable   = new APK_Appointment_List_Table();
+		$list_table  = new APK_Appointment_List_Table();
 		$appointment = $this->get_appointment_not_closed();
 		$appointment[ APK_Appointment_List_Table::COLUMN_TIME ] = $key;
-		$timeColumnDisplayValue                                 = $listTable->column_default( $appointment, APK_Appointment_List_Table::COLUMN_TIME );
-		$this->assertEquals( $display_value, $timeColumnDisplayValue );
+		$time_column_display_value                              = $list_table->column_default( $appointment, APK_Appointment_List_Table::COLUMN_TIME );
+		$this->assertEquals( $display_value, $time_column_display_value );
 	}
 
 	private function assertAppointmentPartsEquals( $expected_date, $expected_times, $expected_closed, $actual_appointment ) {
@@ -186,29 +185,29 @@ class ListTableTest extends WP_UnitTestCase {
 	}
 
 	private function get_appointment_not_closed( $date = '2015-04-22', $time = 16, $closed = 'NO' ) {
-		$wpOptionAppointment[ APK_Appointment_List_Table::COLUMN_DATE ]   = $date;
-		$wpOptionAppointment[ APK_Appointment_List_Table::COLUMN_TIME ]   = $time;
-		$wpOptionAppointment[ APK_Appointment_List_Table::COLUMN_CLOSED ] = $closed;
-		return $wpOptionAppointment;
+		$wp_option_appointment[ APK_Appointment_List_Table::COLUMN_DATE ]   = $date;
+		$wp_option_appointment[ APK_Appointment_List_Table::COLUMN_TIME ]   = $time;
+		$wp_option_appointment[ APK_Appointment_List_Table::COLUMN_CLOSED ] = $closed;
+		return $wp_option_appointment;
 	}
 
 	private function get_appointment_closed() {
-		$wpOptionAppointment[ APK_Appointment_List_Table::COLUMN_DATE ]   = '2015-04-23';
-		$wpOptionAppointment[ APK_Appointment_List_Table::COLUMN_CLOSED ] = 'YES';
-		return $wpOptionAppointment;
+		$wp_option_appointment[ APK_Appointment_List_Table::COLUMN_DATE ]   = '2015-04-23';
+		$wp_option_appointment[ APK_Appointment_List_Table::COLUMN_CLOSED ] = 'YES';
+		return $wp_option_appointment;
 	}
 
 	private function get_appointment_option_not_closed( $date = '2015-04-22', $times = array( 16 ), $closed = false ) {
-		$wpOptionAppointment['date']   = $date;
-		$wpOptionAppointment['times']  = $times;
-		$wpOptionAppointment['closed'] = $closed;
-		return $wpOptionAppointment;
+		$wp_option_appointment['date']   = $date;
+		$wp_option_appointment['times']  = $times;
+		$wp_option_appointment['closed'] = $closed;
+		return $wp_option_appointment;
 	}
 
 	private function get_appointment_option_closed() {
-		$wpOptionAppointment['date']   = '2015-04-23';
-		$wpOptionAppointment['times']  = array();
-		$wpOptionAppointment['closed'] = true;
-		return $wpOptionAppointment;
+		$wp_option_appointment['date']   = '2015-04-23';
+		$wp_option_appointment['times']  = array();
+		$wp_option_appointment['closed'] = true;
+		return $wp_option_appointment;
 	}
 }
