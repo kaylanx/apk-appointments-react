@@ -12,17 +12,6 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 }
 
 /**
- * Gets the sanitized value for a appointments.
- *
- * @param array $appointments the appointment array to sanitize.
- *
- * @return array
- */
-function sanitize_appointment_data( $appointments ) {
-	return $appointments;
-}
-
-/**
  * Create a new table class that will extend the WP_List_Table
  *
  * @property mixed _column_headers
@@ -294,8 +283,8 @@ class APK_Appointment_List_Table extends WP_List_Table {
 
 				$updated = update_option( APK_APPOINTMENTS_OPTION, $appointments );
 
-				wp_redirect( esc_url_raw( self::PLUGIN_HOME_URI ) );
-				exit;
+				wp_safe_redirect( esc_url_raw( self::PLUGIN_HOME_URI ) );
+				exit();
 			}
 		}
 	}
@@ -367,12 +356,12 @@ class APK_Appointment_List_Table extends WP_List_Table {
 	 * Gets the sanitized value for a parameter for key includes a nonce check first.
 	 *
 	 * @param string $key The key of the parameter name.
-	 *
+	 * @param string $value a value we want to check from the $_POST specified by the key.
 	 * @return array
 	 */
 	private function get_post_param_with_nonce_check( $key, $value ) {
 		return isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), $value )
-		  && isset( $_POST[ $key ] ) ? esc_sql( sanitize_appointment_data( wp_unslash( $_POST[ $key ] ) ) ) : array();
+		&& isset( $_POST[ $key ] ) ? esc_sql( array_map( 'sanitize_text_field', wp_unslash( $_POST[ $key ] ) ) ) : array();
 	}
 
 	/**
