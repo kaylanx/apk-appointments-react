@@ -38,7 +38,7 @@ class APK_Appointments_Appointment_Creator {
 	public function apk_add_appointment_form() {
 		?>
 		<div class="wrap">
-			<form method="post" action="options.php">
+			<form method="post" action="admin.php?page=apk-appointments">
 				<?php
 				// This prints out all hidden setting fields...
 				settings_fields( 'apk_appointments_option_group' );
@@ -111,64 +111,6 @@ class APK_Appointments_Appointment_Creator {
 			array(),
 			'1.8.2'
 		);
-	}
-
-	/**
-	 * Sanitize each setting field as needed
-	 *
-	 * @param array $input Contains all settings fields as array keys.
-	 * @return array sanitized $input
-	 */
-	public function old__sanitize( $input ) {
-		if ( isset( $_GET['action'] ) && 'delete' === $_GET['action'] ) {
-			$new_input = $input;
-		} else {
-			$new_input = array();
-
-			if ( isset( $input['appointment_date'] ) && isset( $input['appointment_time'] ) ) {
-
-				$appointments = get_option( APK_APPOINTMENTS_OPTION );
-
-				$appointment_date = sanitize_text_field( $input['appointment_date'] );
-				$appointment_time = (int) sanitize_text_field( $input['appointment_time'] );
-				$shop_closed      = 'on' === sanitize_text_field( $input['shop_closed'] ) ? true : false;
-
-				foreach ( $appointments as $index => $appointment ) {
-					if ( $appointment['date'] === $appointment_date ) {
-						$existing_appointment = $appointment;
-						$existing_index       = $index;
-						break;
-					}
-				}
-
-				// adding a new time to an existing date...
-				if ( isset( $existing_appointment ) && isset( $existing_index ) ) {
-					$existing_appointment['closed'] = $shop_closed;
-
-					if ( $shop_closed ) {
-						$existing_appointment['times'] = array();
-					} else {
-						$existing_appointment['times'][] = $appointment_time;
-					}
-					$appointments[ $existing_index ] = $existing_appointment;
-				} else {
-					// Adding a new date and time.
-					$new_appointment['date']   = $appointment_date;
-					$new_appointment['times']  = array( $appointment_time );
-					$new_appointment['closed'] = $shop_closed;
-
-					if ( $shop_closed ) {
-						$new_appointment['times'] = array();
-					}
-
-					$appointments[] = $new_appointment;
-				}
-
-				$new_input = $appointments;
-			}
-		}
-
-		return $new_input;
 	}
 
 	/**

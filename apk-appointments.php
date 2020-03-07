@@ -32,46 +32,6 @@ function apk_appointments_activation_hook() {
 }
 register_activation_hook( APK_APPOINTMENT_PLUGIN_FILE, 'apk_appointments_activation_hook' );
 
-/**
- * Define the update_option_<option_name> callback.
- *
- * @param mixed[] $array Don't know what this is?.
- */
-function action_update_option_apk_appointments_options( $array ) {
-	write_log( 'action_update_option_apk_appointments_options' );
-	write_log( $array );
-}
-// add_action( 'update_option_apk_appointments_options', 'action_update_option_apk_appointments_options', 10, 1 );
-
-/**
- * Sanitises apk_appointments_options option values.
- *
- * @param string $value  The unsanitised value.
- * @param string $option The name of the option.
- * @return string Sanitized value.
- */
-function sanitize_apk_appointments_options( $value, $option ) {
-	write_log( $value );
-	write_log( $option );
-	return $value;
-}
-add_filter( 'sanitize_option_apk_appointments_options', 'sanitize_apk_appointments_options', 10, 2 );
-
-if ( ! function_exists( 'write_log' ) ) {
-	/**
-	 * Writes log text to error_log will use print_r if it's an object.
-	 *
-	 * @param string $log The text to log.
-	 */
-	function write_log( $log ) {
-		if ( is_array( $log ) || is_object( $log ) ) {
-			error_log( print_r( $log, true ) );
-		} else {
-			error_log( $log );
-		}
-	}
-}
-
 require_once __DIR__ . '/includes/class-apk-appointment-list-table.php';
 require_once __DIR__ . '/includes/class-apk-appointments-options-page.php';
 require_once __DIR__ . '/includes/class-apk-appointments-appointment-creator.php';

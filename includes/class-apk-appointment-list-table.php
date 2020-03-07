@@ -60,6 +60,8 @@ class APK_Appointment_List_Table extends WP_List_Table {
 		$hidden   = $this->get_hidden_columns();
 		$sortable = $this->get_sortable_columns();
 
+		$this->process_action();
+
 		$appointments = get_option( APK_APPOINTMENTS_OPTION );
 		$data         = $this->table_data( $appointments );
 		usort( $data, array( &$this, 'sort_data' ) );
@@ -69,7 +71,6 @@ class APK_Appointment_List_Table extends WP_List_Table {
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 		$this->items           = $data;
 
-		$this->process_action();
 	}
 
 	/**
@@ -148,7 +149,7 @@ class APK_Appointment_List_Table extends WP_List_Table {
 	 * @return string The html for the checkbox.
 	 */
 	public function column_d( $row ) {
-		$delete_nonce = wp_create_nonce( 'apk-delete' );
+		$delete_nonce = wp_create_nonce( 'delete' );
 		$title        = '<strong>' . $row[ self::COLUMN_DATE ] . '</strong>';
 		$actions      = array(
 			'delete' => sprintf(
@@ -256,6 +257,7 @@ class APK_Appointment_List_Table extends WP_List_Table {
 	private function process_action() {
 		$this->process_single_delete();
 		$this->process_bulk_delete();
+		$this->process_add_new();
 	}
 
 	/**
@@ -282,7 +284,7 @@ class APK_Appointment_List_Table extends WP_List_Table {
 		if ( 'bulk-delete' === $this->current_action() ) {
 			if ( $this->check_nonce( 'action', 'bulk-delete' )
 			|| $this->check_nonce( 'action2', 'bulk-delete' ) ) {
-				$appointments_to_delete = $this->get_post_param_with_nonce_check( 'appointment' );
+				$appointments_to_delete = $this->get_post_param_with_nonce_check( 'appointment', 'bulk-' . $this->_args['plural'] );
 				$appointments           = get_option( APK_APPOINTMENTS_OPTION );
 
 				foreach ( $appointments_to_delete as $string_appointment ) {
@@ -296,6 +298,58 @@ class APK_Appointment_List_Table extends WP_List_Table {
 				exit;
 			}
 		}
+	}
+
+	/**
+	 * Add new appointment
+	 */
+	private function process_add_new() {
+		if ( 'update' === $this->current_action() ) {
+			$appointment_to_add = $this->get_post_param_with_nonce_check( 'apk_appointments_options', 'apk_appointments_option_group-options' );
+
+			if ( isset( $appointment_to_add['appointment_date'] ) && isset( $appointment_to_add['appointment_time'] ) ) {
+
+				$appointments = get_option( APK_APPOINTMENTS_OPTION );
+
+				$appointment_date = sanitize_text_field( $appointment_to_add['appointment_date'] );
+				$appointment_time = (int) sanitize_text_field( $appointment_to_add['appointment_time'] );
+				$shop_closed      = 'on' === sanitize_text_field( $appointment_to_add['shop_closed'] ) ? true : false;
+
+				foreach ( $appointments as $index => $appointment ) {
+					if ( $appointment['date'] === $appointment_date ) {
+						$existing_appointment = $appointment;
+						$existing_index       = $index;
+						break;
+					}
+				}
+
+				// adding a new time to an existing date...
+				if ( isset( $existing_appointment ) && isset( $existing_index ) ) {
+					$existing_appointment['closed'] = $shop_closed;
+
+					if ( $shop_closed ) {
+						$existing_appointment['times'] = array();
+					} else {
+						$existing_appointment['times'][] = $appointment_time;
+					}
+					$appointments[ $existing_index ] = $existing_appointment;
+				} else {
+					// Adding a new date and time.
+					$new_appointment['date']   = $appointment_date;
+					$new_appointment['times']  = array( $appointment_time );
+					$new_appointment['closed'] = $shop_closed;
+
+					if ( $shop_closed ) {
+						$new_appointment['times'] = array();
+					}
+
+					$appointments[] = $new_appointment;
+				}
+
+				$updated = update_option( APK_APPOINTMENTS_OPTION, $appointments );
+			}
+		}
+
 	}
 
 	/**
@@ -316,8 +370,8 @@ class APK_Appointment_List_Table extends WP_List_Table {
 	 *
 	 * @return array
 	 */
-	private function get_post_param_with_nonce_check( $key ) {
-		return isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'bulk-' . $this->_args['plural'] )
+	private function get_post_param_with_nonce_check( $key, $value ) {
+		return isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), $value )
 		  && isset( $_POST[ $key ] ) ? esc_sql( sanitize_appointment_data( wp_unslash( $_POST[ $key ] ) ) ) : array();
 	}
 
