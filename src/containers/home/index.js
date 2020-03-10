@@ -39,7 +39,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     incrementAsync,
     decrement,
     decrementAsync,
-    changePage: () => push('/about-us')
+    changePage: () => push('/contact-3-2/about-us')
 }, dispatch)
 
 export default connect(

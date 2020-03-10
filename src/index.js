@@ -7,7 +7,7 @@ import App from './containers/app'
 
 import './index.css'
 
-const target = document.querySelector('#root')
+const target = document.querySelector('#apk-appointments')
 
 render(
   <Provider store={store}>
