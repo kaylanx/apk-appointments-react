@@ -5,7 +5,7 @@ import About from '../about'
 import logo from '../../logo.svg';
 import '../../App.css';
 
-const App = () => (
+const App = () =>(
     <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
