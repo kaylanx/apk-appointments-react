@@ -24,11 +24,10 @@ const disabledDates = (date) => {
 const tomorrow = () => {
   const tomorrow = new Date()
   tomorrow.setDate(tomorrow.getDate() + 1)
-  console.log(tomorrow)
   return tomorrow
 }
 
-function App () {
+const App = () => {
   const [selectedDate, handleDateChange] = useState(tomorrow())
 
   const classes = useStyles()
