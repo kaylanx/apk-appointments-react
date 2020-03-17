@@ -37,6 +37,32 @@ test('today is disabled', async () => {
   expect(todayElement.parentNode.parentNode).toHaveClass('MuiPickersDay-dayDisabled')
 })
 
+test('tomorrow is enabled', async () => {
+  const { getByText, findByText } = render(<App />)
+  fireEvent.click(getByText(/Preferred Date */i))
+
+  const tomorrow = new Date()
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  const expectedDate = tomorrow.toLocaleString('en-US', {
+    day: '2-digit'
+  })
+  const tomorrowElement = await findByText(expectedDate)
+  expect(tomorrowElement.parentNode.parentNode).not.toHaveClass('MuiPickersDay-dayDisabled')
+})
+
+test('two days from now is enabled', async () => {
+  const { getByText, findByText } = render(<App />)
+  fireEvent.click(getByText(/Preferred Date */i))
+
+  const dayAfterTomorrow = new Date()
+  dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2)
+  const expectedDate = dayAfterTomorrow.toLocaleString('en-US', {
+    day: '2-digit'
+  })
+  const tomorrowElement = await findByText(expectedDate)
+  expect(tomorrowElement.parentNode.parentNode).not.toHaveClass('MuiPickersDay-dayDisabled')
+})
+
 test('renders preferred time field', () => {
   const { getByText } = render(<App />)
   const preferredDateField = getByText(/Preferred Time */i)

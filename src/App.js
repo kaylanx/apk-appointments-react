@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css'
 import { TextField } from '@material-ui/core'
 import DateFnsUtils from '@date-io/date-fns'
+import { config } from './Constants'
 import {
   DatePicker,
   MuiPickersUtilsProvider
@@ -17,20 +18,39 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const disabledDates = (date) => {
-  return date.getDay() === 0 || date.getDay() === 6
-}
-
 const tomorrow = () => {
   const tomorrow = new Date()
   tomorrow.setDate(tomorrow.getDate() + 1)
   return tomorrow
 }
 
-const App = () => {
+const determineDisabledDate = (appointments, date) => {
+  console.log(appointments)
+  return false
+}
+
+function App () {
   const [selectedDate, handleDateChange] = useState(tomorrow())
+  const [appointments, appontmentsDataChange] = useState(null)
 
   const classes = useStyles()
+
+  useEffect(() => {
+    async function fetchAppointmentData () {
+      console.log(config.url.API_URL)
+      const response = await fetch(config.url.API_URL)
+      appontmentsDataChange(await response.json())
+    }
+
+    fetchAppointmentData()
+  }, [])
+
+  const disabledDates = (date) => {
+    if (date.getDay() === 0 || date.getDay() === 6) {
+      return true
+    }
+    return determineDisabledDate(appointments, date)
+  }
 
   return (
     <div className="App">
