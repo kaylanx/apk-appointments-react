@@ -1,12 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import './App.css'
 import { TextField } from '@material-ui/core'
-import DateFnsUtils from '@date-io/date-fns'
-import { config } from './Constants'
-import {
-  DatePicker,
-  MuiPickersUtilsProvider
-} from '@material-ui/pickers'
+import { AppointmentsCalendar } from './appointments-calendar'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
@@ -18,56 +13,13 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const tomorrow = () => {
-  const tomorrow = new Date()
-  tomorrow.setDate(tomorrow.getDate() + 1)
-  return tomorrow
-}
-
-const determineDisabledDate = (appointments, date) => {
-  console.log(appointments)
-  return false
-}
-
 function App () {
-  const [selectedDate, handleDateChange] = useState(tomorrow())
-  const [appointments, appontmentsDataChange] = useState(null)
-
   const classes = useStyles()
-
-  useEffect(() => {
-    async function fetchAppointmentData () {
-      console.log(config.url.API_URL)
-      const response = await fetch(config.url.API_URL)
-      appontmentsDataChange(await response.json())
-    }
-
-    fetchAppointmentData()
-  }, [])
-
-  const disabledDates = (date) => {
-    if (date.getDay() === 0 || date.getDay() === 6) {
-      return true
-    }
-    return determineDisabledDate(appointments, date)
-  }
 
   return (
     <div className="App">
       <form className={classes.root} noValidate autoComplete="off">
-
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <DatePicker
-            label="Preferred Date"
-            required
-            value={selectedDate}
-            onChange={handleDateChange}
-            disablePast={true}
-            autoOk={true}
-            minDate={tomorrow()}
-            shouldDisableDate={disabledDates}
-            inputVariant="filled" />
-        </MuiPickersUtilsProvider>
+        <AppointmentsCalendar />
         <TextField
           id="time"
           label="Preferred Time"
