@@ -3,9 +3,10 @@ import {
   DatePicker,
   MuiPickersUtilsProvider
 } from '@material-ui/pickers'
+import { isDayClosed } from './diary'
 import DateFnsUtils from '@date-io/date-fns'
 
-import { useEffectGetAppointments } from './use-effect-get-appointments'
+import { useEffectGetDiary } from './use-effect-get-diary'
 
 const tomorrow = () => {
   const tomorrow = new Date()
@@ -18,7 +19,7 @@ const determineDisabledDate = (appointments, date) => {
 }
 
 export function AppointmentsCalendar () {
-  const { loading, appointments } = useEffectGetAppointments()
+  const { loading, diary } = useEffectGetDiary()
   const [selectedDate, handleDateChange] = useState(tomorrow())
 
   const disabledDates = (date) => {
@@ -28,7 +29,7 @@ export function AppointmentsCalendar () {
     if (date.getDay() === 0 || date.getDay() === 6) {
       return true
     }
-    return determineDisabledDate(appointments, date)
+    return determineDisabledDate(diary, date)
   }
 
   return (
@@ -43,7 +44,7 @@ export function AppointmentsCalendar () {
         minDate={tomorrow()}
         shouldDisableDate={disabledDates}
         inputVariant="filled" />
-      <div>{JSON.stringify(appointments)}</div>
+      <div>{JSON.stringify(diary)}</div>
 
     </MuiPickersUtilsProvider>
   )

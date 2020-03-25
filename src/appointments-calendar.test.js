@@ -2,24 +2,24 @@ import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 
 import { AppointmentsCalendar } from './appointments-calendar'
-import { useEffectGetAppointments } from './use-effect-get-appointments'
-jest.mock('./use-effect-get-appointments')
+import { useEffectGetDiary } from './use-effect-get-diary'
+jest.mock('./use-effect-get-diary')
 
 describe('load appointments', () => {
   it('loading state', () => {
-    useEffectGetAppointments.mockReturnValue({
+    useEffectGetDiary.mockReturnValue({
       loading: true,
       data: null
     })
 
     const { container } = render(<AppointmentsCalendar />)
 
-    expect(useEffectGetAppointments).toHaveBeenCalled()
+    expect(useEffectGetDiary).toHaveBeenCalled()
     expect(container).toHaveTextContent('Preferred Date *')
   })
 
   it('today is disabled', () => {
-    useEffectGetAppointments.mockReturnValue({
+    useEffectGetDiary.mockReturnValue({
       loading: true,
       data: null
     })

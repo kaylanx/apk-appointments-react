@@ -1,19 +1,19 @@
 import { renderHook } from '@testing-library/react-hooks'
-import { useEffectGetAppointments } from './use-effect-get-appointments'
-import { getAppointments } from './fetch-appointments'
+import { useEffectGetDiary } from './use-effect-get-diary'
+import { getDiary } from './fetch-diary'
 import fakeAppointments from './fake-appointments'
-jest.mock('./fetch-appointments')
+jest.mock('./fetch-diary')
 
 describe('use the effect get appointments', () => {
   it('data is fetched and not loading', async () => {
-    getAppointments.mockResolvedValue(fakeAppointments)
+    getDiary.mockResolvedValue(fakeAppointments)
     const { result, waitForNextUpdate } = renderHook(() =>
-      useEffectGetAppointments()
+      useEffectGetDiary()
     )
 
     await waitForNextUpdate()
 
-    expect(getAppointments).toBeCalled()
+    expect(getDiary).toBeCalled()
     expect(result.current).toStrictEqual({
       loading: false,
       data: fakeAppointments
