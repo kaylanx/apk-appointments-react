@@ -1,4 +1,6 @@
 
-export const getDaysClosed = (fakeAppointments) => {
-  return [new Date('2020-10-24')]
+export const getDaysClosed = (appointments) => {
+  return appointments
+    .filter(appointment => appointment.closed === true)
+    .flatMap(appointment => new Date(appointment.date))
 }

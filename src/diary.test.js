@@ -6,6 +6,6 @@ describe('load appointments', () => {
     const daysClosed = getDaysClosed(fakeAppointments)
     expect(daysClosed).toBeDefined()
     const expectedDates = [new Date('2020-10-24')]
-    expect(expectedDates).toEqual(daysClosed)
+    expect(daysClosed).toEqual(expectedDates)
   })
 })
