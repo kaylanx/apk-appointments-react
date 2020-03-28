@@ -18,31 +18,6 @@ describe('appointments calendar', () => {
   })
 
   it('today is disabled', async () => {
-    const expectFieldToContainTomorrowsDate = (input) => {
-      const tomorrow = new Date()
-      tomorrow.setDate(tomorrow.getDate() + 1)
-      const expectedSelectedMonth = tomorrow.toLocaleString('en-US', {
-        month: 'long'
-      })
-
-      const expectedSelectedDate = expectedSelectedMonth + ' ' + englishOrdinalSuffix(tomorrow)
-
-      expect(input.value).toBe(expectedSelectedDate)
-    }
-
-    const expectTodayToBeDisabled = () => {
-      const today = new Date()
-      const expectedDate = today.toLocaleString('en-US', {
-        day: '2-digit'
-      })
-
-      const todayButton = document.querySelector('.MuiPickersDay-current')
-      expect(todayButton).toHaveClass('MuiPickersDay-dayDisabled')
-
-      const paragraph = todayButton.querySelector('p')
-      expect(paragraph.innerHTML).toBe(expectedDate)
-    }
-
     jest.spyOn(global, 'fetch').mockImplementation(() =>
       Promise.resolve({
         json: () => Promise.resolve(fakeAppointments)
@@ -63,8 +38,33 @@ describe('appointments calendar', () => {
 
     expectTodayToBeDisabled()
   })
-
-  const englishOrdinalSuffix = (dt) => {
-    return dt.getDate() + (dt.getDate() % 10 === 1 && dt.getDate() !== 11 ? 'st' : (dt.getDate() % 10 === 2 && dt.getDate() !== 12 ? 'nd' : (dt.getDate() % 10 === 3 && dt.getDate() !== 13 ? 'rd' : 'th')))
-  }
 })
+
+const expectFieldToContainTomorrowsDate = (input) => {
+  const tomorrow = new Date()
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  const expectedSelectedMonth = tomorrow.toLocaleString('en-US', {
+    month: 'long'
+  })
+
+  const expectedSelectedDate = expectedSelectedMonth + ' ' + englishOrdinalSuffix(tomorrow)
+
+  expect(input.value).toBe(expectedSelectedDate)
+}
+
+const expectTodayToBeDisabled = () => {
+  const today = new Date()
+  const expectedDate = today.toLocaleString('en-US', {
+    day: '2-digit'
+  })
+
+  const todayButton = document.querySelector('.MuiPickersDay-current')
+  expect(todayButton).toHaveClass('MuiPickersDay-dayDisabled')
+
+  const paragraph = todayButton.querySelector('p')
+  expect(paragraph.innerHTML).toBe(expectedDate)
+}
+
+const englishOrdinalSuffix = (dt) => {
+  return dt.getDate() + (dt.getDate() % 10 === 1 && dt.getDate() !== 11 ? 'st' : (dt.getDate() % 10 === 2 && dt.getDate() !== 12 ? 'nd' : (dt.getDate() % 10 === 3 && dt.getDate() !== 13 ? 'rd' : 'th')))
+}
