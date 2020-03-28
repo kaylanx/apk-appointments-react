@@ -1,38 +1,70 @@
 import React from 'react'
-import { render, fireEvent } from '@testing-library/react'
-
+import { render, unmountComponentAtNode } from 'react-dom'
+import { act } from 'react-dom/test-utils'
 import { AppointmentsCalendar } from './appointments-calendar'
-import { useEffectGetDiary } from './use-effect-get-diary'
-jest.mock('./use-effect-get-diary')
+import fakeAppointments from './fake-appointments'
 
-describe('load appointments', () => {
-  it('loading state', () => {
-    useEffectGetDiary.mockReturnValue({
-      loading: true,
-      data: null
-    })
-
-    const { container } = render(<AppointmentsCalendar />)
-
-    expect(useEffectGetDiary).toHaveBeenCalled()
-    expect(container).toHaveTextContent('Preferred Date *')
+describe('appointments calendar', () => {
+  let container = null
+  beforeEach(() => {
+    container = document.createElement('div')
+    document.body.appendChild(container)
   })
 
-  it('today is disabled', () => {
-    useEffectGetDiary.mockReturnValue({
-      loading: true,
-      data: null
-    })
-    const { getByText } = render(<AppointmentsCalendar />)
-    fireEvent.click(getByText(/Preferred Date */i))
-
-    const today = new Date()
-    const expectedDate = today.toLocaleString('en-US', {
-      day: '2-digit'
-    })
-
-    const todayElement = getByText(expectedDate)
-    expect(todayElement).not.toBeUndefined()
-    expect(todayElement.parentNode.parentNode).toHaveClass('MuiPickersDay-dayDisabled')
+  afterEach(() => {
+    unmountComponentAtNode(container)
+    container.remove()
+    container = null
   })
+
+  it('today is disabled', async () => {
+    const expectFieldToContainTomorrowsDate = (input) => {
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      const expectedSelectedMonth = tomorrow.toLocaleString('en-US', {
+        month: 'long'
+      })
+
+      const expectedSelectedDate = expectedSelectedMonth + ' ' + englishOrdinalSuffix(tomorrow)
+
+      expect(input.value).toBe(expectedSelectedDate)
+    }
+
+    const expectTodayToBeDisabled = () => {
+      const today = new Date()
+      const expectedDate = today.toLocaleString('en-US', {
+        day: '2-digit'
+      })
+
+      const todayButton = document.querySelector('.MuiPickersDay-current')
+      expect(todayButton).toHaveClass('MuiPickersDay-dayDisabled')
+
+      const paragraph = todayButton.querySelector('p')
+      expect(paragraph.innerHTML).toBe(expectedDate)
+    }
+
+    jest.spyOn(global, 'fetch').mockImplementation(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(fakeAppointments)
+      })
+    )
+
+    await act(async () => {
+      render(<AppointmentsCalendar id="appointments-calendar" />, container)
+    })
+
+    const input = document.querySelector('[id=appointments-calendar]')
+
+    expectFieldToContainTomorrowsDate(input)
+
+    act(() => {
+      input.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    })
+
+    expectTodayToBeDisabled()
+  })
+
+  const englishOrdinalSuffix = (dt) => {
+    return dt.getDate() + (dt.getDate() % 10 === 1 && dt.getDate() !== 11 ? 'st' : (dt.getDate() % 10 === 2 && dt.getDate() !== 12 ? 'nd' : (dt.getDate() % 10 === 3 && dt.getDate() !== 13 ? 'rd' : 'th')))
+  }
 })

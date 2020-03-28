@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import {
   DatePicker,
   MuiPickersUtilsProvider
 } from '@material-ui/pickers'
 import { isDayClosed } from './diary'
-import DateFnsUtils from '@date-io/date-fns'
+import { getDiary } from './fetch-diary'
 
-import { useEffectGetDiary } from './use-effect-get-diary'
+import DateFnsUtils from '@date-io/date-fns'
 
 const tomorrow = () => {
   const tomorrow = new Date()
@@ -18,34 +19,49 @@ const determineDisabledDate = (appointments, date) => {
   return false
 }
 
-export function AppointmentsCalendar () {
-  const { loading, diary } = useEffectGetDiary()
+AppointmentsCalendar.propTypes = {
+  id: PropTypes.string
+}
+
+export function AppointmentsCalendar (props) {
   const [selectedDate, handleDateChange] = useState(tomorrow())
+  const [diary, setDiary] = useState({ loading: true, data: null })
 
   const disabledDates = (date) => {
-    if (loading) {
-      // console.log('shut up es-lint')
-    }
-    if (date.getDay() === 0 || date.getDay() === 6) {
+    if (isDayClosed(diary, date)) {
       return true
     }
     return determineDisabledDate(diary, date)
   }
 
-  return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <DatePicker
-        label="Preferred Date"
-        required
-        value={selectedDate}
-        onChange={handleDateChange}
-        disablePast={true}
-        autoOk={true}
-        minDate={tomorrow()}
-        shouldDisableDate={disabledDates}
-        inputVariant="filled" />
-      <div>{JSON.stringify(diary)}</div>
+  async function fetchData () {
+    const data = await getDiary()
+    setDiary({ loading: false, data })
+  }
 
-    </MuiPickersUtilsProvider>
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  return (
+    <div>
+      {diary.loading && <div>loading...</div>}
+
+      {!diary.loading && <div>json = &quot;{JSON.stringify(diary)}&quot;</div>}
+
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <DatePicker
+          id={props.id}
+          label="Preferred Date"
+          required
+          value={selectedDate}
+          onChange={handleDateChange}
+          disablePast={true}
+          autoOk={true}
+          minDate={tomorrow()}
+          shouldDisableDate={disabledDates}
+          inputVariant="filled" />
+      </MuiPickersUtilsProvider>
+    </div>
   )
 }

@@ -19,7 +19,7 @@ function App () {
   return (
     <div className="App">
       <form className={classes.root} noValidate autoComplete="off">
-        <AppointmentsCalendar />
+        <AppointmentsCalendar id="appointment-date" />
         <TextField
           id="time"
           label="Preferred Time"

@@ -11,7 +11,7 @@ export const isDayClosed = (diary, date) => {
 }
 
 const dayIsDefined = (diary, day) => {
-  return day !== undefined && diary.schedule[day] !== undefined
+  return day !== undefined && diary !== undefined && diary.schedule !== undefined && diary.schedule[day] !== undefined
 }
 
 const getDayStringforDate = (day) => {
