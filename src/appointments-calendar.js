@@ -20,23 +20,32 @@ const determineDisabledDate = (appointments, date) => {
 }
 
 AppointmentsCalendar.propTypes = {
-  id: PropTypes.string
+  id: PropTypes.string,
+  disablePast: PropTypes.bool,
+  minDate: PropTypes.instanceOf(Date),
+  defaultSelectedDate: PropTypes.instanceOf(Date)
 }
 
-export function AppointmentsCalendar (props) {
-  const [selectedDate, handleDateChange] = useState(tomorrow())
-  const [diary, setDiary] = useState({ loading: true, data: null })
+export function AppointmentsCalendar ({
+  id = 'appointment-date',
+  disablePast = true,
+  minDate = tomorrow(),
+  defaultSelectedDate = tomorrow()
+}) {
+  const [selectedDate, handleDateChange] = useState(defaultSelectedDate)
+  const [diary, setDiary] = useState(null)
 
   const disabledDates = (date) => {
     if (isDayClosed(diary, date)) {
       return true
     }
+
     return determineDisabledDate(diary, date)
   }
 
   async function fetchData () {
     const data = await getDiary()
-    setDiary({ loading: false, data })
+    setDiary(data)
   }
 
   useEffect(() => {
@@ -45,20 +54,23 @@ export function AppointmentsCalendar (props) {
 
   return (
     <div>
-      {diary.loading && <div>loading...</div>}
+      {<div>json = &quot;{JSON.stringify(diary)}&quot;</div>}
 
-      {!diary.loading && <div>json = &quot;{JSON.stringify(diary)}&quot;</div>}
+      {JSON.stringify(id)}
+      {JSON.stringify(disablePast)}
+      {JSON.stringify(minDate)}
+      {JSON.stringify(defaultSelectedDate)}
 
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <DatePicker
-          id={props.id}
+          id={id}
           label="Preferred Date"
           required
           value={selectedDate}
           onChange={handleDateChange}
-          disablePast={true}
+          disablePast={disablePast}
           autoOk={true}
-          minDate={tomorrow()}
+          minDate={minDate}
           shouldDisableDate={disabledDates}
           inputVariant="filled" />
       </MuiPickersUtilsProvider>
