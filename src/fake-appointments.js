@@ -100,6 +100,15 @@ export const multipleDaysClosed = {
   ]
 }
 
+export const closedOnThursdays = {
+  schedule: {
+    thursday: {
+      closed: true
+    }
+  },
+  appointments: []
+}
+
 /*
 Monday    - 10:00 - 16:30
 Tuesday   - 10:00 - 16:30
@@ -109,11 +118,52 @@ Friday    - Closed
 Saturday  - 11:00 - 16:00
 Sunday    - 11:00 - 16:00 (£20 fee)
 */
-
-export const closedOnThursdays = {
+export const actualSchedule = {
   schedule: {
+    display: {
+      format: 12
+    },
+    monday: {
+      closed: false,
+      availability: [
+        10, 11, 12, 13, 14, 15, 16
+      ]
+    },
+    tuesday: {
+      closed: false,
+      availability: [
+        10, 11, 12, 13, 14, 15, 16
+      ]
+    },
+    wednesday: {
+      closed: false,
+      availability: [
+        11, 12, 13, 14, 15, 16, 17
+      ],
+      chargable: {
+        fee: '£20',
+        hours: [18, 19]
+      }
+    },
     thursday: {
       closed: true
+    },
+    friday: {
+      closed: true
+    },
+    saturday: {
+      closed: false,
+      availability: [
+        11, 12, 13, 14, 15, 16
+      ]
+    },
+    sunday: {
+      closed: false,
+      availability: [],
+      chargable: {
+        fee: '£20',
+        hours: [11, 12, 13, 14, 15, 16]
+      }
     }
   },
   appointments: []

@@ -2,6 +2,7 @@ import React from 'react'
 import './App.css'
 import { TextField } from '@material-ui/core'
 import { AppointmentsCalendar } from './appointments-calendar'
+import { AppointmentTime } from './appointment-time'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
@@ -10,6 +11,13 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(1),
       width: 200
     }
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2)
   }
 }))
 
@@ -20,7 +28,9 @@ function App () {
     <div className="App">
       <form className={classes.root} noValidate autoComplete="off">
         <AppointmentsCalendar id="appointment-date" />
-        <TextField
+        <AppointmentTime />
+
+        {/* <TextField
           id="time"
           label="Preferred Time"
           required
@@ -34,7 +44,7 @@ function App () {
           inputProps={{
             step: 300 // 5 min
           }}
-        />
+        /> */}
         <TextField id="filled-basic" label="Filled" variant="filled" />
 
         <TextField id="standard-basic" label="Standard" />
