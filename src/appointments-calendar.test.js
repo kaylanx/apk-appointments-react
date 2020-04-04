@@ -70,9 +70,7 @@ const expectInputToHaveDate = (input, date) => {
 
 const expectTodayToBeDisabled = () => {
   const today = new Date()
-  const expectedDate = today.toLocaleString('en-US', {
-    day: '2-digit'
-  })
+  const expectedDate = today.getDate().toString()
 
   const todayButton = document.querySelector('.MuiPickersDay-current')
   expect(todayButton).toHaveClass('MuiPickersDay-dayDisabled')

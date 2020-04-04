@@ -6,6 +6,7 @@ import {
   Select
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { getAppointmentsForDay, getFormattedTime } from './diary'
 
 AppointmentTime.propTypes = {
   id: PropTypes.string,
@@ -31,9 +32,13 @@ const useStyles = makeStyles(theme => ({
 
 export function AppointmentTime ({
   id = 'appointment-time',
-  diary
+  diary,
+  selectedDate
 }) {
   const classes = useStyles()
+  const appointmentAvailability = getAppointmentsForDay(diary, selectedDate)
+
+  // Remove appointments that are booked
 
   return (
     <div>
@@ -41,23 +46,15 @@ export function AppointmentTime ({
 
       <FormControl variant="filled" className={classes.formControl}>
         <InputLabel htmlFor={id}>Preferred Time</InputLabel>
-
         <Select
           native
           id={id}
           inputProps={{
             id: id
           }}
-
         >
           <option aria-label="None" value="" />
-          <option value={10}>10:00am</option>
-          <option value={11}>11:00am</option>
-          <option value={12}>12:00pm</option>
-          <option value={13}>1:00pm</option>
-          <option value={14}>2:00pm</option>
-          <option value={15}>3:00pm</option>
-          <option value={16}>4:00pm</option>
+          {appointmentAvailability.map((time, index) => <option key={index} value={time}>{getFormattedTime(diary, time)}</option>)}
         </Select>
       </FormControl>
     </div>

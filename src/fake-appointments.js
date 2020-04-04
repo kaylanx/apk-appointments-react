@@ -1,5 +1,51 @@
 export const fakeAppointments = {
-  schedule: {},
+  schedule: {
+    display: {
+      format: 12
+    },
+    monday: {
+      closed: false,
+      availability: [
+        10, 11, 12, 13, 14, 15, 16
+      ]
+    },
+    tuesday: {
+      closed: false,
+      availability: [
+        10, 11, 12, 13, 14, 15, 16
+      ]
+    },
+    wednesday: {
+      closed: false,
+      availability: [
+        11, 12, 13, 14, 15, 16, 17
+      ],
+      chargable: {
+        fee: '£20',
+        hours: [18, 19]
+      }
+    },
+    thursday: {
+      closed: true
+    },
+    friday: {
+      closed: true
+    },
+    saturday: {
+      closed: false,
+      availability: [
+        11, 12, 13, 14, 15, 16
+      ]
+    },
+    sunday: {
+      closed: false,
+      availability: [],
+      chargable: {
+        fee: '£20',
+        hours: [11, 12, 13, 14, 15, 16]
+      }
+    }
+  },
   appointments: [
     {
       date: '2020-03-17',
@@ -45,7 +91,53 @@ export const fakeAppointments = {
 }
 
 export const multipleDaysClosed = {
-  schedule: {},
+  schedule: {
+    display: {
+      format: 12
+    },
+    monday: {
+      closed: false,
+      availability: [
+        10, 11, 12, 13, 14, 15, 16
+      ]
+    },
+    tuesday: {
+      closed: false,
+      availability: [
+        10, 11, 12, 13, 14, 15, 16
+      ]
+    },
+    wednesday: {
+      closed: false,
+      availability: [
+        11, 12, 13, 14, 15, 16, 17
+      ],
+      chargable: {
+        fee: '£20',
+        hours: [18, 19]
+      }
+    },
+    thursday: {
+      closed: true
+    },
+    friday: {
+      closed: true
+    },
+    saturday: {
+      closed: false,
+      availability: [
+        11, 12, 13, 14, 15, 16
+      ]
+    },
+    sunday: {
+      closed: false,
+      availability: [],
+      chargable: {
+        fee: '£20',
+        hours: [11, 12, 13, 14, 15, 16]
+      }
+    }
+  },
   appointments: [
     {
       date: '2020-03-17',
@@ -166,5 +258,68 @@ export const actualSchedule = {
       }
     }
   },
-  appointments: []
+  appointments: [{
+    date: '2020-04-07',
+    times: [
+      10, 11, 12, 13, 14, 15, 16
+    ],
+    closed: false
+  }]
+}
+
+export const actualSchedule24Hours = {
+  schedule: {
+    display: {
+      format: 24
+    },
+    monday: {
+      closed: false,
+      availability: [
+        10, 11, 12, 13, 14, 15, 16
+      ]
+    },
+    tuesday: {
+      closed: false,
+      availability: [
+        10, 11, 12, 13, 14, 15, 16
+      ]
+    },
+    wednesday: {
+      closed: false,
+      availability: [
+        11, 12, 13, 14, 15, 16, 17
+      ],
+      chargable: {
+        fee: '£20',
+        hours: [18, 19]
+      }
+    },
+    thursday: {
+      closed: true
+    },
+    friday: {
+      closed: true
+    },
+    saturday: {
+      closed: false,
+      availability: [
+        11, 12, 13, 14, 15, 16
+      ]
+    },
+    sunday: {
+      closed: false,
+      availability: [],
+      chargable: {
+        fee: '£20',
+        hours: [11, 12, 13, 14, 15, 16]
+      }
+    }
+  },
+  appointments: [{
+    date: '2020-04-07',
+    times: [
+      10, 11, 12, 13, 14, 15, 16
+    ],
+    closed: false
+  }]
 }
