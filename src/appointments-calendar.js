@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import {
   DatePicker,
   MuiPickersUtilsProvider
 } from '@material-ui/pickers'
 import { isDayClosed } from './diary'
-import { getDiary } from './fetch-diary'
 
 import DateFnsUtils from '@date-io/date-fns'
 
@@ -21,20 +20,21 @@ const determineDisabledDate = (appointments, date) => {
 
 AppointmentsCalendar.propTypes = {
   id: PropTypes.string,
+  diary: PropTypes.object.isRequired,
   disablePast: PropTypes.bool,
   minDate: PropTypes.instanceOf(Date),
-  defaultSelectedDate: PropTypes.instanceOf(Date)
+  selectedDate: PropTypes.instanceOf(Date),
+  handleDateChange: PropTypes.func.isRequired
 }
 
 export function AppointmentsCalendar ({
   id = 'appointment-date',
+  diary,
   disablePast = true,
   minDate = tomorrow(),
-  defaultSelectedDate = tomorrow()
+  selectedDate = tomorrow(),
+  handleDateChange
 }) {
-  const [selectedDate, handleDateChange] = useState(defaultSelectedDate)
-  const [diary, setDiary] = useState(null)
-
   const disabledDates = (date) => {
     if (isDayClosed(diary, date)) {
       return true
@@ -43,15 +43,6 @@ export function AppointmentsCalendar ({
     return determineDisabledDate(diary, date)
   }
 
-  async function fetchData () {
-    const data = await getDiary()
-    setDiary(data)
-  }
-
-  useEffect(() => {
-    fetchData()
-  }, [])
-
   return (
     <div>
       {<div>json = &quot;{JSON.stringify(diary)}&quot;</div>}
@@ -59,7 +50,7 @@ export function AppointmentsCalendar ({
       {JSON.stringify(id)}
       {JSON.stringify(disablePast)}
       {JSON.stringify(minDate)}
-      {JSON.stringify(defaultSelectedDate)}
+      {JSON.stringify(selectedDate)}
 
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <DatePicker

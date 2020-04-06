@@ -1,9 +1,10 @@
-import React from 'react'
-import './App.css'
+import React, { useState, useEffect } from 'react'
 import { TextField } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import './App.css'
 import { AppointmentsCalendar } from './appointments-calendar'
 import { AppointmentTime } from './appointment-time'
-import { makeStyles } from '@material-ui/core/styles'
+import { getDiary } from './fetch-diary'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,15 +21,41 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2)
   }
 }))
+const tomorrow = () => {
+  const tomorrow = new Date()
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  return tomorrow
+}
 
 function App () {
   const classes = useStyles()
 
+  const [diary, setDiary] = useState(null)
+  const [selectedDate, setSelectedDate] = useState(tomorrow())
+
+  async function fetchData () {
+    const data = await getDiary()
+    setDiary(data)
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date)
+  }
+
+  if (diary === null) {
+    return (<div className="App" />)
+  }
+
   return (
     <div className="App">
       <form className={classes.root} noValidate autoComplete="off">
-        <AppointmentsCalendar id="appointment-date" />
-        <AppointmentTime />
+
+        <AppointmentsCalendar id="appointment-date" diary={diary} handleDateChange={handleDateChange} selectedDate={selectedDate} />
+        <AppointmentTime diary={diary} selectedDate={selectedDate} />
 
         {/* <TextField
           id="time"

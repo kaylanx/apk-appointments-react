@@ -18,10 +18,8 @@ describe('appointments calendar', () => {
   })
 
   it('today is disabled', async () => {
-    mockFetchWithResponse(fakeAppointments)
-
     await act(async () => {
-      render(<AppointmentsCalendar id="appointments-calendar" />, container)
+      render(<AppointmentsCalendar id="appointments-calendar" diary={fakeAppointments} handleDateChange={(date) => {}} />, container)
     })
 
     const input = document.querySelector('[id=appointments-calendar]')
@@ -32,12 +30,10 @@ describe('appointments calendar', () => {
   })
 
   it('thursdays are disabled', async () => {
-    mockFetchWithResponse(closedOnThursdays)
-
     const firstJan2020 = new Date('2020-01-01')
 
     await act(async () => {
-      render(<AppointmentsCalendar id="appointments-calendar" disablePast={false} minDate={firstJan2020} defaultSelectedDate={firstJan2020}/>, container)
+      render(<AppointmentsCalendar id="appointments-calendar" diary={closedOnThursdays} handleDateChange={(date) => {}} disablePast={false} minDate={firstJan2020} selectedDate={firstJan2020}/>, container)
     })
 
     const input = document.querySelector('[id=appointments-calendar]')
@@ -103,12 +99,4 @@ const clickInput = (input) => {
   act(() => {
     input.dispatchEvent(new MouseEvent('click', { bubbles: true }))
   })
-}
-
-const mockFetchWithResponse = (response) => {
-  jest.spyOn(global, 'fetch').mockImplementation(() =>
-    Promise.resolve({
-      json: () => Promise.resolve(response)
-    })
-  )
 }

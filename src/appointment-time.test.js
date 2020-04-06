@@ -19,9 +19,6 @@ describe('appointments time', () => {
 
   it('list to contain no options when closed', async () => {
     const thursdayNinthApril = new Date('2020-04-09')
-    await act(async () => {
-      render(<AppointmentTime id="appointment-time" selectedDate={thursdayNinthApril} diary={actualSchedule} />, container)
-    })
     await expectNoOptions(thursdayNinthApril, actualSchedule)
   })
 

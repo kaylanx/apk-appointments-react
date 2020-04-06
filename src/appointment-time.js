@@ -10,8 +10,8 @@ import { getAppointmentsForDay, getFormattedTime } from './diary'
 
 AppointmentTime.propTypes = {
   id: PropTypes.string,
-  selectedDate: PropTypes.instanceOf(Date),
-  diary: PropTypes.object
+  diary: PropTypes.object.isRequired,
+  selectedDate: PropTypes.instanceOf(Date).isRequired
 }
 
 const useStyles = makeStyles(theme => ({
