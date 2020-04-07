@@ -45,12 +45,12 @@ export function AppointmentsCalendar ({
 
   return (
     <div>
-      {<div>json = &quot;{JSON.stringify(diary)}&quot;</div>}
+      {/* {<div>json = &quot;{JSON.stringify(diary)}&quot;</div>} */}
 
-      {JSON.stringify(id)}
+      {/* {JSON.stringify(id)}
       {JSON.stringify(disablePast)}
       {JSON.stringify(minDate)}
-      {JSON.stringify(selectedDate)}
+      {JSON.stringify(selectedDate)} */}
 
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <DatePicker
@@ -63,7 +63,8 @@ export function AppointmentsCalendar ({
           autoOk={true}
           minDate={minDate}
           shouldDisableDate={disabledDates}
-          inputVariant="filled" />
+          inputVariant="filled"
+          format="EE, d MMMM yy" />
       </MuiPickersUtilsProvider>
     </div>
   )

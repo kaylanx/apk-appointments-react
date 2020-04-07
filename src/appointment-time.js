@@ -42,7 +42,7 @@ export function AppointmentTime ({
 
   return (
     <div>
-      {<div>json = &quot;{JSON.stringify(diary)}&quot;</div>}
+      {/* {<div>json = &quot;{JSON.stringify(diary)}&quot;</div>} */}
 
       <FormControl variant="filled" className={classes.formControl}>
         <InputLabel htmlFor={id}>Preferred Time</InputLabel>

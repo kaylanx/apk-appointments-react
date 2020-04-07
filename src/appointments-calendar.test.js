@@ -1,5 +1,6 @@
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
+import format from 'date-fns/format'
 import { act } from 'react-dom/test-utils'
 import { AppointmentsCalendar } from './appointments-calendar'
 import { fakeAppointments, closedOnThursdays } from './fake-appointments'
@@ -56,11 +57,7 @@ const expectFieldToContainFirstJan = (input) => {
 }
 
 const expectInputToHaveDate = (input, date) => {
-  const expectedSelectedMonth = date.toLocaleString('en-US', {
-    month: 'long'
-  })
-
-  const expectedSelectedDate = expectedSelectedMonth + ' ' + englishOrdinalSuffix(date)
+  const expectedSelectedDate = format(date, 'EEE, d MMMM yy')
   expect(input.value).toBe(expectedSelectedDate)
 }
 
@@ -89,10 +86,6 @@ const expectThursdaysInJan2020ToBeDisabled = () => {
     expect(paragraph.innerHTML).toBe('' + thursday)
     thursday += 7
   }
-}
-
-const englishOrdinalSuffix = (dt) => {
-  return dt.getDate() + (dt.getDate() % 10 === 1 && dt.getDate() !== 11 ? 'st' : (dt.getDate() % 10 === 2 && dt.getDate() !== 12 ? 'nd' : (dt.getDate() % 10 === 3 && dt.getDate() !== 13 ? 'rd' : 'th')))
 }
 
 const clickInput = (input) => {
