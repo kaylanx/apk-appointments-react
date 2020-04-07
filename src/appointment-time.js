@@ -38,25 +38,22 @@ export function AppointmentTime ({
   const classes = useStyles()
   const appointmentAvailability = getAppointmentsForDay(diary, selectedDate)
 
-  // Remove appointments that are booked
+  // TODO: Remove appointments that are booked
+  // TODO: Add appointments with cost.
 
   return (
-    <div>
-      {/* {<div>json = &quot;{JSON.stringify(diary)}&quot;</div>} */}
-
-      <FormControl variant="filled" className={classes.formControl}>
-        <InputLabel htmlFor={id}>Preferred Time</InputLabel>
-        <Select
-          native
-          id={id}
-          inputProps={{
-            id: id
-          }}
-        >
-          <option aria-label="None" value="" />
-          {appointmentAvailability.map((time, index) => <option key={index} value={time}>{getFormattedTime(diary, time)}</option>)}
-        </Select>
-      </FormControl>
-    </div>
+    <FormControl variant="filled" className={classes.formControl}>
+      <InputLabel htmlFor={id}>Preferred Time</InputLabel>
+      <Select
+        native
+        id={id}
+        inputProps={{
+          id: id
+        }}
+      >
+        <option aria-label="None" value="" />
+        {appointmentAvailability.map((time, index) => <option key={index} value={time}>{getFormattedTime(diary, time)}</option>)}
+      </Select>
+    </FormControl>
   )
 }

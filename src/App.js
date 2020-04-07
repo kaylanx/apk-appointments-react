@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { TextField } from '@material-ui/core'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Container from '@material-ui/core/Container'
+
 import { makeStyles } from '@material-ui/core/styles'
 import './App.css'
 import { AppointmentsCalendar } from './appointments-calendar'
@@ -53,29 +56,15 @@ function App () {
   return (
     <div className="App">
       <form className={classes.root} noValidate autoComplete="off">
+        <CssBaseline />
+        <Container maxWidth="lg">
+          <AppointmentsCalendar id="appointment-date" diary={diary} handleDateChange={handleDateChange} selectedDate={selectedDate} />
+          <AppointmentTime diary={diary} selectedDate={selectedDate} />
+          <TextField id="filled-basic" label="Filled" variant="filled" />
 
-        <AppointmentsCalendar id="appointment-date" diary={diary} handleDateChange={handleDateChange} selectedDate={selectedDate} />
-        <AppointmentTime diary={diary} selectedDate={selectedDate} />
-
-        {/* <TextField
-          id="time"
-          label="Preferred Time"
-          required
-          type="time"
-          variant="filled"
-          defaultValue="07:30"
-          className={classes.textField}
-          InputLabelProps={{
-            shrink: true
-          }}
-          inputProps={{
-            step: 300 // 5 min
-          }}
-        /> */}
-        <TextField id="filled-basic" label="Filled" variant="filled" />
-
-        <TextField id="standard-basic" label="Standard" />
-        <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+          <TextField id="standard-basic" label="Standard" />
+          <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+        </Container>
       </form>
     </div>
   )
