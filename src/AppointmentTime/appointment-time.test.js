@@ -55,9 +55,9 @@ describe('appointments time', () => {
     expect(times[index++].textContent).toBe('')
   }
 
-  async function assertExpectedTimesForDateAndSchedule (mondayMarch30th2020, diary, expectedTimes) {
+  async function assertExpectedTimesForDateAndSchedule (date, diary, expectedTimes) {
     await act(async () => {
-      render(<AppointmentTime id="appointment-time" selectedDate={mondayMarch30th2020} diary={diary} />, container)
+      render(<AppointmentTime id="appointment-time" selectedDate={date} diary={diary} />, container)
     })
     const input = document.querySelector('[id=appointment-time]')
     clickInput(input)
