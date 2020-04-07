@@ -10,7 +10,7 @@ import {
   closedOnThursdays,
   actualSchedule,
   actualSchedule24Hours
-} from './fake-appointments'
+} from '../../test_data/fake-appointments'
 
 describe('appointment utilities', () => {
   it('1 day closed', () => {

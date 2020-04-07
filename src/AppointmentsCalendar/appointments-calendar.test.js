@@ -3,7 +3,7 @@ import { render, unmountComponentAtNode } from 'react-dom'
 import format from 'date-fns/format'
 import { act } from 'react-dom/test-utils'
 import { AppointmentsCalendar } from './appointments-calendar'
-import { fakeAppointments, closedOnThursdays } from './fake-appointments'
+import { fakeAppointments, closedOnThursdays } from '../../test_data/fake-appointments'
 
 describe('appointments calendar', () => {
   let container = null

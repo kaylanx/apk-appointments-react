@@ -4,7 +4,7 @@ import {
   DatePicker,
   MuiPickersUtilsProvider
 } from '@material-ui/pickers'
-import { isDayClosed } from './diary'
+import { isDayClosed } from '../Diary/diary'
 
 import DateFnsUtils from '@date-io/date-fns'
 

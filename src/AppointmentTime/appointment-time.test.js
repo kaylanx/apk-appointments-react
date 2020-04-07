@@ -1,8 +1,8 @@
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
-import { AppointmentTime } from './appointment-time'
-import { actualSchedule, actualSchedule24Hours } from './fake-appointments'
+import { AppointmentTime } from '../AppointmentTime/appointment-time'
+import { actualSchedule, actualSchedule24Hours } from '../../test_data/fake-appointments'
 
 describe('appointments time', () => {
   let container = null

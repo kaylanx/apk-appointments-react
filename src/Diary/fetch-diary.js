@@ -1,4 +1,4 @@
-import { config } from './Constants'
+import { config } from '../Constants'
 
 export async function fetchDiary (url, options = {}) {
   const response = await fetch(url, options)

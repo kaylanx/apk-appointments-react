@@ -1,8 +1,8 @@
-import React, { findByText } from 'react'
+import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 import App from './App'
-import { actualSchedule } from './fake-appointments'
+import { actualSchedule } from '../test_data/fake-appointments'
 
 describe('appointments app', () => {
   let container = null

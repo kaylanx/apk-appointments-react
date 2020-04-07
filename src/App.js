@@ -5,9 +5,9 @@ import Container from '@material-ui/core/Container'
 
 import { makeStyles } from '@material-ui/core/styles'
 import './App.css'
-import { AppointmentsCalendar } from './appointments-calendar'
-import { AppointmentTime } from './appointment-time'
-import { getDiary } from './fetch-diary'
+import { AppointmentsCalendar } from './AppointmentsCalendar/appointments-calendar'
+import { AppointmentTime } from './AppointmentTime/appointment-time'
+import { getDiary } from './Diary/fetch-diary'
 
 const useStyles = makeStyles(theme => ({
   root: {
