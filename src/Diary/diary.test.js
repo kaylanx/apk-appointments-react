@@ -10,7 +10,9 @@ import {
   closedOnThursdays,
   actualSchedule,
   actualSchedule24Hours,
-  actualScheduleWith1AppointmentBookedOn24March
+  actualScheduleWith1AppointmentBookedOn24March,
+  actualScheduleWith2AppointmentsBookedOn24March,
+  actualScheduleWithAllAppointmentsBookedOn24March
 } from '../../test_data/fake-appointments'
 
 describe('appointment utilities', () => {
@@ -52,6 +54,20 @@ describe('appointment utilities', () => {
     expect(appointments).not.toBeUndefined()
     expect(appointments).toBeInstanceOf(Array)
     expect(appointments).toStrictEqual([11, 12, 13, 14, 15, 16])
+  })
+
+  it('get appointments for a given day with 2 appointments already booked at 10am and 11am', () => {
+    const appointments = getAppointmentsForDay(actualScheduleWith2AppointmentsBookedOn24March, new Date('2020-03-24'))
+    expect(appointments).not.toBeUndefined()
+    expect(appointments).toBeInstanceOf(Array)
+    expect(appointments).toStrictEqual([12, 13, 14, 15, 16])
+  })
+
+  it('get appointments for a given day with all appointments already booked', () => {
+    const appointments = getAppointmentsForDay(actualScheduleWithAllAppointmentsBookedOn24March, new Date('2020-03-24'))
+    expect(appointments).not.toBeUndefined()
+    expect(appointments).toBeInstanceOf(Array)
+    expect(appointments).toStrictEqual([])
   })
 
   it('display format not present defaults to 24 hours', () => {
