@@ -2,7 +2,7 @@ import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 import App from './App'
-import { actualSchedule } from '../test_data/fake-appointments'
+import { availabilityEveryDay } from '../test_data/fake-appointments'
 
 describe('appointments app', () => {
   let container = null
@@ -18,7 +18,7 @@ describe('appointments app', () => {
   })
 
   it('check integration', async () => {
-    mockFetchWithResponse(actualSchedule)
+    mockFetchWithResponse(availabilityEveryDay)
 
     await act(async () => {
       render(<App />, container)

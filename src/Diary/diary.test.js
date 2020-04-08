@@ -9,7 +9,8 @@ import {
   multipleDaysClosed,
   closedOnThursdays,
   actualSchedule,
-  actualSchedule24Hours
+  actualSchedule24Hours,
+  actualScheduleWith1AppointmentBookedOn24March
 } from '../../test_data/fake-appointments'
 
 describe('appointment utilities', () => {
@@ -44,6 +45,13 @@ describe('appointment utilities', () => {
     expect(appointments).not.toBeUndefined()
     expect(appointments).toBeInstanceOf(Array)
     expect(appointments).toStrictEqual([10, 11, 12, 13, 14, 15, 16])
+  })
+
+  it('get appointments for a given day with 1 appointment already booked at 10am', () => {
+    const appointments = getAppointmentsForDay(actualScheduleWith1AppointmentBookedOn24March, new Date('2020-03-24'))
+    expect(appointments).not.toBeUndefined()
+    expect(appointments).toBeInstanceOf(Array)
+    expect(appointments).toStrictEqual([11, 12, 13, 14, 15, 16])
   })
 
   it('display format not present defaults to 24 hours', () => {

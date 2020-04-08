@@ -18,7 +18,15 @@ export const getAppointmentsForDay = (diary, date) => {
   if (diary.schedule[dayKey].closed) {
     return []
   }
-  return diary.schedule[dayKey].availability
+  const availability = diary.schedule[dayKey].availability
+
+  const times = diary.appointments
+    .filter(appointment => appointment.closed === false && new Date(appointment.date).getTime() === date.getTime())
+    .flatMap(appointment => appointment.times)
+
+  times.forEach(time => availability.splice(availability.indexOf(time), 1))
+
+  return availability
 }
 
 export const getFormattedTime = (diary, time) => {
