@@ -38,7 +38,6 @@ export function AppointmentTime ({
   const classes = useStyles()
   const appointmentAvailability = getAppointmentsForDay(diary, selectedDate)
 
-  // TODO: Remove appointments that are booked
   // TODO: Add appointments with cost.
 
   return (

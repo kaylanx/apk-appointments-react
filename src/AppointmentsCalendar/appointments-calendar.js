@@ -35,6 +35,9 @@ export function AppointmentsCalendar ({
   selectedDate = tomorrow(),
   handleDateChange
 }) {
+
+  // TODO: Disable days where all appointments are booked
+
   const disabledDates = (date) => {
     if (isDayClosed(diary, date)) {
       return true
