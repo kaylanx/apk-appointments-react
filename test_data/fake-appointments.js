@@ -6,24 +6,20 @@ export const fakeAppointments = {
     monday: {
       closed: false,
       availability: [
-        10, 11, 12, 13, 14, 15, 16
+        { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     tuesday: {
       closed: false,
       availability: [
-        10, 11, 12, 13, 14, 15, 16
+        { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     wednesday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16, 17
-      ],
-      chargable: {
-        fee: '£20',
-        hours: [18, 19]
-      }
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }, { time: 17 }, { time: 18, fee: '£20' }, { time: 19, fee: '£20' }
+      ]
     },
     thursday: {
       closed: true
@@ -34,44 +30,40 @@ export const fakeAppointments = {
     saturday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     sunday: {
       closed: false,
-      availability: [],
-      chargable: {
-        fee: '£20',
-        hours: [11, 12, 13, 14, 15, 16]
-      }
+      availability: [{ time: 11, fee: '£20' }, { time: 12, fee: '£20' }, { time: 13, fee: '£20' }, { time: 14, fee: '£20' }, { time: 15, fee: '£20' }, { time: 16, fee: '£20' }]
     }
   },
   appointments: [
     {
       date: '2020-03-17',
       times: [
-        13
+        { time: 13 }
       ],
       closed: false
     },
     {
       date: '2020-06-12',
       times: [
-        17
+        { time: 17 }
       ],
       closed: false
     },
     {
       date: '2020-09-23',
       times: [
-        17
+        { time: 17 }
       ],
       closed: false
     },
     {
       date: '2020-08-20',
       times: [
-        15
+        { time: 15 }
       ],
       closed: false
     },
@@ -83,7 +75,7 @@ export const fakeAppointments = {
     {
       date: '2020-11-26',
       times: [
-        18
+        { time: 18 }
       ],
       closed: false
     }
@@ -98,24 +90,20 @@ export const multipleDaysClosed = {
     monday: {
       closed: false,
       availability: [
-        10, 11, 12, 13, 14, 15, 16
+        { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     tuesday: {
       closed: false,
       availability: [
-        10, 11, 12, 13, 14, 15, 16
+        { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     wednesday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16, 17
-      ],
-      chargable: {
-        fee: '£20',
-        hours: [18, 19]
-      }
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }, { time: 17 }, { time: 18, fee: '£20' }, { time: 18, fee: '£20' }
+      ]
     },
     thursday: {
       closed: true
@@ -126,30 +114,27 @@ export const multipleDaysClosed = {
     saturday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     sunday: {
       closed: false,
-      availability: [],
-      chargable: {
-        fee: '£20',
-        hours: [11, 12, 13, 14, 15, 16]
-      }
+      availability: [{ time: 11, fee: '£20' }, { time: 12, fee: '£20' }, { time: 13, fee: '£20' }, { time: 14, fee: '£20' }, { time: 15, fee: '£20' }, { time: 16, fee: '£20' }]
     }
   },
   appointments: [
     {
       date: '2020-03-17',
       times: [
-        13
+        { time: 13 }
       ],
       closed: false
     },
     {
       date: '2020-06-12',
       times: [
-        17
+        { time: 17 }
+
       ],
       closed: false
     },
@@ -173,7 +158,7 @@ export const multipleDaysClosed = {
     {
       date: '2020-08-20',
       times: [
-        15
+        { time: 15 }
       ],
       closed: false
     },
@@ -185,7 +170,7 @@ export const multipleDaysClosed = {
     {
       date: '2020-11-26',
       times: [
-        18
+        { time: 18 }
       ],
       closed: false
     }
@@ -209,42 +194,42 @@ export const availabilityEveryDay = {
     monday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     tuesday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     wednesday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     thursday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     friday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     saturday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     sunday: {
       closed: false,
-      availability: [11, 12, 13, 14, 15, 16]
+      availability: [{ time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }]
     }
   },
   appointments: []
@@ -267,24 +252,20 @@ export const actualSchedule = {
     monday: {
       closed: false,
       availability: [
-        10, 11, 12, 13, 14, 15, 16
+        { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     tuesday: {
       closed: false,
       availability: [
-        10, 11, 12, 13, 14, 15, 16
+        { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     wednesday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16, 17
-      ],
-      chargable: {
-        fee: '£20',
-        hours: [18, 19]
-      }
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }, { time: 17 }, { time: 18, fee: '£20' }, { time: 19, fee: '£20' }
+      ]
     },
     thursday: {
       closed: true
@@ -295,22 +276,18 @@ export const actualSchedule = {
     saturday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     sunday: {
       closed: false,
-      availability: [],
-      chargable: {
-        fee: '£20',
-        hours: [11, 12, 13, 14, 15, 16]
-      }
+      availability: [{ time: 11, fee: '£20' }, { time: 12, fee: '£20' }, { time: 13, fee: '£20' }, { time: 14, fee: '£20' }, { time: 15, fee: '£20' }, { time: 16, fee: '£20' }]
     }
   },
   appointments: [{
     date: '2020-04-07',
     times: [
-      10, 11, 12, 13, 14, 15, 16
+      { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
     ],
     closed: false
   }]
@@ -324,24 +301,20 @@ export const actualSchedule24Hours = {
     monday: {
       closed: false,
       availability: [
-        10, 11, 12, 13, 14, 15, 16
+        { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     tuesday: {
       closed: false,
       availability: [
-        10, 11, 12, 13, 14, 15, 16
+        { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     wednesday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16, 17
-      ],
-      chargable: {
-        fee: '£20',
-        hours: [18, 19]
-      }
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }, { time: 17 }, { time: 18, fee: '£20' }, { time: 19, fee: '£20' }
+      ]
     },
     thursday: {
       closed: true
@@ -352,22 +325,18 @@ export const actualSchedule24Hours = {
     saturday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     sunday: {
       closed: false,
-      availability: [],
-      chargable: {
-        fee: '£20',
-        hours: [11, 12, 13, 14, 15, 16]
-      }
+      availability: [{ time: 11, fee: '£20' }, { time: 12, fee: '£20' }, { time: 13, fee: '£20' }, { time: 14, fee: '£20' }, { time: 15, fee: '£20' }, { time: 16, fee: '£20' }]
     }
   },
   appointments: [{
     date: '2020-04-07',
     times: [
-      10, 11, 12, 13, 14, 15, 16
+      { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
     ],
     closed: false
   }]
@@ -381,24 +350,20 @@ export const actualScheduleWith1AppointmentBookedOn24March = {
     monday: {
       closed: false,
       availability: [
-        10, 11, 12, 13, 14, 15, 16
+        { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     tuesday: {
       closed: false,
       availability: [
-        10, 11, 12, 13, 14, 15, 16
+        { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     wednesday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16, 17
-      ],
-      chargable: {
-        fee: '£20',
-        hours: [18, 19]
-      }
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }, { time: 17 }, { time: 18, fee: '£20' }, { time: 19, fee: '£20' }
+      ]
     },
     thursday: {
       closed: true
@@ -409,22 +374,18 @@ export const actualScheduleWith1AppointmentBookedOn24March = {
     saturday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     sunday: {
       closed: false,
-      availability: [],
-      chargable: {
-        fee: '£20',
-        hours: [11, 12, 13, 14, 15, 16]
-      }
+      availability: [{ time: 11, fee: '£20' }, { time: 12, fee: '£20' }, { time: 13, fee: '£20' }, { time: 14, fee: '£20' }, { time: 15, fee: '£20' }, { time: 16, fee: '£20' }]
     }
   },
   appointments: [{
     date: '2020-03-24',
     times: [
-      10
+      { time: 10 }
     ],
     closed: false
   }]
@@ -438,24 +399,20 @@ export const actualScheduleWith2AppointmentsBookedOn24March = {
     monday: {
       closed: false,
       availability: [
-        10, 11, 12, 13, 14, 15, 16
+        { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     tuesday: {
       closed: false,
       availability: [
-        10, 11, 12, 13, 14, 15, 16
+        { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     wednesday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16, 17
-      ],
-      chargable: {
-        fee: '£20',
-        hours: [18, 19]
-      }
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }, { time: 17 }, { time: 18, fee: '£20' }, { time: 19, fee: '£20' }
+      ]
     },
     thursday: {
       closed: true
@@ -466,22 +423,18 @@ export const actualScheduleWith2AppointmentsBookedOn24March = {
     saturday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     sunday: {
       closed: false,
-      availability: [],
-      chargable: {
-        fee: '£20',
-        hours: [11, 12, 13, 14, 15, 16]
-      }
+      availability: [{ time: 11, fee: '£20' }, { time: 12, fee: '£20' }, { time: 13, fee: '£20' }, { time: 14, fee: '£20' }, { time: 15, fee: '£20' }, { time: 16, fee: '£20' }]
     }
   },
   appointments: [{
     date: '2020-03-24',
     times: [
-      10, 11
+      { time: 10 }, { time: 11 }
     ],
     closed: false
   }]
@@ -495,24 +448,20 @@ export const actualScheduleWithAllAppointmentsBookedOn24March = {
     monday: {
       closed: false,
       availability: [
-        10, 11, 12, 13, 14, 15, 16
+        { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     tuesday: {
       closed: false,
       availability: [
-        10, 11, 12, 13, 14, 15, 16
+        { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     wednesday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16, 17
-      ],
-      chargable: {
-        fee: '£20',
-        hours: [18, 19]
-      }
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }, { time: 17 }, { time: 18, fee: '£20' }, { time: 19, fee: '£20' }
+      ]
     },
     thursday: {
       closed: true
@@ -523,22 +472,18 @@ export const actualScheduleWithAllAppointmentsBookedOn24March = {
     saturday: {
       closed: false,
       availability: [
-        11, 12, 13, 14, 15, 16
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
       ]
     },
     sunday: {
       closed: false,
-      availability: [],
-      chargable: {
-        fee: '£20',
-        hours: [11, 12, 13, 14, 15, 16]
-      }
+      availability: [{ time: 11, fee: '£20' }, { time: 12, fee: '£20' }, { time: 13, fee: '£20' }, { time: 14, fee: '£20' }, { time: 15, fee: '£20' }, { time: 16, fee: '£20' }]
     }
   },
   appointments: [{
     date: '2020-03-24',
     times: [
-      10, 11, 12, 13, 14, 15, 16
+      { time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
     ],
     closed: false
   }]

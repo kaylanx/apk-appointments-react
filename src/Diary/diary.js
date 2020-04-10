@@ -18,27 +18,35 @@ export const getAppointmentsForDay = (diary, date) => {
   if (diary.schedule[dayKey].closed) {
     return []
   }
-  const availability = diary.schedule[dayKey].availability
+  const available = diary.schedule[dayKey].availability
+  const booked = getTimesAvailableForDate(diary, date)
+  const remainingAvailable = findRemainingAvailable(available, booked)
 
-  const times = diary.appointments
+  return remainingAvailable
+}
+
+const findRemainingAvailable = (available, booked) => {
+  return available.filter(({ time: availableTime }) => !booked.some(({ time: bookedTime }) => availableTime === bookedTime))
+}
+
+const getTimesAvailableForDate = (diary, date) => {
+  return diary.appointments
     .filter(appointment => appointment.closed === false && new Date(appointment.date).getTime() === date.getTime())
     .flatMap(appointment => appointment.times)
-
-  times.forEach(time => availability.splice(availability.indexOf(time), 1))
-
-  return availability
 }
 
 export const getFormattedTime = (diary, time) => {
+  const displayTime = time.time
+
   if (diary === undefined || diary.schedule === undefined || diary.schedule.display === undefined || diary.schedule.display.format === undefined) {
-    return formatTimeIn24HourFormat(time)
+    return formatTimeIn24HourFormat(displayTime)
   }
 
   switch (diary.schedule.display.format) {
     case 12:
-      return formatTimeIn12HourFormat(time)
+      return formatTimeIn12HourFormat(displayTime)
     default:
-      return formatTimeIn24HourFormat(time)
+      return formatTimeIn24HourFormat(displayTime)
   }
 }
 
