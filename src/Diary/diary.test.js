@@ -90,4 +90,25 @@ describe('appointment utilities', () => {
     const formattedTime = getFormattedTime(diary, time)
     expect(formattedTime).toBe('1:00pm')
   })
+
+  it('display format not present defaults to 24 hours and there is a fee', () => {
+    const diary = closedOnThursdays
+    const time = { time: 13, fee: '£20' }
+    const formattedTime = getFormattedTime(diary, time)
+    expect(formattedTime).toBe('13:00 (£20 booking fee)')
+  })
+
+  it('display format present and is 24 hours and there is a fee', () => {
+    const diary = actualSchedule24Hours
+    const time = { time: 13, fee: '£20' }
+    const formattedTime = getFormattedTime(diary, time)
+    expect(formattedTime).toBe('13:00 (£20 booking fee)')
+  })
+
+  it('display format present and is 12 hours and there is a fee', () => {
+    const diary = actualSchedule
+    const time = { time: 13, fee: '£20' }
+    const formattedTime = getFormattedTime(diary, time)
+    expect(formattedTime).toBe('1:00pm (£20 booking fee)')
+  })
 })

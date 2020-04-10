@@ -39,14 +39,14 @@ export const getFormattedTime = (diary, time) => {
   const displayTime = time.time
 
   if (diary === undefined || diary.schedule === undefined || diary.schedule.display === undefined || diary.schedule.display.format === undefined) {
-    return formatTimeIn24HourFormat(displayTime)
+    return formatTimeWithFee(formatTimeIn24HourFormat(displayTime), time.fee)
   }
 
   switch (diary.schedule.display.format) {
     case 12:
-      return formatTimeIn12HourFormat(displayTime)
+      return formatTimeWithFee(formatTimeIn12HourFormat(displayTime), time.fee)
     default:
-      return formatTimeIn24HourFormat(displayTime)
+      return formatTimeWithFee(formatTimeIn24HourFormat(displayTime), time.fee)
   }
 }
 
@@ -63,6 +63,13 @@ const formatTimeIn12HourFormat = (time) => {
     period = 'pm'
   }
   return '' + time + ':00' + period
+}
+
+const formatTimeWithFee = (formattedTime, fee) => {
+  if (fee !== undefined && fee !== null && fee !== '') {
+    return formattedTime + ' (' + fee + ' booking fee)'
+  }
+  return formattedTime
 }
 
 const dayIsDefined = (diary, day) => {
