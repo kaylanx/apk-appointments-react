@@ -4,7 +4,7 @@ import {
   DatePicker,
   MuiPickersUtilsProvider
 } from '@material-ui/pickers'
-import { isDayClosed } from '../Diary/diary'
+import { isDayClosed, getAppointmentsForDay } from '../Diary/diary'
 
 import DateFnsUtils from '@date-io/date-fns'
 
@@ -12,10 +12,6 @@ const tomorrow = () => {
   const tomorrow = new Date()
   tomorrow.setDate(tomorrow.getDate() + 1)
   return tomorrow
-}
-
-const determineDisabledDate = (appointments, date) => {
-  return false
 }
 
 AppointmentsCalendar.propTypes = {
@@ -35,7 +31,10 @@ export function AppointmentsCalendar ({
   selectedDate = tomorrow(),
   handleDateChange
 }) {
-  // TODO: Disable days where all appointments are booked
+  const determineDisabledDate = (diary, date) => {
+    const remainingTimes = getAppointmentsForDay(diary, date)
+    return remainingTimes.length === 0
+  }
 
   const disabledDates = (date) => {
     if (isDayClosed(diary, date)) {

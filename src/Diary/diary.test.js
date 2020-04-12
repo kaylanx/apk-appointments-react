@@ -63,8 +63,15 @@ describe('appointment utilities', () => {
     expect(appointments).toStrictEqual([{ time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }])
   })
 
-  it('get appointments for a given day with all appointments already booked', () => {
+  it('get appointments for 24th March 2020 with all appointments already booked', () => {
     const appointments = getAppointmentsForDay(actualScheduleWithAllAppointmentsBookedOn24March, new Date('2020-03-24'))
+    expect(appointments).not.toBeUndefined()
+    expect(appointments).toBeInstanceOf(Array)
+    expect(appointments).toStrictEqual([])
+  })
+
+  it('get appointments for 7th April 2020 with all appointments already booked', () => {
+    const appointments = getAppointmentsForDay(actualSchedule24Hours, new Date('2020-04-07'))
     expect(appointments).not.toBeUndefined()
     expect(appointments).toBeInstanceOf(Array)
     expect(appointments).toStrictEqual([])

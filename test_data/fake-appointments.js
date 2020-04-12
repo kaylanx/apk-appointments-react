@@ -179,8 +179,42 @@ export const multipleDaysClosed = {
 
 export const closedOnThursdays = {
   schedule: {
+    monday: {
+      closed: false,
+      availability: [
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
+      ]
+    },
+    tuesday: {
+      closed: false,
+      availability: [
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
+      ]
+    },
+    wednesday: {
+      closed: false,
+      availability: [
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
+      ]
+    },
     thursday: {
       closed: true
+    },
+    friday: {
+      closed: false,
+      availability: [
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
+      ]
+    },
+    saturday: {
+      closed: false,
+      availability: [
+        { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }
+      ]
+    },
+    sunday: {
+      closed: false,
+      availability: [{ time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }]
     }
   },
   appointments: []

@@ -19,7 +19,7 @@ export const getAppointmentsForDay = (diary, date) => {
     return []
   }
   const available = diary.schedule[dayKey].availability
-  const booked = getTimesAvailableForDate(diary, date)
+  const booked = findAppointmentsBooked(diary, date)
   const remainingAvailable = findRemainingAvailable(available, booked)
 
   return remainingAvailable
@@ -29,9 +29,9 @@ const findRemainingAvailable = (available, booked) => {
   return available.filter(({ time: availableTime }) => !booked.some(({ time: bookedTime }) => availableTime === bookedTime))
 }
 
-const getTimesAvailableForDate = (diary, date) => {
+const findAppointmentsBooked = (diary, date) => {
   return diary.appointments
-    .filter(appointment => appointment.closed === false && new Date(appointment.date).getTime() === date.getTime())
+    .filter(appointment => appointment.closed === false && new Date(appointment.date).toLocaleDateString() === date.toLocaleDateString())
     .flatMap(appointment => appointment.times)
 }
 
