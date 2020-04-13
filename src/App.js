@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import {
-  TextField,
-  FormControl,
-  InputLabel,
-  Select
+  TextField
 } from '@material-ui/core'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
@@ -22,6 +19,7 @@ import './App.css'
 import { theme, useStyles } from './Theme/theme'
 import { AppointmentsCalendar } from './AppointmentsCalendar/appointments-calendar'
 import { AppointmentTime } from './AppointmentTime/appointment-time'
+import { AppointmentType } from './AppointmentType/appointment-type'
 import { getDiary } from './Diary/fetch-diary'
 
 function App () {
@@ -75,28 +73,6 @@ function App () {
     return null
   }
 
-  function AppointmentTypeField () {
-    return (
-      <FormControl required variant="filled" className={classes.formControl}>
-        <InputLabel htmlFor="appointment-type">Appointment Type</InputLabel>
-        <Select
-          native
-          id="appointment-type"
-          inputProps={{
-            id: 'appointment-type'
-          }}
-          onChange={handleAppointmentTypeChange}
-          value={appointmentType}
-        >
-          <option aria-label="None" value="" />
-          <option value='bridal'>Bridal</option>
-          <option value='bridesmaids'>Bridesmaids</option>
-          <option value='accessories'>Accessories</option>
-        </Select>
-      </FormControl>
-    )
-  }
-
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
@@ -105,7 +81,7 @@ function App () {
           <Container maxWidth="lg">
             <AppointmentsCalendar id="appointment-date" label="Preferred Date" diary={diary} handleDateChange={setSelectedAppointmentDate} selectedDate={selectedAppointmentDate} />
             <AppointmentTime diary={diary} selectedDate={selectedAppointmentDate} classes={classes}/>
-            <AppointmentTypeField />
+            <AppointmentType id="appointment-type" classes={classes} handleAppointmentTypeChange={handleAppointmentTypeChange} appointmentType={appointmentType} />
             <BridesmaidsField />
             <EventDateField />
             <TextField id="standard-basic" label="Standard" />
