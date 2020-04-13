@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react'
 
-import { TextField } from '@material-ui/core'
+import {
+  TextField,
+  FormControl,
+  InputLabel,
+  Select
+} from '@material-ui/core'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import { ThemeProvider } from '@material-ui/core/styles'
@@ -25,6 +30,7 @@ function App () {
   const [diary, setDiary] = useState(null)
   const [selectedAppointmentDate, setSelectedAppointmentDate] = useState(startOfTomorrow())
   const [selectedEventDate, setSelectedEventDate] = useState(startOfTomorrow())
+  const [appointmentType, setAppointmentType] = useState('')
 
   async function fetchData () {
     const data = await getDiary()
@@ -35,8 +41,60 @@ function App () {
     fetchData()
   }, [])
 
+  const handleAppointmentTypeChange = (event) => {
+    setAppointmentType(event.target.value)
+  }
+
   if (diary === null) {
     return (<div className="App" />)
+  }
+
+  function BridesmaidsField () {
+    if (appointmentType === 'bridesmaids') {
+      return (<TextField id="filled-basic" type="number" inputProps={{ inputMode: 'numeric' }} label="How many bridesmaids do you have?" variant="filled" />)
+    }
+    return null
+  }
+
+  function EventDateField () {
+    if (appointmentType === 'bridal' || appointmentType === 'bridesmaids') {
+      return (
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <DatePicker
+            id="event-date"
+            label="Event / Wedding Date"
+            required
+            autoOk={true}
+            value={selectedEventDate}
+            onChange={setSelectedEventDate}
+            inputVariant="filled"
+            format="EE, d MMMM yy" />
+        </MuiPickersUtilsProvider>
+      )
+    }
+    return null
+  }
+
+  function AppointmentTypeField () {
+    return (
+      <FormControl required variant="filled" className={classes.formControl}>
+        <InputLabel htmlFor="appointment-type">Appointment Type</InputLabel>
+        <Select
+          native
+          id="appointment-type"
+          inputProps={{
+            id: 'appointment-type'
+          }}
+          onChange={handleAppointmentTypeChange}
+          value={appointmentType}
+        >
+          <option aria-label="None" value="" />
+          <option value='bridal'>Bridal</option>
+          <option value='bridesmaids'>Bridesmaids</option>
+          <option value='accessories'>Accessories</option>
+        </Select>
+      </FormControl>
+    )
   }
 
   return (
@@ -47,18 +105,9 @@ function App () {
           <Container maxWidth="lg">
             <AppointmentsCalendar id="appointment-date" label="Preferred Date" diary={diary} handleDateChange={setSelectedAppointmentDate} selectedDate={selectedAppointmentDate} />
             <AppointmentTime diary={diary} selectedDate={selectedAppointmentDate} classes={classes}/>
-            <TextField id="filled-basic" type="number" inputProps={{ inputMode: 'numeric' }} label="How many bridesmaids do you have?" variant="filled" />
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <DatePicker
-                id="event-date"
-                label="Event / Wedding Date"
-                required
-                autoOk={true}
-                value={selectedEventDate}
-                onChange={setSelectedEventDate}
-                inputVariant="filled"
-                format="EE, d MMMM yy" />
-            </MuiPickersUtilsProvider>
+            <AppointmentTypeField />
+            <BridesmaidsField />
+            <EventDateField />
             <TextField id="standard-basic" label="Standard" />
             <TextField id="outlined-basic" label="Outlined" variant="outlined" />
           </Container>
@@ -71,16 +120,6 @@ function App () {
 export default App
 
 /*
-
-Preferred Time (required)
-
-Appointment Type (required)
-
-How many bridesmaids do you have?
-
-Wedding / Event Date
-
-dd/mm/yyyy
 
 Your Name (required)
 
