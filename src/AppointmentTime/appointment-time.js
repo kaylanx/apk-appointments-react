@@ -5,40 +5,22 @@ import {
   InputLabel,
   Select
 } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 import { getAppointmentsForDay, getFormattedTime } from '../Diary/diary'
 
 AppointmentTime.propTypes = {
   id: PropTypes.string,
+  classes: PropTypes.object,
   diary: PropTypes.object.isRequired,
   selectedDate: PropTypes.instanceOf(Date).isRequired
 }
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    '& > *': {
-      margin: theme.spacing(1),
-      width: 200
-    }
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2)
-  }
-}))
-
 export function AppointmentTime ({
   id = 'appointment-time',
+  classes,
   diary,
   selectedDate
 }) {
-  const classes = useStyles()
   const appointmentAvailability = getAppointmentsForDay(diary, selectedDate)
-
-  // TODO: Add appointments with cost.
 
   return (
     <FormControl variant="filled" className={classes.formControl}>

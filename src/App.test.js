@@ -1,6 +1,9 @@
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
+
+import startOfTomorrow from 'date-fns/startOfTomorrow'
+
 import App from './App'
 import { availabilityEveryDay } from '../test_data/fake-appointments'
 
@@ -27,10 +30,8 @@ describe('appointments app', () => {
     act(() => {
       input.dispatchEvent(new MouseEvent('click', { bubbles: true }))
     })
-    const tomorrow = new Date()
-    tomorrow.setDate(tomorrow.getDate() + 1)
 
-    const expectedDate = tomorrow.toLocaleString('en-US', {
+    const expectedDate = startOfTomorrow().toLocaleString('en-US', {
       weekday: 'short',
       month: 'short',
       day: 'numeric'

@@ -2,6 +2,9 @@ import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import format from 'date-fns/format'
 import { act } from 'react-dom/test-utils'
+
+import startOfTomorrow from 'date-fns/startOfTomorrow'
+
 import { AppointmentsCalendar } from './appointments-calendar'
 import { fakeAppointments, closedOnThursdays, actualSchedule24Hours } from '../../test_data/fake-appointments'
 
@@ -68,9 +71,7 @@ describe('appointments calendar', () => {
 })
 
 const expectFieldToContainTomorrowsDate = (input) => {
-  const tomorrow = new Date()
-  tomorrow.setDate(tomorrow.getDate() + 1)
-  expectInputToHaveDate(input, tomorrow)
+  expectInputToHaveDate(input, startOfTomorrow())
 }
 
 const expectFieldToContainFirstJan = (input) => {

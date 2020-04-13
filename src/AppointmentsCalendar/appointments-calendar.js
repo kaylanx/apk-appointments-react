@@ -4,15 +4,12 @@ import {
   DatePicker,
   MuiPickersUtilsProvider
 } from '@material-ui/pickers'
+
+import startOfTomorrow from 'date-fns/startOfTomorrow'
+
 import { isDayClosed, getAppointmentsForDay } from '../Diary/diary'
 
 import DateFnsUtils from '@date-io/date-fns'
-
-const tomorrow = () => {
-  const tomorrow = new Date()
-  tomorrow.setDate(tomorrow.getDate() + 1)
-  return tomorrow
-}
 
 AppointmentsCalendar.propTypes = {
   id: PropTypes.string,
@@ -27,8 +24,8 @@ export function AppointmentsCalendar ({
   id = 'appointment-date',
   diary,
   disablePast = true,
-  minDate = tomorrow(),
-  selectedDate = tomorrow(),
+  minDate = startOfTomorrow(),
+  selectedDate = startOfTomorrow(),
   handleDateChange
 }) {
   const determineDisabledDate = (diary, date) => {

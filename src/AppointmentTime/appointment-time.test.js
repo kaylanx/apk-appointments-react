@@ -44,7 +44,7 @@ describe('appointments time', () => {
 
   async function expectNoOptions (selectedDate, diary) {
     await act(async () => {
-      render(<AppointmentTime id="appointment-time" selectedDate={selectedDate} diary={diary} />, container)
+      render(<AppointmentTime id="appointment-time" selectedDate={selectedDate} diary={diary} classes={{ formcontrol: 'dummy' }} />, container)
     })
     const input = document.querySelector('[id=appointment-time]')
     clickInput(input)
@@ -57,7 +57,7 @@ describe('appointments time', () => {
 
   async function assertExpectedTimesForDateAndSchedule (date, diary, expectedTimes) {
     await act(async () => {
-      render(<AppointmentTime id="appointment-time" selectedDate={date} diary={diary} />, container)
+      render(<AppointmentTime id="appointment-time" selectedDate={date} diary={diary} classes={{ formcontrol: 'dummy' }} />, container)
     })
     const input = document.querySelector('[id=appointment-time]')
     clickInput(input)
