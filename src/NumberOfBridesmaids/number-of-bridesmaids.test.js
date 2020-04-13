@@ -3,7 +3,7 @@ import { render, unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 import { NumberOfBridesmaids } from '../NumberOfBridesmaids/number-of-bridesmaids'
 
-describe('appointments type', () => {
+describe('number of bridesmaids', () => {
   let container = null
   beforeEach(() => {
     container = document.createElement('div')

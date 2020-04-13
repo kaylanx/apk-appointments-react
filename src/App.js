@@ -4,12 +4,6 @@ import { TextField } from '@material-ui/core'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import { ThemeProvider } from '@material-ui/core/styles'
-import {
-  DatePicker,
-  MuiPickersUtilsProvider
-} from '@material-ui/pickers'
-
-import DateFnsUtils from '@date-io/date-fns'
 
 import startOfTomorrow from 'date-fns/startOfTomorrow'
 
@@ -19,6 +13,7 @@ import { AppointmentsCalendar } from './AppointmentsCalendar/appointments-calend
 import { AppointmentTime } from './AppointmentTime/appointment-time'
 import { AppointmentType } from './AppointmentType/appointment-type'
 import { NumberOfBridesmaids } from './NumberOfBridesmaids/number-of-bridesmaids'
+import { EventCalendar } from './EventCalendar/event-calendar'
 import { getDiary } from './Diary/fetch-diary'
 
 function App () {
@@ -26,7 +21,6 @@ function App () {
 
   const [diary, setDiary] = useState(null)
   const [selectedAppointmentDate, setSelectedAppointmentDate] = useState(startOfTomorrow())
-  const [selectedEventDate, setSelectedEventDate] = useState(startOfTomorrow())
   const [appointmentType, setAppointmentType] = useState('')
 
   async function fetchData () {
@@ -44,25 +38,6 @@ function App () {
 
   if (diary === null) {
     return (<div className="App" />)
-  }
-
-  function EventDateField () {
-    if (appointmentType === 'bridal' || appointmentType === 'bridesmaids') {
-      return (
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <DatePicker
-            id="event-date"
-            label="Event / Wedding Date"
-            required
-            autoOk={true}
-            value={selectedEventDate}
-            onChange={setSelectedEventDate}
-            inputVariant="filled"
-            format="EE, d MMMM yy" />
-        </MuiPickersUtilsProvider>
-      )
-    }
-    return null
   }
 
   // TODO: validate Email and Confirm Email
@@ -101,7 +76,12 @@ function App () {
               classes={classes}
               appointmentType={appointmentType}
             />
-            <EventDateField />
+            <EventCalendar
+              id="event-date"
+              label="Wedding / Event date"
+              classes={classes}
+              appointmentType={appointmentType}
+            />
             <TextField id="your-name" label="Your Name" required variant="filled"/>
             <TextField id="your-email" label="Your Email" required variant="filled"/>
             <TextField id="confirm-your-email" label="Confirm Email" required variant="filled"/>
