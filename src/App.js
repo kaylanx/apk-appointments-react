@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import {
-  TextField
-} from '@material-ui/core'
+import { TextField } from '@material-ui/core'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import { ThemeProvider } from '@material-ui/core/styles'
@@ -67,6 +65,8 @@ function App () {
     return null
   }
 
+  // TODO: validate Email and Confirm Email
+
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
@@ -102,8 +102,13 @@ function App () {
               appointmentType={appointmentType}
             />
             <EventDateField />
-            <TextField id="standard-basic" label="Standard" />
-            <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+            <TextField id="your-name" label="Your Name" required variant="filled"/>
+            <TextField id="your-email" label="Your Email" required variant="filled"/>
+            <TextField id="confirm-your-email" label="Confirm Email" required variant="filled"/>
+            <TextField id="your-phone-no" label="Your phone number" required variant="filled"/>
+            <TextField id="budget" label="Budget" variant="filled" />
+            <TextField id="hear-about-us" label="How did you hear about us?" variant="filled" />
+            <TextField id="message" label="Your message" multiline rowsMax="4" variant="filled" />
           </Container>
         </form>
       </div>
@@ -112,20 +117,3 @@ function App () {
 }
 
 export default App
-
-/*
-
-Your Name (required)
-
-Your Email (required)
-
-Confirm Email (required)
-
-Your phone number (required)
-
-Budget
-
-How did you hear about us?
-
-Your Message
-*/
