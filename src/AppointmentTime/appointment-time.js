@@ -9,6 +9,7 @@ import { getAppointmentsForDay, getFormattedTime } from '../Diary/diary'
 
 AppointmentTime.propTypes = {
   id: PropTypes.string,
+  label: PropTypes.string,
   classes: PropTypes.object,
   diary: PropTypes.object.isRequired,
   selectedDate: PropTypes.instanceOf(Date).isRequired
@@ -16,6 +17,7 @@ AppointmentTime.propTypes = {
 
 export function AppointmentTime ({
   id = 'appointment-time',
+  label = 'Preferred Time',
   classes,
   diary,
   selectedDate
@@ -24,7 +26,7 @@ export function AppointmentTime ({
 
   return (
     <FormControl required variant="filled" className={classes.formControl}>
-      <InputLabel htmlFor={id}>Preferred Time</InputLabel>
+      <InputLabel htmlFor={id}>{label}</InputLabel>
       <Select
         native
         id={id}

@@ -12,9 +12,10 @@ import { isDayClosed, getAppointmentsForDay } from '../Diary/diary'
 
 AppointmentsCalendar.propTypes = {
   id: PropTypes.string,
+  label: PropTypes.string,
+  classes: PropTypes.object,
   diary: PropTypes.object.isRequired,
   disablePast: PropTypes.bool,
-  label: PropTypes.string,
   minDate: PropTypes.instanceOf(Date),
   selectedDate: PropTypes.instanceOf(Date),
   handleDateChange: PropTypes.func.isRequired
@@ -22,9 +23,10 @@ AppointmentsCalendar.propTypes = {
 
 export function AppointmentsCalendar ({
   id = 'appointment-date',
+  label = 'Preferred Date',
+  classes,
   diary,
   disablePast = true,
-  label = 'Preferred Date',
   minDate = startOfTomorrow(),
   selectedDate = startOfTomorrow(),
   handleDateChange
@@ -48,6 +50,7 @@ export function AppointmentsCalendar ({
         id={id}
         label={label}
         required
+        className={classes.formControl}
         value={selectedDate}
         onChange={handleDateChange}
         disablePast={disablePast}

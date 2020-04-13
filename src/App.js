@@ -79,9 +79,28 @@ function App () {
         <form className={classes.root} noValidate autoComplete="off">
           <CssBaseline />
           <Container maxWidth="lg">
-            <AppointmentsCalendar id="appointment-date" label="Preferred Date" diary={diary} handleDateChange={setSelectedAppointmentDate} selectedDate={selectedAppointmentDate} />
-            <AppointmentTime diary={diary} selectedDate={selectedAppointmentDate} classes={classes}/>
-            <AppointmentType id="appointment-type" classes={classes} handleAppointmentTypeChange={handleAppointmentTypeChange} appointmentType={appointmentType} />
+            <AppointmentsCalendar
+              id="appointment-date"
+              label="Preferred Date"
+              classes={classes}
+              diary={diary}
+              handleDateChange={setSelectedAppointmentDate}
+              selectedDate={selectedAppointmentDate}
+            />
+            <AppointmentTime
+              id="appointment-time"
+              label="Preferred Time"
+              classes={classes}
+              diary={diary}
+              selectedDate={selectedAppointmentDate}
+            />
+            <AppointmentType
+              id="appointment-type"
+              label="Appointment Type"
+              classes={classes}
+              handleAppointmentTypeChange={handleAppointmentTypeChange}
+              appointmentType={appointmentType}
+            />
             <BridesmaidsField />
             <EventDateField />
             <TextField id="standard-basic" label="Standard" />

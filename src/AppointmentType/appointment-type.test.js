@@ -3,7 +3,7 @@ import { render, unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 import { AppointmentType } from '../AppointmentType/appointment-type'
 
-describe('appointments time', () => {
+describe('appointments type', () => {
   let container = null
   beforeEach(() => {
     container = document.createElement('div')

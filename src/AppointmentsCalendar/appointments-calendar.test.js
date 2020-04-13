@@ -23,7 +23,7 @@ describe('appointments calendar', () => {
 
   it('today is disabled', async () => {
     await act(async () => {
-      render(<AppointmentsCalendar id="appointments-calendar" diary={fakeAppointments} handleDateChange={(date) => {}} />, container)
+      render(<AppointmentsCalendar id="appointments-calendar" classes={{ formcontrol: 'dummy' }} diary={fakeAppointments} handleDateChange={(date) => {}} />, container)
     })
 
     const input = document.querySelector('[id=appointments-calendar]')
@@ -37,7 +37,7 @@ describe('appointments calendar', () => {
     const firstJan2020 = new Date('2020-01-01')
 
     await act(async () => {
-      render(<AppointmentsCalendar id="appointments-calendar" diary={closedOnThursdays} handleDateChange={(date) => {}} disablePast={false} minDate={firstJan2020} selectedDate={firstJan2020}/>, container)
+      render(<AppointmentsCalendar id="appointments-calendar" classes={{ formcontrol: 'dummy' }} diary={closedOnThursdays} handleDateChange={(date) => {}} disablePast={false} minDate={firstJan2020} selectedDate={firstJan2020}/>, container)
     })
 
     const input = document.querySelector('[id=appointments-calendar]')
@@ -53,6 +53,7 @@ describe('appointments calendar', () => {
       render(
         <AppointmentsCalendar
           id="appointments-calendar"
+          classes={{ formcontrol: 'dummy' }}
           diary={actualSchedule24Hours}
           handleDateChange={(date) => {}}
           disablePast={false}
