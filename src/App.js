@@ -20,6 +20,7 @@ import { theme, useStyles } from './Theme/theme'
 import { AppointmentsCalendar } from './AppointmentsCalendar/appointments-calendar'
 import { AppointmentTime } from './AppointmentTime/appointment-time'
 import { AppointmentType } from './AppointmentType/appointment-type'
+import { NumberOfBridesmaids } from './NumberOfBridesmaids/number-of-bridesmaids'
 import { getDiary } from './Diary/fetch-diary'
 
 function App () {
@@ -45,13 +46,6 @@ function App () {
 
   if (diary === null) {
     return (<div className="App" />)
-  }
-
-  function BridesmaidsField () {
-    if (appointmentType === 'bridesmaids') {
-      return (<TextField id="filled-basic" type="number" inputProps={{ inputMode: 'numeric' }} label="How many bridesmaids do you have?" variant="filled" />)
-    }
-    return null
   }
 
   function EventDateField () {
@@ -101,7 +95,12 @@ function App () {
               handleAppointmentTypeChange={handleAppointmentTypeChange}
               appointmentType={appointmentType}
             />
-            <BridesmaidsField />
+            <NumberOfBridesmaids
+              id="number-of-bridesmaids"
+              label="How many bridesmaids do you have?"
+              classes={classes}
+              appointmentType={appointmentType}
+            />
             <EventDateField />
             <TextField id="standard-basic" label="Standard" />
             <TextField id="outlined-basic" label="Outlined" variant="outlined" />
