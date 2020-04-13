@@ -47,7 +47,7 @@ function App () {
           <Container maxWidth="lg">
             <AppointmentsCalendar id="appointment-date" label="Preferred Date" diary={diary} handleDateChange={setSelectedAppointmentDate} selectedDate={selectedAppointmentDate} />
             <AppointmentTime diary={diary} selectedDate={selectedAppointmentDate} classes={classes}/>
-            <TextField id="filled-basic" label="How many bridesmaids do you have?" variant="filled" />
+            <TextField id="filled-basic" type="number" inputProps={{ inputMode: 'numeric' }} label="How many bridesmaids do you have?" variant="filled" />
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <DatePicker
                 id="event-date"
