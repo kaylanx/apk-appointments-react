@@ -3,45 +3,15 @@ import React, { useState, useEffect } from 'react'
 import { TextField } from '@material-ui/core'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
-import { ThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles'
+import { ThemeProvider } from '@material-ui/core/styles'
 
 import startOfTomorrow from 'date-fns/startOfTomorrow'
 
 import './App.css'
+import { theme, useStyles } from './Theme/theme'
 import { AppointmentsCalendar } from './AppointmentsCalendar/appointments-calendar'
 import { AppointmentTime } from './AppointmentTime/appointment-time'
 import { getDiary } from './Diary/fetch-diary'
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      light: '#9b7e97',
-      main: '#825e7e',
-      dark: '#5b4158',
-      contrastText: '#fff'
-    },
-    secondary: {
-      light: '#f9f9f9',
-      main: '#f8f8f8',
-      dark: '#adadad',
-      contrastText: '#000'
-    }
-  }
-})
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    '& .MuiTextField-root': {
-      // margin: theme.spacing(1),
-      padding: theme.spacing(1),
-      width: '100%'
-    }
-  },
-  formControl: {
-    padding: theme.spacing(1),
-    width: '100%'
-  }
-}))
 
 function App () {
   const classes = useStyles()
