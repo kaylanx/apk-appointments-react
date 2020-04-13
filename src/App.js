@@ -4,6 +4,12 @@ import { TextField } from '@material-ui/core'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import { ThemeProvider } from '@material-ui/core/styles'
+import {
+  DatePicker,
+  MuiPickersUtilsProvider
+} from '@material-ui/pickers'
+
+import DateFnsUtils from '@date-io/date-fns'
 
 import startOfTomorrow from 'date-fns/startOfTomorrow'
 
@@ -17,7 +23,8 @@ function App () {
   const classes = useStyles()
 
   const [diary, setDiary] = useState(null)
-  const [selectedDate, setSelectedDate] = useState(startOfTomorrow())
+  const [selectedAppointmentDate, setSelectedAppointmentDate] = useState(startOfTomorrow())
+  const [selectedEventDate, setSelectedEventDate] = useState(startOfTomorrow())
 
   async function fetchData () {
     const data = await getDiary()
@@ -27,10 +34,6 @@ function App () {
   useEffect(() => {
     fetchData()
   }, [])
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date)
-  }
 
   if (diary === null) {
     return (<div className="App" />)
@@ -42,10 +45,20 @@ function App () {
         <form className={classes.root} noValidate autoComplete="off">
           <CssBaseline />
           <Container maxWidth="lg">
-            <AppointmentsCalendar id="appointment-date" diary={diary} handleDateChange={handleDateChange} selectedDate={selectedDate} />
-            <AppointmentTime diary={diary} selectedDate={selectedDate} classes={classes}/>
-            <TextField id="filled-basic" label="Filled" variant="filled" />
-
+            <AppointmentsCalendar id="appointment-date" label="Preferred Date" diary={diary} handleDateChange={setSelectedAppointmentDate} selectedDate={selectedAppointmentDate} />
+            <AppointmentTime diary={diary} selectedDate={selectedAppointmentDate} classes={classes}/>
+            <TextField id="filled-basic" label="How many bridesmaids do you have?" variant="filled" />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <DatePicker
+                id="event-date"
+                label="Event / Wedding Date"
+                required
+                autoOk={true}
+                value={selectedEventDate}
+                onChange={setSelectedEventDate}
+                inputVariant="filled"
+                format="EE, d MMMM yy" />
+            </MuiPickersUtilsProvider>
             <TextField id="standard-basic" label="Standard" />
             <TextField id="outlined-basic" label="Outlined" variant="outlined" />
           </Container>

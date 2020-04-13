@@ -5,16 +5,16 @@ import {
   MuiPickersUtilsProvider
 } from '@material-ui/pickers'
 
+import DateFnsUtils from '@date-io/date-fns'
 import startOfTomorrow from 'date-fns/startOfTomorrow'
 
 import { isDayClosed, getAppointmentsForDay } from '../Diary/diary'
-
-import DateFnsUtils from '@date-io/date-fns'
 
 AppointmentsCalendar.propTypes = {
   id: PropTypes.string,
   diary: PropTypes.object.isRequired,
   disablePast: PropTypes.bool,
+  label: PropTypes.string,
   minDate: PropTypes.instanceOf(Date),
   selectedDate: PropTypes.instanceOf(Date),
   handleDateChange: PropTypes.func.isRequired
@@ -24,6 +24,7 @@ export function AppointmentsCalendar ({
   id = 'appointment-date',
   diary,
   disablePast = true,
+  label = 'Preferred Date',
   minDate = startOfTomorrow(),
   selectedDate = startOfTomorrow(),
   handleDateChange
@@ -45,7 +46,7 @@ export function AppointmentsCalendar ({
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <DatePicker
         id={id}
-        label="Preferred Date"
+        label={label}
         required
         value={selectedDate}
         onChange={handleDateChange}

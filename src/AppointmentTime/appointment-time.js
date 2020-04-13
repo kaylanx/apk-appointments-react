@@ -23,7 +23,7 @@ export function AppointmentTime ({
   const appointmentAvailability = getAppointmentsForDay(diary, selectedDate)
 
   return (
-    <FormControl variant="filled" className={classes.formControl}>
+    <FormControl required variant="filled" className={classes.formControl}>
       <InputLabel htmlFor={id}>Preferred Time</InputLabel>
       <Select
         native
