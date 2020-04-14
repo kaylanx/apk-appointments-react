@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import Container from '@material-ui/core/Container'
@@ -19,17 +19,58 @@ export function EmailField ({
   confirmFieldLabel,
   required = null
 }) {
+  const [email, setEmail] = useState('')
+  const [confirmEmail, setConfirmEmail] = useState('')
+  const [fieldsValid, setFieldsValid] = useState(true)
   const [confirmFieldError, setConfirmedFieldError] = useState(false)
   const [confirmFieldErrorMessage, setConfirmedFieldErrorMessage] = useState('')
-  const validateEmails = (event) => {
-    setConfirmedFieldError(true)
-    setConfirmedFieldErrorMessage('Error')
+
+  const displayErrorMessage = (shouldDisplay) => {
+    setConfirmedFieldError(shouldDisplay)
+    setConfirmedFieldErrorMessage(shouldDisplay ? 'Error' : '')
   }
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value)
+  }
+
+  const handleConfirmEmailChange = (event) => {
+    setConfirmEmail(event.target.value)
+  }
+
+  useEffect(() => {
+    const validateEmailsMatch = () => {
+      return email === confirmEmail
+    }
+
+    const validateEmails = () => {
+      setFieldsValid(validateEmailsMatch())
+      displayErrorMessage(!fieldsValid)
+    }
+
+    validateEmails()
+  }, [email, confirmEmail, fieldsValid])
 
   return (
     <Container>
-      <TextField id={id} label={label} required={required} variant="filled" />
-      <TextField error={confirmFieldError} helperText={confirmFieldErrorMessage} id={confirmFieldId} label={confirmFieldLabel} required={required} variant="filled" onFocus={validateEmails} />
+      <TextField
+        id={id}
+        label={label}
+        required={required}
+        variant="filled"
+        onChange={handleEmailChange}
+        value={email}
+      />
+      <TextField
+        error={confirmFieldError}
+        helperText={confirmFieldErrorMessage}
+        id={confirmFieldId}
+        label={confirmFieldLabel}
+        required={required}
+        variant="filled"
+        onChange={handleConfirmEmailChange}
+        value={confirmEmail}
+      />
     </Container>
   )
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 import { EmailField } from '../EmailField/email-field'
+import { fireEvent } from '@testing-library/react'
 
 describe('email field', () => {
   let container = null
@@ -41,7 +42,7 @@ describe('email field', () => {
     expect(confirmEmailFieldHelperText).toBeNull()
   })
 
-  it('Given email contains value, When Confirm field is clicked, Confirm field has error message', async () => {
+  it('Given email contains value, When Confirm field gets focus, Confirm field has error message', async () => {
     await act(async () => {
       render(
         <EmailField
@@ -53,15 +54,75 @@ describe('email field', () => {
         />, container)
     })
     const emailField = container.querySelector('[id=your-email]')
-    emailField.value = 'somevalue'
+    fireEvent.change(emailField, { target: { value: 'somevalue@somedomain.com' } })
 
     const confirmEmailField = container.querySelector('[id=confirm-your-email]')
     confirmEmailField.focus()
+
     const confirmEmailFieldLabel = container.querySelector('[id=confirm-your-email-label]')
     expect(confirmEmailFieldLabel.className).toContain('Mui-error')
     const confirmEmailFieldHelperText = container.querySelector('[id=confirm-your-email-helper-text]')
     expect(confirmEmailFieldHelperText).not.toBeNull()
     expect(confirmEmailFieldHelperText.className).toContain('Mui-error')
+  })
+
+  it('Given email contains value, When confirm field also contains a value and values are not equal, Confirm field has error message', async () => {
+    await act(async () => {
+      render(
+        <EmailField
+          id="your-email"
+          label="Your Email"
+          confirmFieldId="confirm-your-email"
+          confirmFieldLabel="Your Email"
+          required
+        />, container)
+    })
+    const emailField = container.querySelector('[id=your-email]')
+
+    fireEvent.change(emailField, { target: { value: 'somevalue@somedomain.com' } })
+    expect(emailField.value).toBe('somevalue@somedomain.com')
+
+    const confirmEmailField = container.querySelector('[id=confirm-your-email]')
+
+    confirmEmailField.focus()
+    fireEvent.change(confirmEmailField, { target: { value: 'somevalueOtherValue@somedomain.com' } })
+    expect(confirmEmailField.value).toBe('somevalueOtherValue@somedomain.com')
+
+    emailField.focus()
+    const confirmEmailFieldLabel = container.querySelector('[id=confirm-your-email-label]')
+    expect(confirmEmailFieldLabel.className).toContain('Mui-error')
+    const confirmEmailFieldHelperText = container.querySelector('[id=confirm-your-email-helper-text]')
+    expect(confirmEmailFieldHelperText).not.toBeNull()
+    expect(confirmEmailFieldHelperText.className).toContain('Mui-error')
+  })
+
+  it('Given email contains value, When confirm field also contains a value and values are equal, Confirm field has no error message', async () => {
+    await act(async () => {
+      render(
+        <EmailField
+          id="your-email"
+          label="Your Email"
+          confirmFieldId="confirm-your-email"
+          confirmFieldLabel="Your Email"
+          required
+        />, container)
+    })
+    const emailField = container.querySelector('[id=your-email]')
+
+    fireEvent.change(emailField, { target: { value: 'somevalue@somedomain.com' } })
+    expect(emailField.value).toBe('somevalue@somedomain.com')
+
+    const confirmEmailField = container.querySelector('[id=confirm-your-email]')
+
+    confirmEmailField.focus()
+    fireEvent.change(confirmEmailField, { target: { value: 'somevalue@somedomain.com' } })
+    expect(confirmEmailField.value).toBe('somevalue@somedomain.com')
+
+    emailField.focus()
+    const confirmEmailFieldLabel = container.querySelector('[id=confirm-your-email-label]')
+    expect(confirmEmailFieldLabel.className).not.toContain('Mui-error')
+    const confirmEmailFieldHelperText = container.querySelector('[id=confirm-your-email-helper-text]')
+    expect(confirmEmailFieldHelperText).toBeNull()
   })
 
   /*
