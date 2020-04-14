@@ -14,6 +14,7 @@ import { AppointmentTime } from './AppointmentTime/appointment-time'
 import { AppointmentType } from './AppointmentType/appointment-type'
 import { NumberOfBridesmaids } from './NumberOfBridesmaids/number-of-bridesmaids'
 import { EventCalendar } from './EventCalendar/event-calendar'
+import { EmailField } from './EmailField/email-field'
 import { getDiary } from './Diary/fetch-diary'
 
 function App () {
@@ -83,8 +84,13 @@ function App () {
               appointmentType={appointmentType}
             />
             <TextField id="your-name" label="Your Name" required variant="filled"/>
-            <TextField id="your-email" label="Your Email" required variant="filled"/>
-            <TextField id="confirm-your-email" label="Confirm Email" required variant="filled"/>
+            <EmailField
+              id="your-email"
+              label="Your Email"
+              confirmFieldId="confirm-your-email"
+              confirmFieldLabel="Your Email"
+              required
+            />
             <TextField id="your-phone-no" label="Your phone number" required variant="filled"/>
             <TextField id="budget" label="Budget" variant="filled" />
             <TextField id="hear-about-us" label="How did you hear about us?" variant="filled" />
