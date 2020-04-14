@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import Container from '@material-ui/core/Container'
 import { TextField } from '@material-ui/core'
 
 EmailField.propTypes = {
@@ -52,7 +51,7 @@ export function EmailField ({
   }, [email, confirmEmail, fieldsValid])
 
   return (
-    <Container>
+    <span>
       <TextField
         id={id}
         label={label}
@@ -71,6 +70,6 @@ export function EmailField ({
         onChange={handleConfirmEmailChange}
         value={confirmEmail}
       />
-    </Container>
+    </span>
   )
 }
