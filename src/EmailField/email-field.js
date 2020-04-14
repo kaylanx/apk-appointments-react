@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import Container from '@material-ui/core/Container'
@@ -19,10 +19,17 @@ export function EmailField ({
   confirmFieldLabel,
   required = null
 }) {
+  const [confirmFieldError, setConfirmedFieldError] = useState(false)
+  const [confirmFieldErrorMessage, setConfirmedFieldErrorMessage] = useState('')
+  const validateEmails = (event) => {
+    setConfirmedFieldError(true)
+    setConfirmedFieldErrorMessage('Error')
+  }
+
   return (
-    <Container maxWidth="lg">
-      <TextField id={id} label={label} required={required} variant="filled"/>
-      <TextField id={confirmFieldId} label={confirmFieldLabel} required={required} variant="filled"/>
+    <Container>
+      <TextField id={id} label={label} required={required} variant="filled" />
+      <TextField error={confirmFieldError} helperText={confirmFieldErrorMessage} id={confirmFieldId} label={confirmFieldLabel} required={required} variant="filled" onFocus={validateEmails} />
     </Container>
   )
 }

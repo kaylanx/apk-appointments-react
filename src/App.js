@@ -88,7 +88,7 @@ function App () {
               id="your-email"
               label="Your Email"
               confirmFieldId="confirm-your-email"
-              confirmFieldLabel="Your Email"
+              confirmFieldLabel="Confirm Your Email"
               required
             />
             <TextField id="your-phone-no" label="Your phone number" required variant="filled"/>
