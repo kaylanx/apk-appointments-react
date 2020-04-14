@@ -18,16 +18,8 @@ describe('email field', () => {
   })
 
   it('Renders email and confirm field', async () => {
-    await act(async () => {
-      render(
-        <EmailField
-          id="your-email"
-          label="Your Email"
-          confirmFieldId="confirm-your-email"
-          confirmFieldLabel="Confirm Your Email"
-          required
-        />, container)
-    })
+    await renderEmailFieldInContainer(container)
+
     const emailField = container.querySelector('[id=your-email]')
     expect(emailField).not.toBeNull()
     const emailFieldLabel = container.querySelector('[id=your-email-label]')
@@ -43,90 +35,79 @@ describe('email field', () => {
   })
 
   it('Given email contains value, When Confirm field gets focus, Confirm field has error message', async () => {
-    await act(async () => {
-      render(
-        <EmailField
-          id="your-email"
-          label="Your Email"
-          confirmFieldId="confirm-your-email"
-          confirmFieldLabel="Your Email"
-          required
-        />, container)
-    })
+    await renderEmailFieldInContainer(container)
+
     const emailField = container.querySelector('[id=your-email]')
-    fireEvent.change(emailField, { target: { value: 'somevalue@somedomain.com' } })
+    setFieldValue(emailField, 'somevalue@somedomain.com')
 
     const confirmEmailField = container.querySelector('[id=confirm-your-email]')
     confirmEmailField.focus()
 
-    const confirmEmailFieldLabel = container.querySelector('[id=confirm-your-email-label]')
-    expect(confirmEmailFieldLabel.className).toContain('Mui-error')
-    const confirmEmailFieldHelperText = container.querySelector('[id=confirm-your-email-helper-text]')
-    expect(confirmEmailFieldHelperText).not.toBeNull()
-    expect(confirmEmailFieldHelperText.className).toContain('Mui-error')
+    expectConfirmEmailContainsError(container)
   })
 
   it('Given email contains value, When confirm field also contains a value and values are not equal, Confirm field has error message', async () => {
-    await act(async () => {
-      render(
-        <EmailField
-          id="your-email"
-          label="Your Email"
-          confirmFieldId="confirm-your-email"
-          confirmFieldLabel="Your Email"
-          required
-        />, container)
-    })
-    const emailField = container.querySelector('[id=your-email]')
+    await renderEmailFieldInContainer(container)
 
-    fireEvent.change(emailField, { target: { value: 'somevalue@somedomain.com' } })
-    expect(emailField.value).toBe('somevalue@somedomain.com')
+    const emailField = container.querySelector('[id=your-email]')
+    setFieldValue(emailField, 'somevalue@somedomain.com')
 
     const confirmEmailField = container.querySelector('[id=confirm-your-email]')
-
     confirmEmailField.focus()
-    fireEvent.change(confirmEmailField, { target: { value: 'somevalueOtherValue@somedomain.com' } })
-    expect(confirmEmailField.value).toBe('somevalueOtherValue@somedomain.com')
-
+    setFieldValue(emailField, 'somevalueOtherValue@somedomain.com')
     emailField.focus()
-    const confirmEmailFieldLabel = container.querySelector('[id=confirm-your-email-label]')
-    expect(confirmEmailFieldLabel.className).toContain('Mui-error')
-    const confirmEmailFieldHelperText = container.querySelector('[id=confirm-your-email-helper-text]')
-    expect(confirmEmailFieldHelperText).not.toBeNull()
-    expect(confirmEmailFieldHelperText.className).toContain('Mui-error')
+
+    expectConfirmEmailContainsError(container)
   })
 
   it('Given email contains value, When confirm field also contains a value and values are equal, Confirm field has no error message', async () => {
-    await act(async () => {
-      render(
-        <EmailField
-          id="your-email"
-          label="Your Email"
-          confirmFieldId="confirm-your-email"
-          confirmFieldLabel="Your Email"
-          required
-        />, container)
-    })
-    const emailField = container.querySelector('[id=your-email]')
+    await renderEmailFieldInContainer(container)
 
-    fireEvent.change(emailField, { target: { value: 'somevalue@somedomain.com' } })
-    expect(emailField.value).toBe('somevalue@somedomain.com')
+    const emailField = container.querySelector('[id=your-email]')
+    setFieldValue(emailField, 'somevalue@somedomain.com')
 
     const confirmEmailField = container.querySelector('[id=confirm-your-email]')
-
     confirmEmailField.focus()
-    fireEvent.change(confirmEmailField, { target: { value: 'somevalue@somedomain.com' } })
-    expect(confirmEmailField.value).toBe('somevalue@somedomain.com')
+    setFieldValue(confirmEmailField, 'somevalue@somedomain.com')
 
     emailField.focus()
-    const confirmEmailFieldLabel = container.querySelector('[id=confirm-your-email-label]')
-    expect(confirmEmailFieldLabel.className).not.toContain('Mui-error')
-    const confirmEmailFieldHelperText = container.querySelector('[id=confirm-your-email-helper-text]')
-    expect(confirmEmailFieldHelperText).toBeNull()
+    expectConfirmEmailDoesNotContainError(container)
   })
 
   /*
    Validate each field is a valid email address (i.e. contains one @ and at least one . after the @)
-   Validate both fields are equal
    */
 })
+
+function setFieldValue (field, value) {
+  fireEvent.change(field, { target: { value: value } })
+  expect(field.value).toBe(value)
+}
+
+async function renderEmailFieldInContainer (container) {
+  await act(async () => {
+    render(
+      <EmailField
+        id="your-email"
+        label="Your Email"
+        confirmFieldId="confirm-your-email"
+        confirmFieldLabel="Confirm Your Email"
+        required
+      />, container)
+  })
+}
+
+function expectConfirmEmailContainsError (container) {
+  const confirmEmailFieldLabel = container.querySelector('[id=confirm-your-email-label]')
+  expect(confirmEmailFieldLabel.className).toContain('Mui-error')
+  const confirmEmailFieldHelperText = container.querySelector('[id=confirm-your-email-helper-text]')
+  expect(confirmEmailFieldHelperText).not.toBeNull()
+  expect(confirmEmailFieldHelperText.className).toContain('Mui-error')
+}
+
+function expectConfirmEmailDoesNotContainError (container) {
+  const confirmEmailFieldLabel = container.querySelector('[id=confirm-your-email-label]')
+  expect(confirmEmailFieldLabel.className).not.toContain('Mui-error')
+  const confirmEmailFieldHelperText = container.querySelector('[id=confirm-your-email-helper-text]')
+  expect(confirmEmailFieldHelperText).toBeNull()
+}
