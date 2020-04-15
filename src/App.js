@@ -40,7 +40,7 @@ function App () {
   const showLoadingSpinner = (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <CircularProgress />
+        <CircularProgress id="appointments-spinner" />
       </div>
     </ThemeProvider>
   )

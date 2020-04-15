@@ -40,6 +40,21 @@ describe('appointments app', () => {
     const cal = document.querySelector('h4.MuiTypography-root, h4.MuiPickersToolbarText-toolbarTxt, h4.MuiPickersToolbarText-toolbarBtnSelected, h4.MuiTypography-h4, h4.MuiTypography-alignCenter')
     expect(cal.innerHTML).toEqual(expectedDate)
   })
+
+  it('loading spinner shows if data is delayed', async () => {
+    mockFetchWithResponse(null)
+
+    await act(async () => {
+      render(<App />, container)
+    })
+
+    const spinner = document.querySelector('[id=appointments-spinner]')
+    expect(spinner).toBeDefined()
+    expect(spinner).not.toBeNull()
+    const svg = spinner.querySelector('svg.MuiCircularProgress-svg')
+    expect(svg).toBeDefined()
+    expect(svg).not.toBeNull()
+  })
 })
 
 const mockFetchWithResponse = (response) => {
