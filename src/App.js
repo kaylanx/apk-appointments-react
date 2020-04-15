@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { TextField } from '@material-ui/core'
+import { TextField, CircularProgress } from '@material-ui/core'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import { ThemeProvider } from '@material-ui/core/styles'
@@ -37,8 +37,16 @@ function App () {
     setAppointmentType(event.target.value)
   }
 
+  const showLoadingSpinner = (
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <CircularProgress />
+      </div>
+    </ThemeProvider>
+  )
+
   if (diary === null) {
-    return (<div className="App" />)
+    return showLoadingSpinner
   }
 
   // TODO: validate Email and Confirm Email

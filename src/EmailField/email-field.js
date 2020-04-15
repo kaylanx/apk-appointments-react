@@ -26,7 +26,7 @@ export function EmailField ({
 
   const displayErrorMessage = (shouldDisplay) => {
     setConfirmedFieldError(shouldDisplay)
-    setConfirmedFieldErrorMessage(shouldDisplay ? 'Error' : '')
+    setConfirmedFieldErrorMessage(shouldDisplay ? 'Email addresses do not match' : '')
   }
 
   const handleEmailChange = (event) => {

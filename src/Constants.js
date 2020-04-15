@@ -6,7 +6,7 @@ const prod = {
 
 const dev = {
   url: {
-    API_URL: 'http://localhost:3000/appointments'
+    API_URL: 'http://' + window.location.host + '/appointments'
   }
 }
 
