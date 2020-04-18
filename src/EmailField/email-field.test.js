@@ -74,6 +74,26 @@ describe('email field', () => {
     expectConfirmEmailDoesNotContainError(container)
   })
 
+  it('Given email contains invalid email address then error field has an error message', async () => {
+    await renderEmailFieldInContainer(container)
+
+    const emailField = container.querySelector('[id=your-email]')
+    setFieldValue(emailField, 'somevalue')
+
+    emailField.focus()
+    expectEmailContainsError(container)
+  })
+
+  it('Given email contains valid email address then error field has an error message', async () => {
+    await renderEmailFieldInContainer(container)
+
+    const emailField = container.querySelector('[id=your-email]')
+    setFieldValue(emailField, 'somevalue@somedomain.com')
+
+    emailField.focus()
+    expectEmailDoesNotContainsError(container)
+  })
+
   /*
    Validate each field is a valid email address (i.e. contains one @ and at least one . after the @)
    */
@@ -95,6 +115,21 @@ async function renderEmailFieldInContainer (container) {
         required
       />, container)
   })
+}
+
+function expectEmailContainsError (container) {
+  const emailFieldLabel = container.querySelector('[id=your-email-label]')
+  expect(emailFieldLabel.className).toContain('Mui-error')
+  const emailFieldHelperText = container.querySelector('[id=your-email-helper-text]')
+  expect(emailFieldHelperText).not.toBeNull()
+  expect(emailFieldHelperText.className).toContain('Mui-error')
+}
+
+function expectEmailDoesNotContainsError (container) {
+  const emailFieldLabel = container.querySelector('[id=your-email-label]')
+  expect(emailFieldLabel.className).not.toContain('Mui-error')
+  const emailFieldHelperText = container.querySelector('[id=your-email-helper-text]')
+  expect(emailFieldHelperText).toBeNull()
 }
 
 function expectConfirmEmailContainsError (container) {

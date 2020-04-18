@@ -50,6 +50,7 @@ function App () {
   }
 
   // TODO: validate Email and Confirm Email
+  // TODO: keep retrying the API if it fails
 
   return (
     <ThemeProvider theme={theme}>

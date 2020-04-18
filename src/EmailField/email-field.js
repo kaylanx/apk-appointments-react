@@ -20,13 +20,20 @@ export function EmailField ({
 }) {
   const [email, setEmail] = useState('')
   const [confirmEmail, setConfirmEmail] = useState('')
-  const [fieldsValid, setFieldsValid] = useState(true)
+
+  const [emailFieldError, setEmailFieldError] = useState(false)
+  const [emailFieldErrorMessage, setEmailFieldErrorMessage] = useState('')
   const [confirmFieldError, setConfirmedFieldError] = useState(false)
   const [confirmFieldErrorMessage, setConfirmedFieldErrorMessage] = useState('')
 
-  const displayErrorMessage = (shouldDisplay) => {
+  const showEmailsDontMatchMessage = (shouldDisplay) => {
     setConfirmedFieldError(shouldDisplay)
     setConfirmedFieldErrorMessage(shouldDisplay ? 'Email addresses do not match' : '')
+  }
+
+  const showInvalidEmailMessage = (shouldDisplay) => {
+    setEmailFieldError(shouldDisplay)
+    setEmailFieldErrorMessage(shouldDisplay ? 'Invalid Email addresses' : '')
   }
 
   const handleEmailChange = (event) => {
@@ -43,16 +50,18 @@ export function EmailField ({
     }
 
     const validateEmails = () => {
-      setFieldsValid(validateEmailsMatch())
-      displayErrorMessage(!fieldsValid)
+      showInvalidEmailMessage(email !== '' && !emailRegex.test(email))
+      showEmailsDontMatchMessage(!validateEmailsMatch())
     }
 
     validateEmails()
-  }, [email, confirmEmail, fieldsValid])
+  }, [email, confirmEmail])
 
   return (
     <span>
       <TextField
+        error={emailFieldError}
+        helperText={emailFieldErrorMessage}
         id={id}
         label={label}
         required={required}
@@ -73,3 +82,6 @@ export function EmailField ({
     </span>
   )
 }
+
+// eslint-disable-next-line no-control-regex
+const emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
