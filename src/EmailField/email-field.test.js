@@ -93,10 +93,6 @@ describe('email field', () => {
     emailField.focus()
     expectEmailDoesNotContainsError(container)
   })
-
-  /*
-   Validate each field is a valid email address (i.e. contains one @ and at least one . after the @)
-   */
 })
 
 function setFieldValue (field, value) {

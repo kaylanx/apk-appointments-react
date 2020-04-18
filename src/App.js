@@ -49,9 +49,6 @@ function App () {
     return showLoadingSpinner
   }
 
-  // TODO: validate Email and Confirm Email
-  // TODO: keep retrying the API if it fails
-
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
