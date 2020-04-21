@@ -1,0 +1,1 @@
+./vendor/bin/phpcbf --standard=wordpress *.php includes/*.php
