@@ -20,6 +20,7 @@ defined( 'ABSPATH' ) || die( 'Plugin file cannot be accessed directly.' );
 
 define( 'APK_APPOINTMENT_PLUGIN_FILE', __FILE__ );
 require_once __DIR__ . '/includes/apk-appointments-defines.php';
+require_once __DIR__ . '/includes/apk-appointments-enable-rest-endpoint.php';
 
 /**
  * Hook that runs when the plugin is activated.  Will setup an empty list of appointments in the database.
