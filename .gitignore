@@ -24,3 +24,7 @@ yarn-error.log*
 
 # php / wordpress
 wordpress-plugin/vendor
+
+# Main
+
+/build
