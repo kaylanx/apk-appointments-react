@@ -1,7 +1,6 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: andy
+ * User: Andy Kayley
  * Date: 19/4/15
  * Time: 14:57
  *
