@@ -7,7 +7,6 @@ import { ThemeProvider } from '@material-ui/core/styles'
 
 import startOfTomorrow from 'date-fns/startOfTomorrow'
 
-import './App.css'
 import { theme, useStyles } from './Theme/theme'
 import { AppointmentsCalendar } from './AppointmentsCalendar/appointments-calendar'
 import { AppointmentTime } from './AppointmentTime/appointment-time'
