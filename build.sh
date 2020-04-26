@@ -6,5 +6,6 @@ cp wordpress-plugin/readme.txt build/apk-appointments
 cd react-app
 npm run build
 cd ..
-cp -r react-app/build/static/ build/apk-appointments/includes/
+cp -r react-app/build/static/css/*.css build/apk-appointments/includes/css
+cp -r react-app/build/static/js/*.js build/apk-appointments/includes/js
  

@@ -19,6 +19,8 @@ Then you should be able to run
 
 ```./bin/run-tests.sh```
 
+If run-tests.sh consistently gets ```Could not find /var/folders/jw/rppykxm94d34vh9txtns5vjr0000gn/T/wordpress-tests-lib/includes/functions.php, have you run bin/install-wp-tests.sh ?``` then restart the machine and re-run ```bash ./bin/install-wp-tests.sh wordpress_test root root localhost latest```
+
 ## Checking Wordpress Coding Standards
 
 The project uses [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) to detect violations of the wordpress coding standard 

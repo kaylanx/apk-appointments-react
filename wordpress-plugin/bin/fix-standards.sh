@@ -1,1 +1,1 @@
-./vendor/bin/phpcbf --standard=wordpress *.php includes/*.php
+./vendor/bin/phpcbf --standard=wordpress *.php includes/*.php tests/*.php
