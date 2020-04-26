@@ -11,15 +11,14 @@
  * The method that's actually the shortcode
  */
 function apk_appointment_shortcode() {
-	$react_app_files     = list_files( __DIR__ . '/includes/js' );
+	require_once 'wp-admin/includes/file.php';
+	$react_app_files     = list_files( __DIR__ );
 	$scripts_to_register = format_react_app_filenames( $react_app_files );
 	enqueue_react_app( $scripts_to_register );
 
-	$appointments = get_option( 'apk_appointments_options' );
+	// $appointments = get_option( 'apk_appointments_options' );
 
-	return '<script type="text/javascript">
-                        const appointmentsJson = ' . wp_json_encode( $appointments ) . ';'
-		. '</script>';
+	return '<div id="apk-appointments"></div>';
 }
 add_shortcode( 'apk-appointments', 'apk_appointment_shortcode' );
 
