@@ -1,0 +1,40 @@
+#top .main_color input[type='text'],  
+#top .main_color input[type='number'],  
+#top .main_color select, 
+#top .main_color textarea {
+    border-color: #adadad;
+    background-image: none;
+    margin-bottom: 0px;
+    padding: 27px 32px 10px 12px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+
+}
+
+#top label {
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+#top .main_color input[type='text']:hover,  
+#top .main_color input[type='number']:hover,  
+#top .main_color select:hover, 
+#top .main_color textarea:hover {
+    background-color: transparent;
+}
+
+.MuiContainer-root {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.MuiFilledInput-multiline {
+    padding: 0px 0px 0px 0px;
+}
+
+@media (min-width: 600px) {
+    .MuiContainer-root {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+}
