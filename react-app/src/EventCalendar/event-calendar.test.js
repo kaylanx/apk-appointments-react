@@ -38,7 +38,7 @@ describe('event calendar', () => {
 
   async function renderEventCalendar (appointmentType) {
     await act(async () => {
-      render(<EventCalendar id="event-calendar" appointmentType={appointmentType} />, container)
+      render(<EventCalendar id="event-calendar" appointmentType={appointmentType} classes={{ formcontrol: 'dummy' }}/>, container)
     })
     const eventDateField = container.querySelector('[id=event-calendar]')
     return eventDateField

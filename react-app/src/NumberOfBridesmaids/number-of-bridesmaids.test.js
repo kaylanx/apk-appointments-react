@@ -38,7 +38,7 @@ describe('number of bridesmaids', () => {
 
   async function renderNumberOfBridesmaids (appointmentType) {
     await act(async () => {
-      render(<NumberOfBridesmaids id="number-of-bridesmaids" appointmentType={appointmentType} />, container)
+      render(<NumberOfBridesmaids id="number-of-bridesmaids" appointmentType={appointmentType} classes={{ formcontrol: 'dummy' }}/>, container)
     })
     const bridesmaidsField = container.querySelector('[id=number-of-bridesmaids]')
     return bridesmaidsField

@@ -29,7 +29,7 @@ export function EventCalendar ({
         <DatePicker
           id={id}
           label={label}
-          className={classes}
+          className={classes.formControl}
           required
           autoOk={true}
           value={selectedEventDate}

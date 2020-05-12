@@ -20,7 +20,7 @@ export function NumberOfBridesmaids ({
       <TextField
         id={id}
         label={label}
-        className={classes}
+        className={classes.formControl}
         type="number"
         inputProps={{ inputMode: 'numeric' }}
         variant="filled"
