@@ -228,6 +228,11 @@ function get_dummy_data() {
 		\"date\": \"2020-10-24\",
 		\"times\": [],
 		\"closed\": true
+	  },
+	  {
+		\"date\": \"2020-05-25\",
+		\"times\": [],
+		\"closed\": true
 	  }
 	]
   }";

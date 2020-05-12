@@ -1,8 +1,11 @@
 
-export const getDaysClosed = (diary) => {
-  return diary.appointments
+export const isClosedOnDate = (diary, date) => {
+  const dates = diary.appointments
     .filter(appointment => appointment.closed === true)
     .flatMap(appointment => new Date(appointment.date))
+    .filter(appointmentDate => appointmentDate.toLocaleDateString() === date.toLocaleDateString())
+
+  return dates.length > 0
 }
 
 export const isDayClosed = (diary, date) => {

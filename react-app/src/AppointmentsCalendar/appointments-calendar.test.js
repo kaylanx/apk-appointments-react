@@ -6,7 +6,12 @@ import { act } from 'react-dom/test-utils'
 import startOfTomorrow from 'date-fns/startOfTomorrow'
 
 import { AppointmentsCalendar } from './appointments-calendar'
-import { fakeAppointments, closedOnThursdays, actualSchedule24Hours } from '../../test_data/fake-appointments'
+import { 
+  fakeAppointments, 
+  closedOnThursdays, 
+  actualSchedule24Hours, 
+  multipleDaysClosed 
+} from '../../test_data/fake-appointments'
 
 describe('appointments calendar', () => {
   let container = null
@@ -69,6 +74,29 @@ describe('appointments calendar', () => {
     clickInput(input)
     expectTueSeventhApril2020ToBeDisabled()
   })
+
+  it('multiple days closed', async () => {
+    const firstNovember2020 = new Date('2020-11-01')
+    await act(async () => {
+      render(
+        <AppointmentsCalendar
+          id="appointments-calendar"
+          classes={{ formcontrol: 'dummy' }}
+          diary={multipleDaysClosed}
+          handleDateChange={(date) => {}}
+          disablePast={false}
+          minDate={firstNovember2020}
+          selectedDate={firstNovember2020}
+        />,
+        container)
+    })
+
+    const input = document.querySelector('[id=appointments-calendar]')
+
+    expectFieldToContainFirstNovember(input)
+    clickInput(input)
+    expectEleventhOfNovember2020ToBeDisabled()
+  })
 })
 
 const expectFieldToContainTomorrowsDate = (input) => {
@@ -85,6 +113,11 @@ const expectFieldToContainFirstApril = (input) => {
   expectInputToHaveDate(input, firstApril2020)
 }
 
+const expectFieldToContainFirstNovember = (input) => {
+  const firstNovember2020 = new Date('2020-11-01')
+  expectInputToHaveDate(input, firstNovember2020)
+}
+
 const expectInputToHaveDate = (input, date) => {
   const expectedSelectedDate = format(date, 'EEE, d MMMM yy')
   expect(input.value).toBe(expectedSelectedDate)
@@ -99,6 +132,28 @@ const expectTodayToBeDisabled = () => {
 
   const paragraph = button.querySelector('p')
   expect(paragraph.innerHTML).toBe(expectedDate)
+}
+
+const expectEleventhOfNovember2020ToBeDisabled = () => {
+  const date = new Date('2020-11-11')
+  const expectedDate = date.getDate().toString()
+  const numberOfThursdays = 4
+  const numberOfFridays = 4
+  const numberOfDaysClosedDueToNotBeingOpen = numberOfThursdays + numberOfFridays
+  const numberOfDaysClosedIncludingSeventh = numberOfDaysClosedDueToNotBeingOpen + 1
+
+  const disabledDays = document.querySelectorAll('.MuiPickersDay-dayDisabled:not(.MuiPickersDay-hidden)')
+  expect(disabledDays).not.toBeUndefined()
+  expect(disabledDays).toHaveLength(numberOfDaysClosedIncludingSeventh)
+  expect(disabledDays).toBeInstanceOf(NodeList)
+
+  const actualDate = Array.from(disabledDays).map(disabledDay => disabledDay.querySelector('p'))
+    .filter(paragraph => paragraph.innerHTML === '' + expectedDate)
+
+  expect(actualDate).not.toBeUndefined()
+  expect(actualDate).toBeInstanceOf(Array)
+  expect(actualDate).toHaveLength(1)
+  expect(actualDate[0].innerHTML).toBe('' + expectedDate)
 }
 
 const expectTueSeventhApril2020ToBeDisabled = () => {

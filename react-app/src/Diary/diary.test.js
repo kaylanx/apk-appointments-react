@@ -1,5 +1,5 @@
 import {
-  getDaysClosed,
+  isClosedOnDate,
   isDayClosed,
   getAppointmentsForDay,
   getFormattedTime
@@ -17,17 +17,19 @@ import {
 
 describe('appointment utilities', () => {
   it('1 day closed', () => {
-    const daysClosed = getDaysClosed(fakeAppointments)
-    expect(daysClosed).toBeDefined()
-    const expectedDates = [new Date('2020-10-24')]
-    expect(daysClosed).toEqual(expectedDates)
+    let daysClosed = isClosedOnDate(fakeAppointments, new Date('2020-10-24'))
+    expect(daysClosed).toBeTruthy()
+    daysClosed = isClosedOnDate(fakeAppointments, new Date('2020-10-23'))
+    expect(daysClosed).toBeFalsy()
   })
 
   it('multiple days closed', () => {
-    const daysClosed = getDaysClosed(multipleDaysClosed)
-    expect(daysClosed).toBeDefined()
-    const expectedDates = [new Date('2020-02-27'), new Date('2020-11-11'), new Date('2020-10-24')]
-    expect(daysClosed).toEqual(expectedDates)
+    let daysClosed = isClosedOnDate(multipleDaysClosed,new Date('2020-02-27'))
+    expect(daysClosed).toBeTruthy()
+    daysClosed = isClosedOnDate(multipleDaysClosed,new Date('2020-11-11'))
+    expect(daysClosed).toBeTruthy()
+    daysClosed = isClosedOnDate(multipleDaysClosed,new Date('2020-10-24'))
+    expect(daysClosed).toBeTruthy()
   })
 
   it('thursdays closed', () => {

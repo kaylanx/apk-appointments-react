@@ -8,7 +8,11 @@ import {
 import DateFnsUtils from '@date-io/date-fns'
 import startOfTomorrow from 'date-fns/startOfTomorrow'
 
-import { isDayClosed, getAppointmentsForDay } from '../Diary/diary'
+import {
+  isDayClosed,
+  getAppointmentsForDay,
+  isClosedOnDate
+} from '../Diary/diary'
 
 AppointmentsCalendar.propTypes = {
   id: PropTypes.string,
@@ -37,6 +41,10 @@ export function AppointmentsCalendar ({
   }
 
   const disabledDates = (date) => {
+    if (isClosedOnDate(diary, date)) {
+      return true
+    }
+
     if (isDayClosed(diary, date)) {
       return true
     }
