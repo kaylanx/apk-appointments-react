@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
-import { TextField, CircularProgress } from '@material-ui/core'
+import { Button, TextField, CircularProgress } from '@material-ui/core'
+import Icon from '@material-ui/core/Icon'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import { ThemeProvider } from '@material-ui/core/styles'
@@ -15,6 +16,7 @@ import { NumberOfBridesmaids } from './NumberOfBridesmaids/number-of-bridesmaids
 import { EventCalendar } from './EventCalendar/event-calendar'
 import { EmailField } from './EmailField/email-field'
 import { getDiary } from './Diary/fetch-diary'
+import { requestAppointment } from './AppointmentRequest/appointment-request'
 
 function App () {
   const classes = useStyles()
@@ -44,6 +46,19 @@ function App () {
     </ThemeProvider>
   )
 
+  async function onSubmit (event) {
+    event.preventDefault()
+    const form = event.target
+    const data = {}
+    for (const element of form.elements) {
+      if (element.tagName === 'BUTTON') { continue }
+      data[element.id] = element.value
+    }
+    console.log(data)
+    const response = await requestAppointment(data)
+    console.log(response)
+  }
+
   if (diary === null) {
     return showLoadingSpinner
   }
@@ -51,7 +66,7 @@ function App () {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <form className={classes.root} noValidate autoComplete="off">
+        <form className={classes.root} autoComplete="off" onSubmit={onSubmit}>
           <CssBaseline />
           <Container maxWidth="lg">
             <AppointmentsCalendar
@@ -97,9 +112,18 @@ function App () {
               required
             />
             <TextField id="your-phone-no" label="Your phone number" required variant="filled"/>
-            <TextField id="budget" label="Budget" variant="filled" />
+            <TextField id="your-budget" label="Budget" variant="filled" />
             <TextField id="hear-about-us" label="How did you hear about us?" variant="filled" />
-            <TextField id="message" label="Your message" multiline rowsMax="4" variant="filled" />
+            <TextField id="your-message" label="Your message" multiline rowsMax="4" variant="filled" />
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              endIcon={<Icon>send</Icon>}
+              type="submit"
+            >
+              Book Appointment
+            </Button>
           </Container>
         </form>
       </div>

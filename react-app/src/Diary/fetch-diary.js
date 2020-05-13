@@ -1,9 +1,9 @@
 import { config } from '../Configuration'
 
-export async function fetchDiary (url, options = {}) {
-  const response = await fetch(url, options)
+async function fetchDiary (url) {
+  const response = await fetch(url, {})
   const json = await response.json()
   return json
 }
 
-export const getDiary = async () => fetchDiary(config.url.API_URL)
+export const getDiary = async () => fetchDiary(config.url.APPOINTMENTS_API_URL)

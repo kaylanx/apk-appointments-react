@@ -54,4 +54,12 @@ const json = {
 
 app.get('/appointments', (req, res) => res.send(json))
 
+const validRequestSent = {
+  into: '#',
+  status: 'mail_sent',
+  message: 'Thank you for your message. It has been sent.'
+}
+
+app.post('/request-appointment', (req, res) => res.send(validRequestSent))
+
 app.listen(8080)

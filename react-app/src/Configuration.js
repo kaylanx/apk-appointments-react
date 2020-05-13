@@ -1,5 +1,6 @@
 export const config = {
   url: {
-    API_URL: process.env.REACT_APP_APPOINTMENTS_API_URL
+    APPOINTMENTS_API_URL: process.env.REACT_APP_APPOINTMENTS_API_URL,
+    APPOINTMENT_REQUEST_URL: process.env.REACT_APP_APPOINTMENT_REQUEST_API_URL
   }
 }
