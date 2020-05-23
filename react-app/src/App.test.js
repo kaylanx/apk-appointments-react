@@ -15,6 +15,7 @@ describe('appointments app', () => {
   })
 
   afterEach(() => {
+    global.fetch.mockClear()
     unmountComponentAtNode(container)
     container.remove()
     container = null

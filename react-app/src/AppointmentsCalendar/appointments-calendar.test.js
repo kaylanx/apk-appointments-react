@@ -6,11 +6,11 @@ import { act } from 'react-dom/test-utils'
 import startOfTomorrow from 'date-fns/startOfTomorrow'
 
 import { AppointmentsCalendar } from './appointments-calendar'
-import { 
-  fakeAppointments, 
-  closedOnThursdays, 
-  actualSchedule24Hours, 
-  multipleDaysClosed 
+import {
+  fakeAppointments,
+  closedOnThursdays,
+  actualSchedule24Hours,
+  multipleDaysClosed
 } from '../../test_data/fake-appointments'
 
 describe('appointments calendar', () => {
