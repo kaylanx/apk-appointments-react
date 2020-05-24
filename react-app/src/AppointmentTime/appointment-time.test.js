@@ -32,18 +32,16 @@ describe('appointments time', () => {
     const mondayMarch30th2020 = new Date('2020-03-30')
     const diary = actualSchedule
     const expectedTimes = ['', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm']
-    await assertExpectedTimesForDateAndSchedule(mondayMarch30th2020, diary, expectedTimes)
     const expectedTimeValues = ['', '10', '11', '12', '13', '14', '15', '16']
-    await assertExpectedTimeValuesForDateAndSchedule(mondayMarch30th2020, diary, expectedTimeValues)
+    await assertExpectedTimesForDateAndSchedule(mondayMarch30th2020, diary, expectedTimes, expectedTimeValues)
   })
 
   it('list to contain 24 hour format from 10:00 to 16:00', async () => {
     const mondayMarch30th2020 = new Date('2020-03-30')
     const diary = actualSchedule24Hours
     const expectedTimes = ['', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00']
-    await assertExpectedTimesForDateAndSchedule(mondayMarch30th2020, diary, expectedTimes)
     const expectedTimeValues = ['', '10', '11', '12', '13', '14', '15', '16']
-    await assertExpectedTimeValuesForDateAndSchedule(mondayMarch30th2020, diary, expectedTimeValues)
+    await assertExpectedTimesForDateAndSchedule(mondayMarch30th2020, diary, expectedTimes, expectedTimeValues)
   })
 
   async function expectNoOptions (selectedDate, diary) {
@@ -59,7 +57,7 @@ describe('appointments time', () => {
     expect(times[index++].textContent).toBe('')
   }
 
-  async function assertExpectedTimesForDateAndSchedule (date, diary, expectedTimes) {
+  async function assertExpectedTimesForDateAndSchedule (date, diary, expectedTimes, expectedTimeValues) {
     await act(async () => {
       render(<AppointmentTime id="appointment-time" selectedDate={date} diary={diary} classes={{ formcontrol: 'dummy' }} />, container)
     })
@@ -71,17 +69,6 @@ describe('appointments time', () => {
 
     const actualTimes = Array.from(times).map((time) => time.textContent)
     expect(actualTimes).toEqual(expect.arrayContaining(expectedTimes))
-  }
-
-  async function assertExpectedTimeValuesForDateAndSchedule (date, diary, expectedTimeValues) {
-    await act(async () => {
-      render(<AppointmentTime id="appointment-time" selectedDate={date} diary={diary} classes={{ formcontrol: 'dummy' }} />, container)
-    })
-    const input = document.querySelector('[id=appointment-time]')
-    clickInput(input)
-    const times = document.querySelectorAll('option')
-    expect(times).not.toBeUndefined()
-    expect(times).toHaveLength(8)
 
     const actualTimeValues = Array.from(times).map((time) => time.value)
     expect(actualTimeValues).toEqual(expect.arrayContaining(expectedTimeValues))
