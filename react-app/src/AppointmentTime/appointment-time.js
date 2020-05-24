@@ -35,7 +35,7 @@ export function AppointmentTime ({
         }}
       >
         <option aria-label="None" value="" />
-        {appointmentAvailability.map((time, index) => <option key={index} value={time}>{getFormattedTime(diary, time)}</option>)}
+        {appointmentAvailability.map((time, index) => <option key={index} value={time.time}>{getFormattedTime(diary, time)}</option>)}
       </Select>
     </FormControl>
   )
