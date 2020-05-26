@@ -22,6 +22,7 @@ function App () {
   const classes = useStyles()
 
   const [diary, setDiary] = useState(null)
+  const [messageSent, setMessageSent] = useState(false)
   const [selectedAppointmentDate, setSelectedAppointmentDate] = useState(startOfTomorrow())
   const [appointmentType, setAppointmentType] = useState('')
 
@@ -46,6 +47,14 @@ function App () {
     </ThemeProvider>
   )
 
+  const showMessageSent = (
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <h1 id="success-message">Thanks, we will confirm your appointment shortly</h1>
+      </div>
+    </ThemeProvider>
+  )
+
   async function onSubmit (event) {
     event.preventDefault()
     const form = event.target
@@ -56,11 +65,16 @@ function App () {
     }
     console.log(data)
     const response = await requestAppointment(data)
+    setMessageSent(response.status === 'mail_sent')
     console.log(response)
   }
 
   if (diary === null) {
     return showLoadingSpinner
+  }
+
+  if (messageSent === true) {
+    return showMessageSent
   }
 
   return (
@@ -116,6 +130,7 @@ function App () {
             <TextField id="hear-about-us" label="How did you hear about us?" variant="filled" />
             <TextField id="your-message" label="Your message" multiline rowsMax="4" variant="filled" />
             <Button
+              id="request-appointment-button"
               variant="contained"
               color="primary"
               className={classes.button}

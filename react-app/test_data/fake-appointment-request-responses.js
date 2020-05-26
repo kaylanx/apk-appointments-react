@@ -1,4 +1,4 @@
-export const sucessfulResponse = {
+export const successfulResponse = {
   into: '#',
   status: 'mail_sent',
   message: 'Thank you for your message. It has been sent.'

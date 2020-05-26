@@ -1,5 +1,5 @@
 import { requestAppointment } from './appointment-request'
-import { sucessfulResponse, validationErrorResponse } from '../../test_data/fake-appointment-request-responses'
+import { successfulResponse, validationErrorResponse } from '../../test_data/fake-appointment-request-responses'
 
 describe('appointment request', () => {
   afterEach(() => {
@@ -7,7 +7,7 @@ describe('appointment request', () => {
   })
 
   it('mail sent response', async () => {
-    const response = await sendRequest(sucessfulResponse)
+    const response = await sendRequest(successfulResponse)
     expect(response).toEqual({ status: 'mail_sent' })
   })
 
