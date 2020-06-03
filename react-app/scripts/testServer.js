@@ -62,4 +62,14 @@ const validRequestSent = {
 
 app.post('/request-appointment', (req, res) => res.send(validRequestSent))
 
+const notFoundResponse = {
+  code: 'wpcf7_not_found',
+  message: 'The requested contact form was not found.',
+  data: {
+    status: 404
+  }
+}
+
+app.post('/invalid-request-appointment', (req, res) => res.send(notFoundResponse))
+
 app.listen(8080)

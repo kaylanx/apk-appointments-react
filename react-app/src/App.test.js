@@ -9,7 +9,7 @@ import startOfTomorrow from 'date-fns/startOfTomorrow'
 
 import App from './App'
 import { availabilityEveryDay } from '../test_data/fake-appointments'
-import { successfulResponse } from '../test_data/fake-appointment-request-responses'
+import { successfulResponse, notFoundResponse } from '../test_data/fake-appointment-request-responses'
 
 describe('appointments app', () => {
   let container = null
@@ -115,11 +115,73 @@ describe('appointments app', () => {
       expectElementToBeNull('request-appointment-button')
     })
   })
+
+  it('Form displays error message when request fails', async () => {
+    mockFetchWithResponse(availabilityEveryDay)
+
+    await act(async () => {
+      render(<App />, container)
+    })
+
+    global.fetch.mockClear()
+    mockFetchWithResponse(notFoundResponse)
+
+    const appointmentTimeInput = document.querySelector('[id=appointment-time]')
+    const appointmentTypeInput = document.querySelector('[id=appointment-type]')
+    const appointmentYourNameInput = document.querySelector('[id=your-name]')
+    const appointmentYourEmailInput = document.querySelector('[id=your-email]')
+    const appointmentConfirmYourEmailInput = document.querySelector('[id=confirm-your-email]')
+
+    const appointmentYourPhoneNoInput = document.querySelector('[id=your-phone-no]')
+    const appointmentYourBudgetInput = document.querySelector('[id=your-budget]')
+    const appointmentHearAboutUsInput = document.querySelector('[id=hear-about-us]')
+    const appointmentYourMessageInput = document.querySelector('[id=your-message]')
+
+    act(() => {
+      appointmentTimeInput.selectedIndex = 1
+      appointmentTypeInput.selectedIndex = 1
+      appointmentYourNameInput.value = 'Sebaceous Crumb'
+      appointmentYourEmailInput.value = 'apk-appointment-unit-test@kayley.name'
+      appointmentConfirmYourEmailInput.value = 'apk-appointment-unit-test@kayley.name'
+      appointmentYourPhoneNoInput.value = '07900 000000'
+      appointmentYourBudgetInput.value = '1 miiiiillllion dollars'
+      appointmentHearAboutUsInput.value = 'T\'internet'
+      appointmentYourMessageInput.value = 'Testing testing 1, 2, 1, 2'
+    })
+
+    const requestAppointmentButton = document.querySelector('[id=request-appointment-button]')
+    act(() => {
+      user.click(requestAppointmentButton)
+    })
+
+    await waitFor(() => {
+      const successMessage = document.querySelector('[id=error-requesting-appointment]')
+      expect(successMessage).toBeDefined()
+      expect(successMessage).not.toBeNull()
+      expect(successMessage.innerHTML).toEqual('Sorry, there was a problem sending the appointment request.  Please try again.')
+
+      expectElementToBeNotNull('appointment-date')
+      expectElementToBeNotNull('appointment-time')
+      expectElementToBeNotNull('appointment-type')
+      expectElementToBeNotNull('your-email')
+      expectElementToBeNotNull('confirm-your-email')
+      expectElementToBeNotNull('your-phone-no')
+      expectElementToBeNotNull('your-budget')
+      expectElementToBeNotNull('hear-about-us')
+      expectElementToBeNotNull('your-message')
+      expectElementToBeNotNull('request-appointment-button')
+    })
+  })
 })
 
 const expectElementToBeNull = (selectorId) => {
   const htmlElement = document.querySelector(`[id=${selectorId}]`)
   expect(htmlElement).toBeNull()
+}
+
+const expectElementToBeNotNull = (selectorId) => {
+  const htmlElement = document.querySelector(`[id=${selectorId}]`)
+  expect(htmlElement).not.toBeNull()
 }
 
 const mockFetchWithResponse = (response) => {

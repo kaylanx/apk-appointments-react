@@ -22,7 +22,7 @@ function App () {
   const classes = useStyles()
 
   const [diary, setDiary] = useState(null)
-  const [messageSent, setMessageSent] = useState(false)
+  const [responseStatus, setResponseStatus] = useState('')
   const [selectedAppointmentDate, setSelectedAppointmentDate] = useState(startOfTomorrow())
   const [appointmentType, setAppointmentType] = useState('')
 
@@ -57,24 +57,32 @@ function App () {
 
   async function onSubmit (event) {
     event.preventDefault()
+    setResponseStatus('')
     const form = event.target
     const data = {}
     for (const element of form.elements) {
       if (element.tagName === 'BUTTON') { continue }
       data[element.id] = element.value
     }
-    console.log(data)
     const response = await requestAppointment(data)
-    setMessageSent(response.status === 'mail_sent')
-    console.log(response)
+    setResponseStatus(response.status)
   }
 
   if (diary === null) {
     return showLoadingSpinner
   }
 
-  if (messageSent === true) {
+  if (responseStatus === 'mail_sent') {
     return showMessageSent
+  }
+
+  function showErrorMessage () {
+    if (responseStatus === 'error') {
+      return (
+        <div id="error-requesting-appointment" classes={classes.formControl}>Sorry, there was a problem sending the appointment request.  Please try again.</div>
+      )
+    }
+    return null
   }
 
   return (
@@ -129,11 +137,12 @@ function App () {
             <TextField id="your-budget" label="Budget" variant="filled" />
             <TextField id="hear-about-us" label="How did you hear about us?" variant="filled" />
             <TextField id="your-message" label="Your message" multiline rowsMax="4" variant="filled" />
+            {showErrorMessage()}
             <Button
               id="request-appointment-button"
               variant="contained"
               color="primary"
-              className={classes.button}
+              className={classes.formControl}
               endIcon={<Icon>send</Icon>}
               type="submit"
             >
