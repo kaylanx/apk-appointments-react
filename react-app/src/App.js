@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 
 import { Button, TextField, CircularProgress } from '@material-ui/core'
 import Icon from '@material-ui/core/Icon'
@@ -17,8 +18,15 @@ import { EventCalendar } from './EventCalendar/event-calendar'
 import { EmailField } from './EmailField/email-field'
 import { getDiary } from './Diary/fetch-diary'
 import { requestAppointment } from './AppointmentRequest/appointment-request'
+import { initializeAnalytics, logEvent } from './Analytics/analytics'
 
-function App () {
+App.propTypes = {
+  analyticsConfig: PropTypes.object
+}
+
+function App ({
+  analyticsConfig
+}) {
   const classes = useStyles()
 
   const [diary, setDiary] = useState(null)
@@ -32,8 +40,9 @@ function App () {
   }
 
   useEffect(() => {
+    initializeAnalytics(analyticsConfig)
     fetchData()
-  }, [])
+  }, [analyticsConfig])
 
   const handleAppointmentTypeChange = (event) => {
     setAppointmentType(event.target.value)
@@ -71,6 +80,8 @@ function App () {
   if (diary === null) {
     return showLoadingSpinner
   }
+
+  logEvent(responseStatus)
 
   if (responseStatus === 'mail_sent') {
     return showMessageSent

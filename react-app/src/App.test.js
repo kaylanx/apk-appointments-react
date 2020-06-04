@@ -10,6 +10,7 @@ import startOfTomorrow from 'date-fns/startOfTomorrow'
 import App from './App'
 import { availabilityEveryDay } from '../test_data/fake-appointments'
 import { successfulResponse, notFoundResponse } from '../test_data/fake-appointment-request-responses'
+import * as analytics from './Analytics/analytics'
 
 describe('appointments app', () => {
   let container = null
@@ -26,6 +27,8 @@ describe('appointments app', () => {
   })
 
   it('check integration', async () => {
+    const initializeAnalytics = mockInitializeAnalytics()
+    const logEvent = mockLogEvent()
     mockFetchWithResponse(availabilityEveryDay)
 
     await act(async () => {
@@ -44,6 +47,8 @@ describe('appointments app', () => {
 
     const cal = document.querySelector('h4.MuiTypography-root, h4.MuiPickersToolbarText-toolbarTxt, h4.MuiPickersToolbarText-toolbarBtnSelected, h4.MuiTypography-h4, h4.MuiTypography-alignCenter')
     expect(cal.innerHTML).toEqual(expectedDate)
+    expect(initializeAnalytics).toHaveBeenCalled()
+    expect(logEvent).toHaveBeenCalled()
   })
 
   it('loading spinner shows if data is delayed', async () => {
@@ -190,4 +195,12 @@ const mockFetchWithResponse = (response) => {
       json: () => Promise.resolve(response)
     })
   )
+}
+
+const mockInitializeAnalytics = () => {
+  return jest.spyOn(analytics, 'initializeAnalytics').mockImplementation()
+}
+
+const mockLogEvent = () => {
+  return jest.spyOn(analytics, 'logEvent').mockImplementation()
 }
