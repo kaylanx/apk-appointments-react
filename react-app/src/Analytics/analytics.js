@@ -13,6 +13,25 @@ export function initializeAnalytics (config) {
 
 export function logEvent (eventName, eventParams, options) {
   if (firebaseConfig !== undefined) {
-    firebase.analytics().logEvent(eventName, eventParams, options)
+    const cleanedParams = cleanEventParamsOfPII(eventParams)
+    firebase.analytics().logEvent(eventName, cleanedParams, options)
   }
+}
+
+export function cleanEventParamsOfPII (eventParams) {
+  const cleanedParams = {}
+  for (var attributename in eventParams) {
+    if (attributename === 'confirm-your-email' ||
+      attributename === 'your-email' ||
+      attributename === 'your-name' ||
+      attributename === 'your-phone-no') {
+      const dirtyValue = eventParams[attributename]
+      const cleanedValue = dirtyValue.replace(/./g, '*')
+      cleanedParams[attributename] = cleanedValue
+    } else {
+      cleanedParams[attributename] = eventParams[attributename]
+    }
+  }
+
+  return cleanedParams
 }

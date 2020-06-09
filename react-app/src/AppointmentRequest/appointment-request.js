@@ -20,9 +20,9 @@ async function sendAppointmentRequest (url, appointmentData) {
     }
 
     const json = await response.json()
-    return { status: json.status || 'error' }
+    return { status: json.status || 'failure' }
   } catch (err) {
-    return { status: 'error' }
+    return { status: 'failure' }
   }
 }
 

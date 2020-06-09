@@ -18,7 +18,7 @@ describe('appointment request', () => {
 
   it('generic error response', async () => {
     const response = await sendRequest(validationErrorResponse, mockFetchWithErrorResponse)
-    expect(response).toEqual({ status: 'error' })
+    expect(response).toEqual({ status: 'failure' })
   })
 
   const sendRequest = async (mockedResponse, mockFetchWithResponse = mockTheFetchWithResponse) => {

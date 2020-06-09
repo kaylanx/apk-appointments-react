@@ -33,6 +33,7 @@ function App ({
   const [responseStatus, setResponseStatus] = useState('')
   const [selectedAppointmentDate, setSelectedAppointmentDate] = useState(startOfTomorrow())
   const [appointmentType, setAppointmentType] = useState('')
+  const [dataToLog, setDataToLog] = useState({})
 
   async function fetchData () {
     const data = await getDiary()
@@ -43,6 +44,10 @@ function App ({
     initializeAnalytics(analyticsConfig)
     fetchData()
   }, [analyticsConfig])
+
+  useEffect(() => {
+    logEvent(responseStatus, dataToLog)
+  }, [dataToLog, responseStatus])
 
   const handleAppointmentTypeChange = (event) => {
     setAppointmentType(event.target.value)
@@ -73,6 +78,7 @@ function App ({
       if (element.tagName === 'BUTTON') { continue }
       data[element.id] = element.value
     }
+    setDataToLog(data)
     const response = await requestAppointment(data)
     setResponseStatus(response.status)
   }
@@ -81,14 +87,12 @@ function App ({
     return showLoadingSpinner
   }
 
-  logEvent(responseStatus)
-
   if (responseStatus === 'mail_sent') {
     return showMessageSent
   }
 
   function showErrorMessage () {
-    if (responseStatus === 'error') {
+    if (responseStatus === 'failure') {
       return (
         <div id="error-requesting-appointment" classes={classes.formControl}>Sorry, there was a problem sending the appointment request.  Please try again.</div>
       )
