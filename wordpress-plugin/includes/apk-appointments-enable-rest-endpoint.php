@@ -2,10 +2,7 @@
 function get_appointments( $data ) {
 	require_once __DIR__ . '/apk-appointments-defines.php';
 	$appointments = get_option( APK_APPOINTMENTS_OPTION );
-
-	// print_r ( $appointments );
-
-	return get_dummy_data();
+	return $appointments;
 }
 
 function get_dummy_data() {

@@ -6,3 +6,4 @@
  */
 
 define( 'APK_APPOINTMENTS_OPTION', 'apk_appointments_options' );
+define( 'APK_APPOINTMENTS_SETTINGS_OPTION', 'apk_appointments_settings_options' );

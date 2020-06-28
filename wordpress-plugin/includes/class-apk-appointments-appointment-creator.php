@@ -26,12 +26,6 @@ class APK_Appointments_Appointment_Creator {
 	}
 
 	/**
-	 * TODO, FIND OUT WHY WE NEED THIS SHIT?
-	 */
-	public function screen_option() {
-	}
-
-	/**
 	 * Draw the form for capturing a new appointment.
 	 */
 	public function apk_add_appointment_form() {

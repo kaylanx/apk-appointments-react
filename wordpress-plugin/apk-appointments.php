@@ -36,16 +36,21 @@ register_activation_hook( APK_APPOINTMENT_PLUGIN_FILE, 'apk_appointments_activat
 require_once __DIR__ . '/includes/class-apk-appointment-list-table.php';
 require_once __DIR__ . '/includes/class-apk-appointments-options-page.php';
 require_once __DIR__ . '/includes/class-apk-appointments-appointment-creator.php';
+require_once __DIR__ . '/includes/class-apk-appointments-settings.php';
 require_once __DIR__ . '/includes/class-apk-appointments-menu-creator.php';
 
 if ( is_admin() ) {
-	$options_page        = new APK_Appointments_Options_Page();
-	$appointment_creator = new APK_Appointments_Appointment_Creator();
-	$menu_creator        = new APK_Appointments_Menu_Creator( $options_page, $appointment_creator );
+	$options_page         = new APK_Appointments_Options_Page();
+	$appointment_creator  = new APK_Appointments_Appointment_Creator();
+	$appointment_settings = new APK_Appointments_Settings();
+	$menu_creator         = new APK_Appointments_Menu_Creator( $options_page, $appointment_creator, $appointment_settings );
 	add_action( 'admin_menu', array( $menu_creator, 'plugin_menu' ) );
 
 	if ( array_key_exists( 'page', $_GET ) && 'apk-appointments-new' === $_GET['page'] ) {
 		$appointment_creator->display();
+	}
+	if ( array_key_exists( 'page', $_GET ) && 'apk-appointments-settings' === $_GET['page'] ) {
+		$appointment_settings->display();
 	}
 } else {
 	include __DIR__ . '/includes/class-apk-appointments-shortcode.php';
