@@ -162,7 +162,7 @@ class APK_Appointments_Settings {
 				break;
 			case 'checkbox':
 				if ( ! empty( $arguments['options'] ) && is_array( $arguments['options'] ) ) {
-					$options_markup = '<table class="fixed striped"><th>Time</th><th>Fee</th>';
+					$options_markup = '<table class="fixed striped"><th style="text-align:center">Time</th><th style="text-align:center">Fee</th>';
 					$iterator       = 0;
 					foreach ( $arguments['options'] as $key => $label ) {
 						$iterator++;
@@ -181,15 +181,6 @@ class APK_Appointments_Settings {
 				}
 				break;
 		}
-
-		if ( $helper = $arguments['helper'] ) {
-			printf( '<span class="helper"> %s</span>', $helper );
-		}
-
-		if ( $supplimental = $arguments['supplimental'] ) {
-			printf( '<p class="description">%s</p>', $supplimental );
-		}
-
 	}
 
 }
