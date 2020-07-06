@@ -167,13 +167,15 @@ class APK_Appointments_Settings {
 					foreach ( $arguments['options'] as $key => $label ) {
 						$iterator++;
 						$checked             = checked( $value[ array_search( strval( $key ), $value, true ) ], $key, false );
+						$fee                 = checked( $value[ array_search( strval( $key ), $value, true ) ], $key, false );
+
 						$uid                 = $arguments['uid'];
 						$uid_fee_field       = $arguments['uid_fee_field'];
 						$type                = $arguments['type'];
-						$checkbox_id         = "${uid}_${$iterator}";
+						$checkbox_id         = "${uid}_${iterator}";
 						$uid_fee_field_value = get_option( $arguments['uid_fee_field'] . '_' . $key );
 						$options_markup     .= "<tr><td><label for='$checkbox_id'><input id='$checkbox_id' name='${uid}[]' type='$type' value='$key' $checked /> $label</label></td>
-						<td><input name='${uid_fee_field}_${key}' id='$${uid_fee_field}_${key}' type='text' placeholder='Fee e.g. £20' value='$uid_fee_field_value'/></td></tr>";
+						<td><input name='${uid}[]' id='${uid}_fee_${iterator}' type='text' placeholder='Fee e.g. £20' value='$fee'/></td></tr>";
 					}
 
 					print( "$options_markup</table>" );
