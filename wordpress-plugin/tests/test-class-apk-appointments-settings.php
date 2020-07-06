@@ -7,14 +7,11 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 
 	function setUp() {
 		parent::setUp();
-		print( 'setup called' );
 		$this->settings = new APK_Appointments_Settings();
 	}
 
 	function tearDown() {
 		parent::tearDown();
-		print( 'teardown called' );
-
 		$this->settings = null;
 	}
 

@@ -46,7 +46,6 @@ function apk_appointments_test_enqueue_react_app() {
 		'/css/main.5ecd60fb.chunk.css',
 	);
 
-	print ( ' does this get called? ' );
 	enqueue_react_app( $scripts_to_load );
 }
 add_action( 'wp_enqueue_scripts', 'apk_appointments_test_enqueue_react_app' );
