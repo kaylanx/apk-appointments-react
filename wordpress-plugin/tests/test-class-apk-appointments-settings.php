@@ -35,6 +35,42 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 		$this->assertEquals( $expected_array, $actual_array );
 	}
 
+	public function test_values_of_checkboxes_have_9am_and_12pm_selected() {
+
+		$monday_options = array(
+			'9','',
+			'', '',
+			'', '',
+			'12','',
+			'', '',
+			'', '',
+			'','',
+			'','',
+			'','',
+			'','',
+		);
+
+
+		$this->assertEquals(" checked='checked'", $this->settings->time_checked($monday_options, '9')); 
+		$this->assertEquals(" checked='checked'", $this->settings->time_checked($monday_options, '12')); 
+		$this->assertEquals("", $this->settings->time_checked($monday_options, '11')); 
+	}
+
+	/*
+			$expected_values = array(
+			'9','',
+			'10', '£20',
+			'11', '',
+			'','',
+			'13', '',
+			'14', '',
+			'','',
+			'','',
+			'','',
+			'','',
+		);
+	*/
+
 	private function expected_checkbox_array() {
 		return array(
 			array(

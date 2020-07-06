@@ -136,6 +136,10 @@ class APK_Appointments_Settings {
 		return $merged_fields;
 	}
 
+	public function time_checked($option, $time) {
+		return checked( $option[ array_search( strval( $time ), $option, true ) ], $time, false );
+	}
+
 	public function field_callback( $arguments ) {
 
 		$value = get_option( $arguments['uid'] );
@@ -166,7 +170,7 @@ class APK_Appointments_Settings {
 					$iterator       = 0;
 					foreach ( $arguments['options'] as $key => $label ) {
 						$iterator++;
-						$checked             = checked( $value[ array_search( strval( $key ), $value, true ) ], $key, false );
+						$checked             = $this->time_checked($value, $key);
 						$fee                 = checked( $value[ array_search( strval( $key ), $value, true ) ], $key, false );
 
 						$uid                 = $arguments['uid'];
