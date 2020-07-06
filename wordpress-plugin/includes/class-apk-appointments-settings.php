@@ -140,6 +140,18 @@ class APK_Appointments_Settings {
 		return checked( $option[ array_search( strval( $time ), $option, true ) ], $time, false );
 	}
 
+	public function get_fee_for_time($option, $time) {
+		$return_next = false;
+		foreach ($option as $key => $value) {
+			if ($return_next == true) {
+				return $value;
+			}
+			if ($value === $time) {
+				$return_next = true;
+			}
+		}
+	}
+
 	public function field_callback( $arguments ) {
 
 		$value = get_option( $arguments['uid'] );
@@ -171,8 +183,7 @@ class APK_Appointments_Settings {
 					foreach ( $arguments['options'] as $key => $label ) {
 						$iterator++;
 						$checked             = $this->time_checked($value, $key);
-						$fee                 = checked( $value[ array_search( strval( $key ), $value, true ) ], $key, false );
-
+						$fee                 = $this->get_fee_for_time($value, strval( $key ));
 						$uid                 = $arguments['uid'];
 						$uid_fee_field       = $arguments['uid_fee_field'];
 						$type                = $arguments['type'];

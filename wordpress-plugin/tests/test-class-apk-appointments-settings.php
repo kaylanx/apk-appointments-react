@@ -56,6 +56,25 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 		$this->assertEquals("", $this->settings->time_checked($monday_options, '11')); 
 	}
 
+	public function test_values_of_fee_is_present_for_1800() {
+
+		$monday_options = array(
+			'9','',
+			'', '',
+			'', '',
+			'12','',
+			'', '',
+			'', '',
+			'','',
+			'','',
+			'','',
+			'18','£20.00',
+		);
+
+		$this->assertEquals(" checked='checked'", $this->settings->time_checked($monday_options, '18')); 
+		$this->assertEquals("£20.00", $this->settings->get_fee_for_time($monday_options, '18')); 
+	}
+
 	/*
 			$expected_values = array(
 			'9','',
