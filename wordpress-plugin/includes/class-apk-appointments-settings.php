@@ -79,7 +79,7 @@ class APK_Appointments_Settings {
 				'label'         => "$value",
 				'uid_fee_field' => "apk_${key}_appointment_fee",
 				'section'       => 'appointment_availability_section',
-				'type'          => 'checkbox',
+				'type'          => 'time_fee',
 				'options'       => array(
 					8  => '08:00',
 					9  => '09:00',
@@ -109,7 +109,7 @@ class APK_Appointments_Settings {
 		foreach ( $fields as $field ) {
 			add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), APK_APPOINTMENTS_SETTINGS_FIELDS, $field['section'], $field );
 			register_setting( APK_APPOINTMENTS_SETTINGS_FIELDS, $field['uid'] );
-			if ( $field['type'] == 'checkbox' ) {
+			if ( $field['type'] == 'time_fee' ) {
 				foreach ( $field['options'] as $option => $display_value ) {
 					register_setting( APK_APPOINTMENTS_SETTINGS_FIELDS, $field['uid_fee_field'] . '_' . $option );
 				}
@@ -160,43 +160,47 @@ class APK_Appointments_Settings {
 			$value = $arguments['default'];
 		}
 		switch ( $arguments['type'] ) {
-			case 'number':
-				printf( '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" min="0" step="0.01"/>', $arguments['uid'], $arguments['type'], $arguments['placeholder'], $value );
-				break;
 			case 'select':
-				if ( ! empty( $arguments['options'] ) && is_array( $arguments['options'] ) ) {
-					$attributes     = '';
-					$options_markup = '';
-					foreach ( $arguments['options'] as $key => $label ) {
-						$options_markup .= sprintf( '<option value="%s" %s>%s</option>', $key, selected( $value[ array_search( $key, $value, true ) ], $key, false ), $label );
-					}
-					if ( $arguments['type'] === 'multiselect' ) {
-						$attributes = ' multiple="multiple" ';
-					}
-					printf( '<select name="%1$s[]" id="%1$s" %2$s>%3$s</select>', $arguments['uid'], $attributes, $options_markup );
-				}
+				$this->render_select($arguments, $value);
 				break;
-			case 'checkbox':
-				if ( ! empty( $arguments['options'] ) && is_array( $arguments['options'] ) ) {
-					$options_markup = '<table class="fixed striped"><th style="text-align:center">Time</th><th style="text-align:center">Fee</th>';
-					$iterator       = 0;
-					foreach ( $arguments['options'] as $key => $label ) {
-						$iterator++;
-						$checked             = $this->time_checked($value, $key);
-						$fee                 = $this->get_fee_for_time($value, strval( $key ));
-						$uid                 = $arguments['uid'];
-						$uid_fee_field       = $arguments['uid_fee_field'];
-						$type                = $arguments['type'];
-						$checkbox_id         = "${uid}_${iterator}";
-						$uid_fee_field_value = get_option( $arguments['uid_fee_field'] . '_' . $key );
-						$options_markup     .= "<tr><td><label for='$checkbox_id'><input id='$checkbox_id' name='${uid}[]' type='$type' value='$key' $checked /> $label</label></td>
-						<td><input name='${uid}[]' id='${uid}_fee_${iterator}' type='text' placeholder='Fee e.g. £20' value='$fee'/></td></tr>";
-					}
-
-					print( "$options_markup</table>" );
-
-				}
+			case 'time_fee':
+				$this->render_time_fee($arguments, $value);
 				break;
+		}
+	}
+
+	private function render_select($arguments, $value) {
+		if ( ! empty( $arguments['options'] ) && is_array( $arguments['options'] ) ) {
+			$attributes     = '';
+			$options_markup = '';
+			foreach ( $arguments['options'] as $key => $label ) {
+				$options_markup .= sprintf( '<option value="%s" %s>%s</option>', $key, selected( $value[ array_search( $key, $value, true ) ], $key, false ), $label );
+			}
+			if ( $arguments['type'] === 'multiselect' ) {
+				$attributes = ' multiple="multiple" ';
+			}
+			printf( '<select name="%1$s[]" id="%1$s" %2$s>%3$s</select>', $arguments['uid'], $attributes, $options_markup );
+		}
+	}
+
+	private function render_time_fee($arguments, $value) {
+		if ( ! empty( $arguments['options'] ) && is_array( $arguments['options'] ) ) {
+			$options_markup = '<table class="fixed striped"><th style="text-align:center">Time</th><th style="text-align:center">Fee</th>';
+			$iterator       = 0;
+			foreach ( $arguments['options'] as $key => $label ) {
+				$iterator++;
+				$checked             = $this->time_checked($value, $key);
+				$fee                 = $this->get_fee_for_time($value, strval( $key ));
+				$uid                 = $arguments['uid'];
+				$uid_fee_field       = $arguments['uid_fee_field'];
+				$checkbox_id         = "${uid}_${iterator}";
+				$uid_fee_field_value = get_option( $arguments['uid_fee_field'] . '_' . $key );
+				$options_markup     .= "<tr><td><label for='$checkbox_id'><input id='$checkbox_id' name='${uid}[]' type='checkbox' value='$key' $checked /> $label</label></td>
+				<td><input name='${uid}[]' id='${uid}_fee_${iterator}' type='text' placeholder='Fee e.g. £20' value='$fee'/></td></tr>";
+			}
+
+			print( "$options_markup</table>" );
+
 		}
 	}
 

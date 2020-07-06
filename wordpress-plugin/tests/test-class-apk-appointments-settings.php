@@ -96,7 +96,7 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 				'uid'     => 'apk_monday_appointment_availability',
 				'label'   => 'Monday',
 				'section' => 'appointment_availability_section',
-				'type'    => 'checkbox',
+				'type'    => 'time_fee',
 				'options' => array(
 					8  => '08:00',
 					9  => '09:00',
@@ -120,7 +120,7 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 				'uid'     => 'apk_tuesday_appointment_availability',
 				'label'   => 'Tuesday',
 				'section' => 'appointment_availability_section',
-				'type'    => 'checkbox',
+				'type'    => 'time_fee',
 				'options' => array(
 					8  => '08:00',
 					9  => '09:00',
@@ -144,7 +144,7 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 				'uid'     => 'apk_wednesday_appointment_availability',
 				'label'   => 'Wednesday',
 				'section' => 'appointment_availability_section',
-				'type'    => 'checkbox',
+				'type'    => 'time_fee',
 				'options' => array(
 					8  => '08:00',
 					9  => '09:00',
@@ -168,7 +168,7 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 				'uid'     => 'apk_thursday_appointment_availability',
 				'label'   => 'Thursday',
 				'section' => 'appointment_availability_section',
-				'type'    => 'checkbox',
+				'type'    => 'time_fee',
 				'options' => array(
 					8  => '08:00',
 					9  => '09:00',
@@ -192,7 +192,7 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 				'uid'     => 'apk_friday_appointment_availability',
 				'label'   => 'Friday',
 				'section' => 'appointment_availability_section',
-				'type'    => 'checkbox',
+				'type'    => 'time_fee',
 				'options' => array(
 					8  => '08:00',
 					9  => '09:00',
@@ -216,7 +216,7 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 				'uid'     => 'apk_saturday_appointment_availability',
 				'label'   => 'Saturday',
 				'section' => 'appointment_availability_section',
-				'type'    => 'checkbox',
+				'type'    => 'time_fee',
 				'options' => array(
 					8  => '08:00',
 					9  => '09:00',
@@ -240,7 +240,7 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 				'uid'     => 'apk_sunday_appointment_availability',
 				'label'   => 'Sunday',
 				'section' => 'appointment_availability_section',
-				'type'    => 'checkbox',
+				'type'    => 'time_fee',
 				'options' => array(
 					8  => '08:00',
 					9  => '09:00',
@@ -280,7 +280,7 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 				'uid'     => 'apk_monday_appointment_availability',
 				'label'   => 'Monday',
 				'section' => 'appointment_availability_section',
-				'type'    => 'checkbox',
+				'type'    => 'time_fee',
 				'options' => array(
 					8  => '08:00',
 					9  => '09:00',
@@ -304,7 +304,7 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 				'uid'     => 'apk_tuesday_appointment_availability',
 				'label'   => 'Tuesday',
 				'section' => 'appointment_availability_section',
-				'type'    => 'checkbox',
+				'type'    => 'time_fee',
 				'options' => array(
 					8  => '08:00',
 					9  => '09:00',
@@ -328,7 +328,7 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 				'uid'     => 'apk_wednesday_appointment_availability',
 				'label'   => 'Wednesday',
 				'section' => 'appointment_availability_section',
-				'type'    => 'checkbox',
+				'type'    => 'time_fee',
 				'options' => array(
 					8  => '08:00',
 					9  => '09:00',
@@ -352,7 +352,7 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 				'uid'     => 'apk_thursday_appointment_availability',
 				'label'   => 'Thursday',
 				'section' => 'appointment_availability_section',
-				'type'    => 'checkbox',
+				'type'    => 'time_fee',
 				'options' => array(
 					8  => '08:00',
 					9  => '09:00',
@@ -376,7 +376,7 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 				'uid'     => 'apk_friday_appointment_availability',
 				'label'   => 'Friday',
 				'section' => 'appointment_availability_section',
-				'type'    => 'checkbox',
+				'type'    => 'time_fee',
 				'options' => array(
 					8  => '08:00',
 					9  => '09:00',
@@ -400,7 +400,7 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 				'uid'     => 'apk_saturday_appointment_availability',
 				'label'   => 'Saturday',
 				'section' => 'appointment_availability_section',
-				'type'    => 'checkbox',
+				'type'    => 'time_fee',
 				'options' => array(
 					8  => '08:00',
 					9  => '09:00',
@@ -424,7 +424,7 @@ class APK_Appointments_Settings_Test extends WP_UnitTestCase {
 				'uid'     => 'apk_sunday_appointment_availability',
 				'label'   => 'Sunday',
 				'section' => 'appointment_availability_section',
-				'type'    => 'checkbox',
+				'type'    => 'time_fee',
 				'options' => array(
 					8  => '08:00',
 					9  => '09:00',
