@@ -1,12 +1,15 @@
 <?php
-/*
-	Plugin Name: Smashing Fields Plugin: Approach 1
-	Description: Setting up custom fields for our plugin.
-	Author: Matthew Ray
-	Version: 1.0.0
-*/
-define( 'APK_APPOINTMENTS_SETTINGS_FIELDS', 'apk-appointments-settings' );
+/**
+ * User: Andy Kayley
+ * Date: 28/6/20
+ * Time: 16:00:28
+ *
+ * @package     APK_Appointments
+ */
 
+/**
+ * Appointment Settings
+ */
 class APK_Appointments_Settings {
 
 	public function __construct() {
@@ -95,8 +98,7 @@ class APK_Appointments_Settings {
 					19 => '19:00',
 					20 => '20:00',
 					21 => '21:00',
-				),
-				'default'       => array(),
+				)
 			);
 		}
 
@@ -127,8 +129,7 @@ class APK_Appointments_Settings {
 				'options' => array(
 					'24' => '24 Hour',
 					'12' => '12 Hour',
-				),
-				'default' => array(),
+				)
 			),
 		);
 
@@ -136,17 +137,17 @@ class APK_Appointments_Settings {
 		return $merged_fields;
 	}
 
-	public function time_checked($option, $time) {
+	public function time_checked( $option, $time ) {
 		return checked( $option[ array_search( strval( $time ), $option, true ) ], $time, false );
 	}
 
-	public function get_fee_for_time($option, $time) {
+	public function get_fee_for_time( $option, $time ) {
 		$return_next = false;
-		foreach ($option as $key => $value) {
-			if ($return_next == true) {
+		foreach ( $option as $key => $value ) {
+			if ( $return_next == true ) {
 				return $value;
 			}
-			if ($value === $time) {
+			if ( $value === $time ) {
 				$return_next = true;
 			}
 		}
@@ -156,20 +157,17 @@ class APK_Appointments_Settings {
 
 		$value = get_option( $arguments['uid'] );
 
-		if ( ! $value ) {
-			$value = $arguments['default'];
-		}
 		switch ( $arguments['type'] ) {
 			case 'select':
-				$this->render_select($arguments, $value);
+				$this->render_select( $arguments, $value );
 				break;
 			case 'time_fee':
-				$this->render_time_fee($arguments, $value);
+				$this->render_time_fee( $arguments, $value );
 				break;
 		}
 	}
 
-	private function render_select($arguments, $value) {
+	private function render_select( $arguments, $value ) {
 		if ( ! empty( $arguments['options'] ) && is_array( $arguments['options'] ) ) {
 			$attributes     = '';
 			$options_markup = '';
@@ -183,14 +181,14 @@ class APK_Appointments_Settings {
 		}
 	}
 
-	private function render_time_fee($arguments, $value) {
+	private function render_time_fee( $arguments, $value ) {
 		if ( ! empty( $arguments['options'] ) && is_array( $arguments['options'] ) ) {
 			$options_markup = '<table class="fixed striped"><th style="text-align:center">Time</th><th style="text-align:center">Fee</th>';
 			$iterator       = 0;
 			foreach ( $arguments['options'] as $key => $label ) {
 				$iterator++;
-				$checked             = $this->time_checked($value, $key);
-				$fee                 = $this->get_fee_for_time($value, strval( $key ));
+				$checked             = $this->time_checked( $value, $key );
+				$fee                 = $this->get_fee_for_time( $value, strval( $key ) );
 				$uid                 = $arguments['uid'];
 				$uid_fee_field       = $arguments['uid_fee_field'];
 				$checkbox_id         = "${uid}_${iterator}";
