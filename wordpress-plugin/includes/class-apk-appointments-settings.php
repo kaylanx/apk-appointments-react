@@ -78,12 +78,11 @@ class APK_Appointments_Settings {
 
 		foreach ( $days_of_the_week as $key => $value ) {
 			$checkbox_day_array[] = array(
-				'uid'           => "apk_${key}_appointment_availability",
-				'label'         => "$value",
-				'uid_fee_field' => "apk_${key}_appointment_fee",
-				'section'       => 'appointment_availability_section',
-				'type'          => 'time_fee',
-				'options'       => array(
+				'uid'     => "apk_${key}_appointment_availability",
+				'label'   => "$value",
+				'section' => 'appointment_availability_section',
+				'type'    => 'time_fee',
+				'options' => array(
 					8  => '08:00',
 					9  => '09:00',
 					10 => '10:00',
@@ -98,7 +97,7 @@ class APK_Appointments_Settings {
 					19 => '19:00',
 					20 => '20:00',
 					21 => '21:00',
-				)
+				),
 			);
 		}
 
@@ -111,25 +110,20 @@ class APK_Appointments_Settings {
 		foreach ( $fields as $field ) {
 			add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), APK_APPOINTMENTS_SETTINGS_FIELDS, $field['section'], $field );
 			register_setting( APK_APPOINTMENTS_SETTINGS_FIELDS, $field['uid'] );
-			if ( $field['type'] == 'time_fee' ) {
-				foreach ( $field['options'] as $option => $display_value ) {
-					register_setting( APK_APPOINTMENTS_SETTINGS_FIELDS, $field['uid_fee_field'] . '_' . $option );
-				}
-			}
 		}
 	}
 
 	public function merge_checkboxes_with_rest_of_fields( $checkbox_fields ) {
 		$fields = array(
 			array(
-				'uid'     => 'apk_time_display_format',
+				'uid'     => APK_APPOINTMENTS_TIME_DISPLAY_FORMAT,
 				'label'   => 'Time Display Format',
 				'section' => 'display_format_section',
 				'type'    => 'select',
 				'options' => array(
 					'24' => '24 Hour',
 					'12' => '12 Hour',
-				)
+				),
 			),
 		);
 
@@ -187,13 +181,11 @@ class APK_Appointments_Settings {
 			$iterator       = 0;
 			foreach ( $arguments['options'] as $key => $label ) {
 				$iterator++;
-				$checked             = $this->time_checked( $value, $key );
-				$fee                 = $this->get_fee_for_time( $value, strval( $key ) );
-				$uid                 = $arguments['uid'];
-				$uid_fee_field       = $arguments['uid_fee_field'];
-				$checkbox_id         = "${uid}_${iterator}";
-				$uid_fee_field_value = get_option( $arguments['uid_fee_field'] . '_' . $key );
-				$options_markup     .= "<tr><td><label for='$checkbox_id'><input id='$checkbox_id' name='${uid}[]' type='checkbox' value='$key' $checked /> $label</label></td>
+				$checked         = $this->time_checked( $value, $key );
+				$fee             = $this->get_fee_for_time( $value, strval( $key ) );
+				$uid             = $arguments['uid'];
+				$checkbox_id     = "${uid}_${iterator}";
+				$options_markup .= "<tr><td><label for='$checkbox_id'><input id='$checkbox_id' name='${uid}[]' type='checkbox' value='$key' $checked /> $label</label></td>
 				<td><input name='${uid}[]' id='${uid}_fee_${iterator}' type='text' placeholder='Fee e.g. £20' value='$fee'/></td></tr>";
 			}
 

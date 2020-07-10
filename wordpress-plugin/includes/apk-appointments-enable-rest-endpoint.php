@@ -1,241 +1,60 @@
 <?php
 function get_appointments( $data ) {
-	// require_once __DIR__ . '/apk-appointments-defines.php';
-	// $appointments = get_option( APK_APPOINTMENTS_OPTION );
-	// return $appointments;
-	return get_dummy_data();
+	require_once __DIR__ . '/apk-appointments-defines.php';
+	$display_format      = get_option( APK_APPOINTMENTS_TIME_DISPLAY_FORMAT );
+	$appointments_option = get_option( APK_APPOINTMENTS_OPTION );
+
+	$monday_availability    = create_day_availability_for_serialization( get_option( APK_APPOINTMENTS_MONDAY_APPOINTMENT_AVAILABILITY ) );
+	$tuesday_availability   = create_day_availability_for_serialization( get_option( APK_APPOINTMENTS_TUESDAY_APPOINTMENT_AVAILABILITY ) );
+	$wednesday_availability = create_day_availability_for_serialization( get_option( APK_APPOINTMENTS_WEDNESDAY_APPOINTMENT_AVAILABILITY ) );
+	$thursday_availability  = create_day_availability_for_serialization( get_option( APK_APPOINTMENTS_THURSDAY_APPOINTMENT_AVAILABILITY ) );
+	$friday_availability    = create_day_availability_for_serialization( get_option( APK_APPOINTMENTS_FRIDAY_APPOINTMENT_AVAILABILITY ) );
+	$saturday_availability  = create_day_availability_for_serialization( get_option( APK_APPOINTMENTS_SATURDAY_APPOINTMENT_AVAILABILITY ) );
+	$sunday_availability    = create_day_availability_for_serialization( get_option( APK_APPOINTMENTS_SUNDAY_APPOINTMENT_AVAILABILITY ) );
+
+	$appointments                            = new \stdClass();
+	$appointments->schedule                  = new \stdClass();
+	$appointments->schedule->display         = new \stdClass();
+	$appointments->schedule->display->format = (int) $display_format[0];
+	$appointments->schedule->monday          = (object) map_availability_for_serialization( $monday_availability );
+	$appointments->schedule->tuesday         = (object) map_availability_for_serialization( $tuesday_availability );
+	$appointments->schedule->wednesday       = (object) map_availability_for_serialization( $wednesday_availability );
+	$appointments->schedule->thursday        = (object) map_availability_for_serialization( $thursday_availability );
+	$appointments->schedule->friday          = (object) map_availability_for_serialization( $friday_availability );
+	$appointments->schedule->saturday        = (object) map_availability_for_serialization( $saturday_availability );
+	$appointments->schedule->sunday          = (object) map_availability_for_serialization( $sunday_availability );
+	$appointments->appointments              = $appointments_option;
+
+	return $appointments;
 }
 
-function get_dummy_data() {
+function map_availability_for_serialization( $day_availability ) {
+	$day         = new stdClass();
+	$day->closed = sizeof( $day_availability ) === 0;
+	if ( ! $day->closed ) {
+		$day->availability = $day_availability;
+	}
+	return $day;
+}
 
-	$dummy_json = '{
-	"schedule": {
-	  "display": {
-		"format": 12
-	  },
-	  "monday": {
-		"closed": false,
-		"availability": [
-		  {
-			"time": 10
-		  },
-		  {
-			"time": 11
-		  },
-		  {
-			"time": 12
-		  },
-		  {
-			"time": 13
-		  },
-		  {
-			"time": 14
-		  },
-		  {
-			"time": 15
-		  },
-		  {
-			"time": 16
-		  }
-		]
-	  },
-	  "tuesday": {
-		"closed": false,
-		"availability": [
-		  {
-			"time": 10
-		  },
-		  {
-			"time": 11
-		  },
-		  {
-			"time": 12
-		  },
-		  {
-			"time": 13
-		  },
-		  {
-			"time": 14
-		  },
-		  {
-			"time": 15
-		  },
-		  {
-			"time": 16
-		  }
-		]
-	  },
-	  "wednesday": {
-		"closed": false,
-		"availability": [
-		  {
-			"time": 11
-		  },
-		  {
-			"time": 12
-		  },
-		  {
-			"time": 13
-		  },
-		  {
-			"time": 14
-		  },
-		  {
-			"time": 15
-		  },
-		  {
-			"time": 16
-		  },
-		  {
-			"time": 17
-		  },
-		  {
-			"time": 18,
-			"fee": "£20"
-		  },
-		  {
-			"time": 19,
-			"fee": "£20"
-		  }
-		]
-	  },
-	  "thursday": {
-		"closed": true
-	  },
-	  "friday": {
-		"closed": true
-	  },
-	  "saturday": {
-		"closed": false,
-		"availability": [
-		  {
-			"time": 11
-		  },
-		  {
-			"time": 12
-		  },
-		  {
-			"time": 13
-		  },
-		  {
-			"time": 14
-		  },
-		  {
-			"time": 15
-		  },
-		  {
-			"time": 16
-		  }
-		]
-	  },
-	  "sunday": {
-		"closed": false,
-		"availability": [
-		  {
-			"time": 11,
-			"fee": "£20"
-		  },
-		  {
-			"time": 12,
-			"fee": "£20"
-		  },
-		  {
-			"time": 13,
-			"fee": "£20"
-		  },
-		  {
-			"time": 14,
-			"fee": "£20"
-		  },
-		  {
-			"time": 15,
-			"fee": "£20"
-		  },
-		  {
-			"time": 16,
-			"fee": "£20"
-		  }
-		]
-	  }
-	},
-	"appointments": [
-	  {
-		"date": "2020-03-17",
-		"times": [
-		  {
-			"time": 13
-		  }
-		],
-		"closed": false
-	  },
-	  {
-		"date": "2020-06-12",
-		"times": [
-		  {
-			"time": 17
-		  }
-		],
-		"closed": false
-	  },
-	  {
-		"date": "2020-09-23",
-		"times": [
-		  {
-			"time": 17
-		  }
-		],
-		"closed": false
-	  },
-	  {
-		"date": "2020-08-20",
-		"times": [
-		  {
-			"time": 15
-		  }
-		],
-		"closed": false
-	  },
-	  {
-		"date": "2020-04-21",
-		"times": [
-		  {
-			"time": 10
-		  },
-		  {
-			"time": 11
-		  },
-		  {
-			"time": 12
-		  },
-		  {
-			"time": 13
-		  },
-		  {
-			"time": 14
-		  },
-		  {
-			"time": 15
-		  },
-		  {
-			"time": 16
-		  }
-		],
-		"closed": false
-	  },
-	  {
-		"date": "2020-10-24",
-		"times": [],
-		"closed": true
-	  },
-	  {
-		"date": "2020-05-25",
-		"times": [],
-		"closed": true
-	  }
-	]
-  }';
+function create_day_availability_for_serialization( $day_availability_option ) {
+	$day_availability = array();
+	for ( $x = 0; $x < sizeof( $day_availability_option ); $x += 2 ) {
+		$time = (int) $day_availability_option[ $x ];
+		if ( $time > 0 ) {
+			$fee = $day_availability_option[ $x + 1 ];
 
-	return json_decode( $dummy_json );
+			$hour_data       = new \stdClass();
+			$hour_data->time = $time;
+
+			if ( isset( $fee ) && $fee !== '' ) {
+				$hour_data->fee = $fee;
+			}
+			array_push( $day_availability, $hour_data );
+		}
+	}
+
+	return $day_availability;
 }
 
 add_action(
