@@ -35,7 +35,7 @@ class APK_Appointments_Settings {
 		<div class="wrap">
 			<h2>APK Appointments Settings</h2>
 			<?php
-			if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ) {
+			if ( isset( $_GET['settings-updated'] ) ) {
 				$this->admin_notice();
 			}
 			?>
@@ -72,7 +72,7 @@ class APK_Appointments_Settings {
 	/**
 	 * Callback for the settings sections.
 	 *
-	 * @param Array associative array containging details fo the sections.
+	 * @param Array $arguments associative array containging details fo the sections.
 	 */
 	public function section_callback( $arguments ) {
 		switch ( $arguments['id'] ) {
@@ -170,8 +170,8 @@ class APK_Appointments_Settings {
 	/**
 	 * If the time value is in the $option array mark it as checked.
 	 *
-	 * @param $option the WordPress option that may contain $time.
-	 * @param time that may appear in the                  $option array.
+	 * @param Array $option the WordPress option that may contain $time.
+	 * @param Int   $time that may appear in the $option array.
 	 */
 	public function time_checked( $option, $time ) {
 		return checked( $option[ array_search( strval( $time ), $option, true ) ], $time, false );
@@ -180,13 +180,18 @@ class APK_Appointments_Settings {
 	/**
 	 * Gets the fee, the $option is the fee option and the index is the index we want for the array.
 	 *
-	 * @param $option the array.
-	 * @param $index of the option we want.
+	 * @param Array $option the array.
+	 * @param Int   $index of the option we want.
 	 */
 	public function get_fee_for_time( $option, $index ) {
 		return $option[ $index ];
 	}
 
+	/**
+	 * Callback when add_settings_field is called to draw the HTML.
+	 *
+	 * @param Array $arguments from array created in merge_checkboxes_with_rest_of_fields.
+	 */
 	public function field_callback( $arguments ) {
 
 		$value = get_option( $arguments['uid'] );
@@ -203,20 +208,33 @@ class APK_Appointments_Settings {
 		}
 	}
 
+	/**
+	 * Renders a select for the format that should be displayed on the appointments page (24 hour or 12 hour).
+	 *
+	 * @param Array $arguments from array created in merge_checkboxes_with_rest_of_fields.
+	 * @param Array $value the array of formats available from the WordPress option.
+	 */
 	private function render_select( $arguments, $value ) {
 		if ( ! empty( $arguments['options'] ) && is_array( $arguments['options'] ) ) {
 			$attributes     = '';
 			$options_markup = '';
 			foreach ( $arguments['options'] as $key => $label ) {
-				$options_markup .= sprintf( '<option value="%s" %s>%s</option>', $key, selected( $value[ array_search( $key, $value, true ) ], $key, false ), $label );
+				$options_markup .= sprintf( '<option value="%s" %s>%s</option>', esc_html( $key ), selected( $value[ array_search( $key, $value, true ) ], $key, false ), $label );
 			}
 			if ( 'multiselect' === $arguments['type'] ) {
 				$attributes = ' multiple="multiple" ';
 			}
-			printf( '<select name="%1$s[]" id="%1$s" %2$s>%3$s</select>', $arguments['uid'], $attributes, $options_markup );
+			printf( '<select name="%1$s[]" id="%1$s" %2$s>%3$s</select>', esc_attr( $arguments['uid'] ), esc_attr( $attributes ), $options_markup );
 		}
 	}
 
+	/**
+	 * Renders a checkbox and textfield for each time available on each day.
+	 *
+	 * @param Array $arguments from array created in create_day_checkboxes_array.
+	 * @param Array $value the array of times available from the WordPress option.
+	 * @param Array $fee_value the array of fees specified from the WordPress option.
+	 */
 	private function render_time_fee( $arguments, $value, $fee_value ) {
 		if ( ! empty( $arguments['options'] ) && is_array( $arguments['options'] ) ) {
 			$options_markup = '<table class="fixed striped"><th style="text-align:center">Time</th><th style="text-align:center">Fee</th>';
@@ -224,9 +242,9 @@ class APK_Appointments_Settings {
 			foreach ( $arguments['options'] as $key => $label ) {
 				$checked         = $this->time_checked( $value, $key );
 				$fee             = $this->get_fee_for_time( $fee_value, $iterator++ );
-				$uid             = $arguments['uid'];
-				$uid_fee         = $arguments['uid_fee'];
-				$checkbox_id     = "${uid}_${iterator}";
+				$uid             = esc_html( $arguments['uid'] );
+				$uid_fee         = esc_html( $arguments['uid_fee'] );
+				$checkbox_id     = esc_html( "${uid}_${iterator}" );
 				$options_markup .= "<tr><td><label for='$checkbox_id'><input id='$checkbox_id' name='${uid}[]' type='checkbox' value='$key' $checked /> $label</label></td>
 				<td><input name='${uid_fee}[]' id='${uid_fee}_${iterator}' type='text' placeholder='Fee e.g. £20' value='$fee'/></td></tr>";
 			}
