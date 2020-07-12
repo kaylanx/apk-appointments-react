@@ -1,9 +1,17 @@
 <?php
+/**
+ * Removes plugin options on uninstall.
+ *
+ * @package APK_Appointments
+ */
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit();
 }
 
+/**
+ * Removes all the options that are added with this plugin.
+ */
 function apk_appointments_delete_plugin() {
 	require_once __DIR__ . '/includes/apk-appointments-defines.php';
 	delete_option( APK_APPOINTMENTS_OPTION );

@@ -39,7 +39,7 @@ class APK_Appointments_Menu_Creator {
 	 *
 	 * @param APK_Appointments_Option_Page         $options_page  The options page.
 	 * @param APK_Appointments_Appointment_Creator $appointment_creator The add new appointment page.
-	 * @param APK_Appointments_Settings            $settings The settings page.
+	 * @param APK_Appointments_Settings            $appointment_settings The settings page.
 	 */
 	public function __construct( $options_page, $appointment_creator, $appointment_settings ) {
 		$this->options_page         = $options_page;

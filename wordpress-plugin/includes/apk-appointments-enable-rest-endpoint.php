@@ -1,5 +1,16 @@
 <?php
-function get_appointments( $data ) {
+/**
+ * User: Andy Kayley
+ * Date: 19/4/15
+ * Time: 14:57
+ *
+ * @package     APK_Appointments
+ */
+
+/**
+ * Get the appointments and schedule serialiased for the rest api endpoint
+ */
+function get_appointments() {
 	require_once __DIR__ . '/apk-appointments-defines.php';
 	$display_format      = get_option( APK_APPOINTMENTS_TIME_DISPLAY_FORMAT );
 	$appointments_option = get_option( APK_APPOINTMENTS_OPTION );
@@ -49,15 +60,26 @@ function get_appointments( $data ) {
 	return $appointments;
 }
 
+/**
+ * Private method that will set the availability attribute if there are any, otherwise it will be closed
+ *
+ * @param Array $day_availability an array containing the times available for an appointment for a day.  e.g. ['11','12'] means appointments are available at 11am and 12pm.
+ */
 function map_availability_for_serialization( $day_availability ) {
 	$day         = new stdClass();
-	$day->closed = sizeof( $day_availability ) === 0;
+	$day->closed = count( $day_availability ) === 0;
 	if ( ! $day->closed ) {
 		$day->availability = $day_availability;
 	}
 	return $day;
 }
 
+/**
+ * If theres a fee for the time the set it in the availability for the day.
+ *
+ * @param Array $day_availability_option - WordPress option - an array containing the times available for an appointment for a day.  e.g. ['11','12'] means appointments are available at 11am and 12pm.
+ * @param Array $day_fee_option - WordPress option - an array containing fee data  e.g. ['£20', '£20', '', ''] means fees are applicable at 8am and 9am.
+ */
 function create_day_availability_for_serialization( $day_availability_option, $day_fee_option ) {
 	$day_availability = array();
 
@@ -78,7 +100,8 @@ function create_day_availability_for_serialization( $day_availability_option, $d
 		'21' => 13,
 	);
 
-	for ( $i = 0; $i < sizeof( $day_availability_option ); $i ++ ) {
+	$count = count( $day_availability_option );
+	for ( $i = 0; $i < $count; $i ++ ) {
 
 		$hour_data = new \stdClass();
 		$time      = (int) $day_availability_option[ $i ];
@@ -88,7 +111,7 @@ function create_day_availability_for_serialization( $day_availability_option, $d
 
 			$fee = $day_fee_option[ $index_map[ $hour_data->time ] ];
 
-			if ( isset( $fee ) && $fee !== '' ) {
+			if ( isset( $fee ) && '' !== $fee ) {
 				$hour_data->fee = $fee;
 			}
 			array_push( $day_availability, $hour_data );
