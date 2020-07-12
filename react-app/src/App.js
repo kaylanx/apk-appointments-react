@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { Button, TextField, CircularProgress } from '@material-ui/core'
-import Icon from '@material-ui/core/Icon'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import { ThemeProvider } from '@material-ui/core/styles'
@@ -158,7 +157,6 @@ function App ({
               variant="contained"
               color="primary"
               className={classes.formControl}
-              endIcon={<Icon>send</Icon>}
               type="submit"
             >
               Book Appointment
