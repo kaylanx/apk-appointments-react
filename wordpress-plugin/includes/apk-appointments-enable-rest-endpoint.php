@@ -80,15 +80,19 @@ function create_day_availability_for_serialization( $day_availability_option, $d
 
 	for ( $i = 0; $i < sizeof( $day_availability_option ); $i ++ ) {
 
-		$hour_data       = new \stdClass();
-		$hour_data->time = (int) $day_availability_option[ $i ];
+		$hour_data = new \stdClass();
+		$time      = (int) $day_availability_option[ $i ];
 
-		$fee = $day_fee_option[ $index_map[ $hour_data->time ] ];
+		if ( $time > 0 ) {
+			$hour_data->time = (int) $day_availability_option[ $i ];
 
-		if ( isset( $fee ) && $fee !== '' ) {
-			$hour_data->fee = $fee;
+			$fee = $day_fee_option[ $index_map[ $hour_data->time ] ];
+
+			if ( isset( $fee ) && $fee !== '' ) {
+				$hour_data->fee = $fee;
+			}
+			array_push( $day_availability, $hour_data );
 		}
-		array_push( $day_availability, $hour_data );
 	}
 
 	return $day_availability;
