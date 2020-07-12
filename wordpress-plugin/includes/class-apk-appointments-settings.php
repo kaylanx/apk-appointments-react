@@ -79,6 +79,7 @@ class APK_Appointments_Settings {
 		foreach ( $days_of_the_week as $key => $value ) {
 			$checkbox_day_array[] = array(
 				'uid'     => "apk_${key}_appointment_availability",
+				'uid_fee' => "apk_${key}_appointment_fee",
 				'label'   => "$value",
 				'section' => 'appointment_availability_section',
 				'type'    => 'time_fee',
@@ -110,6 +111,10 @@ class APK_Appointments_Settings {
 		foreach ( $fields as $field ) {
 			add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), APK_APPOINTMENTS_SETTINGS_FIELDS, $field['section'], $field );
 			register_setting( APK_APPOINTMENTS_SETTINGS_FIELDS, $field['uid'] );
+			if ( $field['type'] === 'time_fee' ) {
+				// add_settings_field( $field['uid_fee'], $field['label'], array( $this, 'field_callback' ), APK_APPOINTMENTS_SETTINGS_FIELDS, $field['section'], $field );
+				register_setting( APK_APPOINTMENTS_SETTINGS_FIELDS, $field['uid_fee'] );
+			}
 		}
 	}
 
@@ -135,16 +140,8 @@ class APK_Appointments_Settings {
 		return checked( $option[ array_search( strval( $time ), $option, true ) ], $time, false );
 	}
 
-	public function get_fee_for_time( $option, $time ) {
-		$return_next = false;
-		foreach ( $option as $key => $value ) {
-			if ( $return_next == true ) {
-				return $value;
-			}
-			if ( $value === $time ) {
-				$return_next = true;
-			}
-		}
+	public function get_fee_for_time( $option, $index ) {
+		return $option[ $index ];
 	}
 
 	public function field_callback( $arguments ) {
@@ -156,7 +153,9 @@ class APK_Appointments_Settings {
 				$this->render_select( $arguments, $value );
 				break;
 			case 'time_fee':
-				$this->render_time_fee( $arguments, $value );
+				$fee_value = get_option( $arguments['uid_fee'] );
+
+				$this->render_time_fee( $arguments, $value, $fee_value );
 				break;
 		}
 	}
@@ -175,18 +174,18 @@ class APK_Appointments_Settings {
 		}
 	}
 
-	private function render_time_fee( $arguments, $value ) {
+	private function render_time_fee( $arguments, $value, $fee_value ) {
 		if ( ! empty( $arguments['options'] ) && is_array( $arguments['options'] ) ) {
 			$options_markup = '<table class="fixed striped"><th style="text-align:center">Time</th><th style="text-align:center">Fee</th>';
 			$iterator       = 0;
 			foreach ( $arguments['options'] as $key => $label ) {
-				$iterator++;
 				$checked         = $this->time_checked( $value, $key );
-				$fee             = $this->get_fee_for_time( $value, strval( $key ) );
+				$fee             = $this->get_fee_for_time( $fee_value, $iterator++ );
 				$uid             = $arguments['uid'];
+				$uid_fee         = $arguments['uid_fee'];
 				$checkbox_id     = "${uid}_${iterator}";
 				$options_markup .= "<tr><td><label for='$checkbox_id'><input id='$checkbox_id' name='${uid}[]' type='checkbox' value='$key' $checked /> $label</label></td>
-				<td><input name='${uid}[]' id='${uid}_fee_${iterator}' type='text' placeholder='Fee e.g. £20' value='$fee'/></td></tr>";
+				<td><input name='${uid_fee}[]' id='${uid_fee}_${iterator}' type='text' placeholder='Fee e.g. £20' value='$fee'/></td></tr>";
 			}
 
 			print( "$options_markup</table>" );

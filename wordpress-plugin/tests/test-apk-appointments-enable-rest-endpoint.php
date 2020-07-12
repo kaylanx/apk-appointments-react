@@ -8,12 +8,26 @@ class APK_Appointments_Enable_Rest_Endpoint_Test extends WP_UnitTestCase {
 		update_option( APK_APPOINTMENTS_OPTION, json_decode( $this->appointments_fixture ) );
 		update_option( APK_APPOINTMENTS_TIME_DISPLAY_FORMAT, $this->display_format_fixture );
 		update_option( APK_APPOINTMENTS_MONDAY_APPOINTMENT_AVAILABILITY, $this->monday_appointment_availability_fixture );
+		update_option( APK_APPOINTMENTS_MONDAY_APPOINTMENT_FEE, $this->monday_appointment_fee_fixture );
+
 		update_option( APK_APPOINTMENTS_TUESDAY_APPOINTMENT_AVAILABILITY, $this->tuesday_appointment_availability_fixture );
+		update_option( APK_APPOINTMENTS_TUESDAY_APPOINTMENT_FEE, $this->tuesday_appointment_fee_fixture );
+
 		update_option( APK_APPOINTMENTS_WEDNESDAY_APPOINTMENT_AVAILABILITY, $this->wednesday_appointment_availability_fixture );
+		update_option( APK_APPOINTMENTS_WEDNESDAY_APPOINTMENT_FEE, $this->wednesday_appointment_fee_fixture );
+
 		update_option( APK_APPOINTMENTS_THURSDAY_APPOINTMENT_AVAILABILITY, $this->thursday_appointment_availability_fixture );
+		update_option( APK_APPOINTMENTS_THURSDAY_APPOINTMENT_FEE, $this->thursday_appointment_fee_fixture );
+
 		update_option( APK_APPOINTMENTS_FRIDAY_APPOINTMENT_AVAILABILITY, $this->friday_appointment_availability_fixture );
+		update_option( APK_APPOINTMENTS_FRIDAY_APPOINTMENT_FEE, $this->friday_appointment_fee_fixture );
+
 		update_option( APK_APPOINTMENTS_SATURDAY_APPOINTMENT_AVAILABILITY, $this->saturday_appointment_availability_fixture );
+		update_option( APK_APPOINTMENTS_SATURDAY_APPOINTMENT_FEE, $this->saturday_appointment_fee_fixture );
+
 		update_option( APK_APPOINTMENTS_SUNDAY_APPOINTMENT_AVAILABILITY, $this->sunday_appointment_availability_fixture );
+		update_option( APK_APPOINTMENTS_SUNDAY_APPOINTMENT_FEE, $this->sunday_appointment_fee_fixture );
+
 	}
 
 	function tearDown() {
@@ -27,6 +41,14 @@ class APK_Appointments_Enable_Rest_Endpoint_Test extends WP_UnitTestCase {
 		delete_option( APK_APPOINTMENTS_FRIDAY_APPOINTMENT_AVAILABILITY );
 		delete_option( APK_APPOINTMENTS_SATURDAY_APPOINTMENT_AVAILABILITY );
 		delete_option( APK_APPOINTMENTS_SUNDAY_APPOINTMENT_AVAILABILITY );
+
+		delete_option( APK_APPOINTMENTS_MONDAY_APPOINTMENT_FEE );
+		delete_option( APK_APPOINTMENTS_TUESDAY_APPOINTMENT_FEE );
+		delete_option( APK_APPOINTMENTS_WEDNESDAY_APPOINTMENT_FEE );
+		delete_option( APK_APPOINTMENTS_THURSDAY_APPOINTMENT_FEE );
+		delete_option( APK_APPOINTMENTS_FRIDAY_APPOINTMENT_FEE );
+		delete_option( APK_APPOINTMENTS_SATURDAY_APPOINTMENT_FEE );
+		delete_option( APK_APPOINTMENTS_SUNDAY_APPOINTMENT_FEE );
 	}
 
 	function test_get_appointments() {
@@ -270,13 +292,26 @@ class APK_Appointments_Enable_Rest_Endpoint_Test extends WP_UnitTestCase {
 		return json_decode( $expected_json );
 	}
 
-	private $monday_appointment_availability_fixture    = array( '', '', '', '', '10', '', '11', '', '12', '', '13', '', '14', '', '15', '', '16', '', '', '', '', '', '', '', '', '', '', '' );
-	private $tuesday_appointment_availability_fixture   = array( '', '', '', '', '10', '', '11', '', '12', '', '13', '', '14', '', '15', '', '16', '', '', '', '', '', '', '', '', '', '', '' );
-	private $wednesday_appointment_availability_fixture = array( '', '', '', '', '', '', '11', '', '12', '', '13', '', '14', '', '15', '', '16', '', '17', '', '18', '£20', '19', '£20', '', '', '', '' );
-	private $thursday_appointment_availability_fixture  = array( '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' );
-	private $friday_appointment_availability_fixture    = array( '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' );
-	private $saturday_appointment_availability_fixture  = array( '', '', '', '', '', '', '11', '', '12', '', '13', '', '14', '', '15', '', '16', '', '', '', '', '', '', '', '', '', '', '' );
-	private $sunday_appointment_availability_fixture    = array( '', '', '', '', '', '', '11', '£20', '12', '£20', '13', '£20', '14', '£20', '15', '£20', '16', '£20', '', '', '', '', '', '', '', '', '', '' );
+	private $monday_appointment_availability_fixture = array( '10', '11', '12', '13', '14', '15', '16' );
+	private $monday_appointment_fee_fixture          = array( '', '', '', '', '', '', '', '', '', '', '', '', '', '' );
+
+	private $tuesday_appointment_availability_fixture = array( '10', '11', '12', '13', '14', '15', '16' );
+	private $tuesday_appointment_fee_fixture          = array( '', '', '', '', '', '', '', '', '', '', '', '', '', '' );
+
+	private $wednesday_appointment_availability_fixture = array( '11', '12', '13', '14', '15', '16', '17', '18', '19' );
+	private $wednesday_appointment_fee_fixture          = array( '', '', '', '', '', '', '', '', '', '', '£20', '£20', '', '' );
+
+	private $thursday_appointment_availability_fixture = array();
+	private $thursday_appointment_fee_fixture          = array( '', '', '', '', '', '', '', '', '', '', '', '', '', '' );
+
+	private $friday_appointment_availability_fixture = array();
+	private $friday_appointment_fee_fixture          = array( '', '', '', '', '', '', '', '', '', '', '', '', '', '' );
+
+	private $saturday_appointment_availability_fixture = array( '11', '12', '13', '14', '15', '16' );
+	private $saturday_appointment_fee_fixture          = array( '', '', '', '', '', '', '', '', '', '', '', '', '', '' );
+
+	private $sunday_appointment_availability_fixture = array( '11', '12', '13', '14', '15', '16' );
+	private $sunday_appointment_fee_fixture          = array( '', '', '', '£20', '£20', '£20', '£20', '£20', '£20', '', '', '', '', '' );
 
 	private $display_format_fixture = array( '12' );
 

@@ -4,13 +4,34 @@ function get_appointments( $data ) {
 	$display_format      = get_option( APK_APPOINTMENTS_TIME_DISPLAY_FORMAT );
 	$appointments_option = get_option( APK_APPOINTMENTS_OPTION );
 
-	$monday_availability    = create_day_availability_for_serialization( get_option( APK_APPOINTMENTS_MONDAY_APPOINTMENT_AVAILABILITY ) );
-	$tuesday_availability   = create_day_availability_for_serialization( get_option( APK_APPOINTMENTS_TUESDAY_APPOINTMENT_AVAILABILITY ) );
-	$wednesday_availability = create_day_availability_for_serialization( get_option( APK_APPOINTMENTS_WEDNESDAY_APPOINTMENT_AVAILABILITY ) );
-	$thursday_availability  = create_day_availability_for_serialization( get_option( APK_APPOINTMENTS_THURSDAY_APPOINTMENT_AVAILABILITY ) );
-	$friday_availability    = create_day_availability_for_serialization( get_option( APK_APPOINTMENTS_FRIDAY_APPOINTMENT_AVAILABILITY ) );
-	$saturday_availability  = create_day_availability_for_serialization( get_option( APK_APPOINTMENTS_SATURDAY_APPOINTMENT_AVAILABILITY ) );
-	$sunday_availability    = create_day_availability_for_serialization( get_option( APK_APPOINTMENTS_SUNDAY_APPOINTMENT_AVAILABILITY ) );
+	$monday_availability    = create_day_availability_for_serialization(
+		get_option( APK_APPOINTMENTS_MONDAY_APPOINTMENT_AVAILABILITY ),
+		get_option( APK_APPOINTMENTS_MONDAY_APPOINTMENT_FEE ),
+	);
+	$tuesday_availability   = create_day_availability_for_serialization(
+		get_option( APK_APPOINTMENTS_TUESDAY_APPOINTMENT_AVAILABILITY ),
+		get_option( APK_APPOINTMENTS_TUESDAY_APPOINTMENT_FEE ),
+	);
+	$wednesday_availability = create_day_availability_for_serialization(
+		get_option( APK_APPOINTMENTS_WEDNESDAY_APPOINTMENT_AVAILABILITY ),
+		get_option( APK_APPOINTMENTS_WEDNESDAY_APPOINTMENT_FEE ),
+	);
+	$thursday_availability  = create_day_availability_for_serialization(
+		get_option( APK_APPOINTMENTS_THURSDAY_APPOINTMENT_AVAILABILITY ),
+		get_option( APK_APPOINTMENTS_THURSDAY_APPOINTMENT_FEE ),
+	);
+	$friday_availability    = create_day_availability_for_serialization(
+		get_option( APK_APPOINTMENTS_FRIDAY_APPOINTMENT_AVAILABILITY ),
+		get_option( APK_APPOINTMENTS_FRIDAY_APPOINTMENT_FEE ),
+	);
+	$saturday_availability  = create_day_availability_for_serialization(
+		get_option( APK_APPOINTMENTS_SATURDAY_APPOINTMENT_AVAILABILITY ),
+		get_option( APK_APPOINTMENTS_SATURDAY_APPOINTMENT_FEE ),
+	);
+	$sunday_availability    = create_day_availability_for_serialization(
+		get_option( APK_APPOINTMENTS_SUNDAY_APPOINTMENT_AVAILABILITY ),
+		get_option( APK_APPOINTMENTS_SUNDAY_APPOINTMENT_FEE ),
+	);
 
 	$appointments                            = new \stdClass();
 	$appointments->schedule                  = new \stdClass();
@@ -37,21 +58,37 @@ function map_availability_for_serialization( $day_availability ) {
 	return $day;
 }
 
-function create_day_availability_for_serialization( $day_availability_option ) {
+function create_day_availability_for_serialization( $day_availability_option, $day_fee_option ) {
 	$day_availability = array();
-	for ( $x = 0; $x < sizeof( $day_availability_option ); $x += 2 ) {
-		$time = (int) $day_availability_option[ $x ];
-		if ( $time > 0 ) {
-			$fee = $day_availability_option[ $x + 1 ];
 
-			$hour_data       = new \stdClass();
-			$hour_data->time = $time;
+	$index_map = array(
+		'8'  => 0,
+		'9'  => 1,
+		'10' => 2,
+		'11' => 3,
+		'12' => 4,
+		'13' => 5,
+		'14' => 6,
+		'15' => 7,
+		'16' => 8,
+		'17' => 9,
+		'18' => 10,
+		'19' => 11,
+		'20' => 12,
+		'21' => 13,
+	);
 
-			if ( isset( $fee ) && $fee !== '' ) {
-				$hour_data->fee = $fee;
-			}
-			array_push( $day_availability, $hour_data );
+	for ( $i = 0; $i < sizeof( $day_availability_option ); $i ++ ) {
+
+		$hour_data       = new \stdClass();
+		$hour_data->time = (int) $day_availability_option[ $i ];
+
+		$fee = $day_fee_option[ $index_map[ $hour_data->time ] ];
+
+		if ( isset( $fee ) && $fee !== '' ) {
+			$hour_data->fee = $fee;
 		}
+		array_push( $day_availability, $hour_data );
 	}
 
 	return $day_availability;
