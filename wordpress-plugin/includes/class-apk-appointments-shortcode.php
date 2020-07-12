@@ -22,7 +22,7 @@ add_shortcode( 'apk-appointments', 'apk_appointment_shortcode' );
 /**
  * Formats the react app filenames correctly.
  *
- * @param Array $full_paths the react app js and css paths
+ * @param Array $full_paths the react app js and css paths.
  */
 function format_react_app_filenames( $full_paths ) {
 	if ( ! is_array( $full_paths ) ) {

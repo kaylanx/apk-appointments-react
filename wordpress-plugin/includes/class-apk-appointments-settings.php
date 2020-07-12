@@ -12,21 +12,31 @@
  */
 class APK_Appointments_Settings {
 
+	/**
+	 * Constructor for the class
+	 */
 	public function __construct() {
-		// Add Settings and Fields
+		// Add Settings and Fields.
 		add_action( 'admin_init', array( $this, 'setup_sections' ) );
 		add_action( 'admin_init', array( $this, 'setup_fields' ) );
 	}
 
+	/**
+	 * Lack of php / WordPress knowledge, this is called from apk-appointments.php for a reason I don't
+	 * know why.
+	 */
 	public function display() {
 	}
 
+	/**
+	 * Draw the form
+	 */
 	public function apk_appointment_settings_form() {?>
 		<div class="wrap">
 			<h2>APK Appointments Settings</h2>
 			<?php
 			if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ) {
-				  $this->admin_notice();
+				$this->admin_notice();
 			}
 			?>
 			<form method="POST" action="options.php">
@@ -40,6 +50,9 @@ class APK_Appointments_Settings {
 		<?php
 	}
 
+	/**
+	 * Called when settings are updated.
+	 */
 	public function admin_notice() {
 		?>
 		<div class="notice notice-success is-dismissible">
@@ -48,11 +61,19 @@ class APK_Appointments_Settings {
 		<?php
 	}
 
+	/**
+	 * Adds the settings sections
+	 */
 	public function setup_sections() {
 		add_settings_section( 'display_format_section', 'Display Settings', array( $this, 'section_callback' ), APK_APPOINTMENTS_SETTINGS_FIELDS );
 		add_settings_section( 'appointment_availability_section', 'Appointment Availablity', array( $this, 'section_callback' ), APK_APPOINTMENTS_SETTINGS_FIELDS );
 	}
 
+	/**
+	 * Callback for the settings sections.
+	 *
+	 * @param Array associative array containging details fo the sections.
+	 */
 	public function section_callback( $arguments ) {
 		switch ( $arguments['id'] ) {
 			case 'display_format_section':
@@ -64,6 +85,9 @@ class APK_Appointments_Settings {
 		}
 	}
 
+	/**
+	 * Draws the day check boxes.
+	 */
 	public function create_day_checkboxes_array() {
 
 		$days_of_the_week['monday']    = 'Monday';
@@ -105,19 +129,26 @@ class APK_Appointments_Settings {
 		return $checkbox_day_array;
 	}
 
+	/**
+	 * Sets up the fields based and registers them with WordPress.
+	 */
 	public function setup_fields() {
 		$fields = $this->merge_checkboxes_with_rest_of_fields( $this->create_day_checkboxes_array() );
 
 		foreach ( $fields as $field ) {
 			add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), APK_APPOINTMENTS_SETTINGS_FIELDS, $field['section'], $field );
 			register_setting( APK_APPOINTMENTS_SETTINGS_FIELDS, $field['uid'] );
-			if ( $field['type'] === 'time_fee' ) {
-				// add_settings_field( $field['uid_fee'], $field['label'], array( $this, 'field_callback' ), APK_APPOINTMENTS_SETTINGS_FIELDS, $field['section'], $field );
+			if ( 'time_fee' === $field['type'] ) {
 				register_setting( APK_APPOINTMENTS_SETTINGS_FIELDS, $field['uid_fee'] );
 			}
 		}
 	}
 
+	/**
+	 * Merges the passed in array with the array from $this->create_day_checkboxes_array()
+	 *
+	 * @param Array $checkbox_fields list of checkbox fields.
+	 */
 	public function merge_checkboxes_with_rest_of_fields( $checkbox_fields ) {
 		$fields = array(
 			array(
@@ -136,10 +167,22 @@ class APK_Appointments_Settings {
 		return $merged_fields;
 	}
 
+	/**
+	 * If the time value is in the $option array mark it as checked.
+	 *
+	 * @param $option the WordPress option that may contain $time.
+	 * @param time that may appear in the                  $option array.
+	 */
 	public function time_checked( $option, $time ) {
 		return checked( $option[ array_search( strval( $time ), $option, true ) ], $time, false );
 	}
 
+	/**
+	 * Gets the fee, the $option is the fee option and the index is the index we want for the array.
+	 *
+	 * @param $option the array.
+	 * @param $index of the option we want.
+	 */
 	public function get_fee_for_time( $option, $index ) {
 		return $option[ $index ];
 	}
@@ -167,7 +210,7 @@ class APK_Appointments_Settings {
 			foreach ( $arguments['options'] as $key => $label ) {
 				$options_markup .= sprintf( '<option value="%s" %s>%s</option>', $key, selected( $value[ array_search( $key, $value, true ) ], $key, false ), $label );
 			}
-			if ( $arguments['type'] === 'multiselect' ) {
+			if ( 'multiselect' === $arguments['type'] ) {
 				$attributes = ' multiple="multiple" ';
 			}
 			printf( '<select name="%1$s[]" id="%1$s" %2$s>%3$s</select>', $arguments['uid'], $attributes, $options_markup );
