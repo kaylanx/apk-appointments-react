@@ -174,6 +174,9 @@ class APK_Appointments_Settings {
 	 * @param Int   $time that may appear in the $option array.
 	 */
 	public function time_checked( $option, $time ) {
+		if ( ! is_array( $option ) ) {
+			return '';
+		}
 		return checked( $option[ array_search( strval( $time ), $option, true ) ], $time, false );
 	}
 
@@ -219,7 +222,12 @@ class APK_Appointments_Settings {
 			$attributes     = '';
 			$options_markup = '';
 			foreach ( $arguments['options'] as $key => $label ) {
-				$options_markup .= sprintf( '<option value="%s" %s>%s</option>', esc_html( $key ), selected( $value[ array_search( $key, $value, true ) ], $key, false ), $label );
+				$selected = '';
+				if ( is_array( $value ) ) {
+					$selected = selected( $value[ array_search( $key, $value, true ) ], $key, false );
+				}
+
+				$options_markup .= sprintf( '<option value="%s" %s>%s</option>', esc_html( $key ), $selected, $label );
 			}
 			if ( 'multiselect' === $arguments['type'] ) {
 				$attributes = ' multiple="multiple" ';
