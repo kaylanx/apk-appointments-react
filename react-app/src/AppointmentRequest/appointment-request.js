@@ -12,7 +12,7 @@ async function sendAppointmentRequest (url, appointmentData) {
       },
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
-      body: JSON.stringify(appointmentData)
+      body: appointmentData
     })
 
     if (response.ok === false) {
