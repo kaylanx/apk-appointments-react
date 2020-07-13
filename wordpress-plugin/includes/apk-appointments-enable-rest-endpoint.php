@@ -99,7 +99,7 @@ function create_day_availability_for_serialization( $day_availability_option, $d
 		'20' => 12,
 		'21' => 13,
 	);
-	
+
 	$count = isset( $day_availability_option ) && is_array( $day_availability_option ) ? count( $day_availability_option ) : 0;
 	for ( $i = 0; $i < $count; $i ++ ) {
 

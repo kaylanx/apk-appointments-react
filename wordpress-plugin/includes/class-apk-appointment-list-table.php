@@ -199,7 +199,7 @@ class APK_Appointment_List_Table extends WP_List_Table {
 			if ( ! $shop_closed ) {
 				$appointment_times = $appointment['times'];
 				foreach ( $appointment_times as $time ) {
-					$data_model[] = $this->create_appointment( $appointment_date, $time, 'NO' );
+					$data_model[] = $this->create_appointment( $appointment_date, $time['time'], 'NO' );
 				}
 			} else {
 				$data_model[] = $this->create_appointment( $appointment_date, '', 'YES' );
@@ -278,7 +278,9 @@ class APK_Appointment_List_Table extends WP_List_Table {
 
 				foreach ( $appointments_to_delete as $string_appointment ) {
 					$appointment_to_delete = explode( ',', $string_appointment );
-					$appointments          = $this->remove_date_or_times( $appointment_to_delete[0], absint( $appointment_to_delete[1] ), $appointments );
+					$time                  = array( 'time' => absint( $appointment_to_delete[1] ) );
+					$date                  = $appointment_to_delete[0];
+					$appointments          = $this->remove_date_or_times( $date, $time, $appointments );
 				}
 
 				$updated = update_option( APK_APPOINTMENTS_OPTION, $appointments );
@@ -319,13 +321,13 @@ class APK_Appointment_List_Table extends WP_List_Table {
 					if ( $shop_closed ) {
 						$existing_appointment['times'] = array();
 					} else {
-						$existing_appointment['times'][] = $appointment_time;
+						$existing_appointment['times'][] = array( 'time' => $appointment_time );
 					}
 					$appointments[ $existing_index ] = $existing_appointment;
 				} else {
 					// Adding a new date and time.
 					$new_appointment['date']   = $appointment_date;
-					$new_appointment['times']  = array( $appointment_time );
+					$new_appointment['times']  = array( array( 'time' => $appointment_time ) );
 					$new_appointment['closed'] = $shop_closed;
 
 					if ( $shop_closed ) {
@@ -372,7 +374,8 @@ class APK_Appointment_List_Table extends WP_List_Table {
 	 */
 	private function delete_appointment( $date, $time ) {
 		$appointments = get_option( APK_APPOINTMENTS_OPTION );
-		$appointments = $this->remove_date_or_times( $date, $time, $appointments );
+		$time_array   = array( 'time' => $time );
+		$appointments = $this->remove_date_or_times( $date, $time_array, $appointments );
 		update_option( APK_APPOINTMENTS_OPTION, $appointments );
 	}
 
