@@ -22,8 +22,8 @@ describe('appointment request', () => {
   })
 
   const sendRequest = async (mockedResponse, mockFetchWithResponse = mockTheFetchWithResponse) => {
-    const body = {}
-    const expectedPostBody = { body: body, cache: 'no-cache', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, method: 'POST', mode: 'cors', redirect: 'follow', referrerPolicy: 'no-referrer' }
+    const body = new FormData()
+    const expectedPostBody = { body: body, cache: 'no-cache', credentials: 'same-origin', method: 'POST', mode: 'cors', redirect: 'follow', referrerPolicy: 'no-referrer' }
 
     mockFetchWithResponse(mockedResponse)
     const response = await requestAppointment({})

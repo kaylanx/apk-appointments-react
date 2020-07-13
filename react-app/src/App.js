@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container'
 import { ThemeProvider } from '@material-ui/core/styles'
 
 import startOfTomorrow from 'date-fns/startOfTomorrow'
+import { format } from 'date-fns'
 
 import { theme, useStyles } from './Theme/theme'
 import { AppointmentsCalendar } from './AppointmentsCalendar/appointments-calendar'
@@ -31,6 +32,7 @@ function App ({
   const [diary, setDiary] = useState(null)
   const [responseStatus, setResponseStatus] = useState('')
   const [selectedAppointmentDate, setSelectedAppointmentDate] = useState(startOfTomorrow())
+  const [selectedEventDate, setSelectedEventDate] = useState(null)
   const [appointmentType, setAppointmentType] = useState('')
   const [dataToLog, setDataToLog] = useState({})
 
@@ -77,6 +79,8 @@ function App ({
       if (element.tagName === 'BUTTON') { continue }
       data[element.id] = element.value
     }
+    data['appointment-date'] = format(selectedAppointmentDate, 'yyyy-MM-dd')
+    data['event-date'] = selectedEventDate ? format(selectedEventDate, 'yyyy-MM-dd') : ''
     setDataToLog(data)
     const response = await requestAppointment(data)
     setResponseStatus(response.status)
@@ -138,6 +142,7 @@ function App ({
               label="Wedding / Event date"
               classes={classes}
               appointmentType={appointmentType}
+              handleDateChange={setSelectedEventDate}
             />
             <TextField id="your-name" label="Your Name" required variant="filled"/>
             <EmailField

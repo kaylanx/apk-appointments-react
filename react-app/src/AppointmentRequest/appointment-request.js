@@ -2,17 +2,20 @@ import { config } from '../Configuration'
 
 async function sendAppointmentRequest (url, appointmentData) {
   try {
+    const formData = new FormData()
+
+    for (const key in appointmentData) {
+      formData.append(key, appointmentData[key])
+    }
+
     const response = await fetch(url, {
       method: 'POST',
       mode: 'cors',
       cache: 'no-cache',
       credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json'
-      },
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
-      body: appointmentData
+      body: formData
     })
 
     if (response.ok === false) {

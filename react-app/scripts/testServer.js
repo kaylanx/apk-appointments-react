@@ -46,6 +46,7 @@ const json = {
     { date: '2020-06-12', times: [{ time: 17 }], closed: false },
     { date: '2020-09-23', times: [{ time: 17 }], closed: false },
     { date: '2020-08-20', times: [{ time: 15 }], closed: false },
+    { date: '2020-07-15', times: [{ time: 16 }], closed: false },
     { date: '2020-04-21', times: [{ time: 10 }, { time: 11 }, { time: 12 }, { time: 13 }, { time: 14 }, { time: 15 }, { time: 16 }], closed: false },
     { date: '2020-10-24', times: [], closed: true },
     { date: '2020-05-25', times: [], closed: true }
