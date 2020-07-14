@@ -4,14 +4,14 @@
  *
  * @package     APK_Appointments
  * @author      Andy Kayley
- * @copyright   2019 Andy Kayley
+ * @copyright   2020 Andy Kayley
  * @license     GPL-2.0-or-later
  *
  * @wordpress-plugin
  * Plugin Name: APK Appointments
  * Plugin URI: http://kayley.name
  * Description: APK Appointments plug-in.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Andy Kayley
  * Author URI: http://kayley.name
  */
