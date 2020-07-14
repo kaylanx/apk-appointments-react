@@ -1,9 +1,9 @@
 === APK Appointments ===
 Contributors: kayleya
 Tags: calendar, appointment, scheduling
-Requires at least: 5.3.2
-Tested up to: 5.3.2
-Stable tag: 1.0.0
+Requires at least: 5.4.2
+Tested up to: 5.4.2
+Stable tag: 1.0.1
 License: GPLv2 or later
 
 Appointment calendar.  Lets you grey out days when you are closed, lets you define how many appointments there are in each day, and will also gray out days if all appointments are already booked.
@@ -33,6 +33,7 @@ Make sure your PHP version is TODO or higher.
 
 1. Go to Appointments
 2. Add any appointments you already have.
+3. Add any schedule you have in settings.
 
 == Frequently Asked Questions ==
 
@@ -44,6 +45,10 @@ TODO
 
 == Changelog ==
 
-= 1.0.0 - 2020-04-22 =
+= 1.0.0 - 2020-07-13 =
+
+* Initial version
+
+= 1.0.1 - 2020-07-14 =
 
 * Initial version
