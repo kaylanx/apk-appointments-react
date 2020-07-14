@@ -12,9 +12,25 @@ Appointment calendar.  Lets you grey out days when you are closed, lets you defi
 
 = What this plugin can do for you =
 
-TODO 
+Plugin uses the API from Contact Form 7 to send emails to yourself and to whoever filled in the form.
 
 = Prerequisite =
+A contact form 7 form configured with the following fields:
+
+[date* appointment-date]
+[text* appointment-time]
+[text* appointment-type]
+[text number-of-bridesmaids]
+[date event-date]
+[text* your-name]
+[email* your-email]
+[email confirm-your-email]
+[tel* your-phone-no]
+[text your-budget]
+[text hear-about-us]
+[textarea your-message]
+[submit class:enf_button "Book Appointment"]
+
 Make sure your PHP version is TODO or higher.
 
 = From your WordPress Dashboard =
@@ -37,7 +53,7 @@ Make sure your PHP version is TODO or higher.
 
 == Frequently Asked Questions ==
 
-TODO
+None yet :) 
 
 == Screenshots ==
 
@@ -51,4 +67,4 @@ TODO
 
 = 1.0.1 - 2020-07-14 =
 
-* Initial version
+* Fix bug with event dates not showing in the emails
