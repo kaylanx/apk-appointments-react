@@ -142,6 +142,7 @@ function App ({
               label="Wedding / Event date"
               classes={classes}
               appointmentType={appointmentType}
+              selectedDate={selectedEventDate}
               handleDateChange={setSelectedEventDate}
             />
             <TextField id="your-name" label="Your Name" required variant="filled"/>

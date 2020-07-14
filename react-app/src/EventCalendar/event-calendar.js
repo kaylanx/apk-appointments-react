@@ -1,28 +1,29 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import {
   DatePicker,
   MuiPickersUtilsProvider
 } from '@material-ui/pickers'
 
-import startOfTomorrow from 'date-fns/startOfTomorrow'
 import DateFnsUtils from '@date-io/date-fns'
 
 EventCalendar.propTypes = {
   id: PropTypes.string,
   label: PropTypes.string,
   classes: PropTypes.object,
-  appointmentType: PropTypes.string.isRequired
+  appointmentType: PropTypes.string.isRequired,
+  selectedDate: PropTypes.instanceOf(Date),
+  handleDateChange: PropTypes.func.isRequired
 }
 
 export function EventCalendar ({
   id,
   label,
   classes,
-  appointmentType
+  appointmentType,
+  selectedDate,
+  handleDateChange
 }) {
-  const [selectedEventDate, setSelectedEventDate] = useState(startOfTomorrow())
-
   if (appointmentType === 'bridal' || appointmentType === 'bridesmaids') {
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -32,8 +33,8 @@ export function EventCalendar ({
           className={classes.formControl}
           required
           autoOk={true}
-          value={selectedEventDate}
-          onChange={setSelectedEventDate}
+          value={selectedDate}
+          onChange={handleDateChange}
           inputVariant="filled"
           format="EE, d MMMM yy" />
       </MuiPickersUtilsProvider>
