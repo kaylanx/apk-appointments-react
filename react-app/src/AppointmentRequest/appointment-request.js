@@ -1,6 +1,6 @@
 import { config } from '../Configuration'
 
-async function sendAppointmentRequest (url, appointmentData) {
+async function sendAppointmentRequest (formId, url, appointmentData) {
   try {
     const formData = new FormData()
 
@@ -8,7 +8,9 @@ async function sendAppointmentRequest (url, appointmentData) {
       formData.append(key, appointmentData[key])
     }
 
-    const response = await fetch(url, {
+    const finalUrl = url.replace(/\{formId\}/g, formId)
+
+    const response = await fetch(finalUrl, {
       method: 'POST',
       mode: 'cors',
       cache: 'no-cache',
@@ -29,4 +31,4 @@ async function sendAppointmentRequest (url, appointmentData) {
   }
 }
 
-export const requestAppointment = async (appointmentData) => sendAppointmentRequest(config.url.APPOINTMENT_REQUEST_URL, appointmentData)
+export const requestAppointment = async (formId, appointmentData) => sendAppointmentRequest(formId, config.url.APPOINTMENT_REQUEST_URL, appointmentData)

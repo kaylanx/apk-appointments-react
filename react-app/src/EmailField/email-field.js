@@ -63,6 +63,7 @@ export function EmailField ({
         error={emailFieldError}
         helperText={emailFieldErrorMessage}
         id={id}
+        type="email"
         label={label}
         required={required}
         variant="filled"
@@ -73,6 +74,7 @@ export function EmailField ({
         error={confirmFieldError}
         helperText={confirmFieldErrorMessage}
         id={confirmFieldId}
+        type="email"
         label={confirmFieldLabel}
         required={required}
         variant="filled"

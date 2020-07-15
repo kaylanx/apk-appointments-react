@@ -26,10 +26,10 @@ describe('appointment request', () => {
     const expectedPostBody = { body: body, cache: 'no-cache', credentials: 'same-origin', method: 'POST', mode: 'cors', redirect: 'follow', referrerPolicy: 'no-referrer' }
 
     mockFetchWithResponse(mockedResponse)
-    const response = await requestAppointment({})
+    const response = await requestAppointment('1', {})
 
     expect(global.fetch).toHaveBeenCalledTimes(1)
-    expect(global.fetch).toHaveBeenCalledWith('/request-appointment', expectedPostBody)
+    expect(global.fetch).toHaveBeenCalledWith('/request-appointment?formId=1', expectedPostBody)
     expect(response).not.toBeUndefined()
     return response
   }

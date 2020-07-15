@@ -21,11 +21,13 @@ import { requestAppointment } from './AppointmentRequest/appointment-request'
 import { initializeAnalytics, logEvent } from './Analytics/analytics'
 
 App.propTypes = {
-  analyticsConfig: PropTypes.object
+  analyticsConfig: PropTypes.object,
+  contactForm7FormId: PropTypes.string
 }
 
 function App ({
-  analyticsConfig
+  analyticsConfig,
+  contactForm7FormId
 }) {
   const classes = useStyles()
 
@@ -82,7 +84,7 @@ function App ({
     data['appointment-date'] = format(selectedAppointmentDate, 'yyyy-MM-dd')
     data['event-date'] = selectedEventDate ? format(selectedEventDate, 'yyyy-MM-dd') : ''
     setDataToLog(data)
-    const response = await requestAppointment(data)
+    const response = await requestAppointment(contactForm7FormId, data)
     setResponseStatus(response.status)
   }
 
@@ -153,8 +155,8 @@ function App ({
               confirmFieldLabel="Confirm Your Email"
               required
             />
-            <TextField id="your-phone-no" label="Your phone number" required variant="filled"/>
-            <TextField id="your-budget" label="Budget" variant="filled" />
+            <TextField id="your-phone-no" label="Your phone number" required variant="filled" type="tel"/>
+            <TextField id="your-budget" label="Budget" variant="filled" type="number" />
             <TextField id="hear-about-us" label="How did you hear about us?" variant="filled" />
             <TextField id="your-message" label="Your message" multiline rowsMax="4" variant="filled" />
             {showErrorMessage()}
