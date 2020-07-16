@@ -3,7 +3,7 @@ Contributors: kayleya
 Tags: calendar, appointment, scheduling
 Requires at least: 5.4.2
 Tested up to: 5.4.2
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 
 Appointment calendar.  Lets you grey out days when you are closed, lets you define how many appointments there are in each day, and will also gray out days if all appointments are already booked.
@@ -68,3 +68,9 @@ None yet :)
 = 1.0.1 - 2020-07-14 =
 
 * Fix bug with event dates not showing in the emails
+
+= 1.0.2 - 2020-07-16 =
+
+* Allow the form id from contact form 7 to be passed in to the plugin.
+* Change the way analytics config is passed into the plugin
+* Make the email, telephone and budget fields show up with the correct keyboards on mobile.

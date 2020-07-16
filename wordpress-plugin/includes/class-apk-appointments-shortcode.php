@@ -10,12 +10,16 @@
 /**
  * The method that's actually the shortcode
  */
-function apk_appointment_shortcode() {
+function apk_appointment_shortcode( $atts = [] ) {
 	require_once 'wp-admin/includes/file.php';
 	$react_app_files     = list_files( __DIR__ );
 	$scripts_to_register = format_react_app_filenames( $react_app_files );
+
+	$form_id = esc_html__($atts['contact-form-7-form-id']);
+	$analytics_config = $atts['analytics-config'];
+	
 	enqueue_react_app( $scripts_to_register );
-	return '<div id="apk-appointments"></div>';
+	return "<div id='apk-appointments' data-analytics-config='$analytics_config' data-contact-form-7-form-id='$form_id'></div>";
 }
 add_shortcode( 'apk-appointments', 'apk_appointment_shortcode' );
 

@@ -1,5 +1,7 @@
 #top .main_color input[type='text'],  
 #top .main_color input[type='number'],  
+#top .main_color input[type='email'],
+#top .main_color input[type='tel'],
 #top .main_color select, 
 #top .main_color textarea {
     border-color: #adadad;
@@ -18,6 +20,8 @@
 
 #top .main_color input[type='text']:hover,  
 #top .main_color input[type='number']:hover,  
+#top .main_color input[type='email']:hover,  
+#top .main_color input[type='tel']:hover,  
 #top .main_color select:hover, 
 #top .main_color textarea:hover {
     background-color: transparent;
