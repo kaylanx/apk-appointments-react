@@ -11,7 +11,7 @@
  * Plugin Name: APK Appointments
  * Plugin URI: http://kayley.name
  * Description: APK Appointments plug-in.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Andy Kayley
  * Author URI: http://kayley.name
  */
