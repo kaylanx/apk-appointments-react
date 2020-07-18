@@ -12,7 +12,7 @@ AppointmentTime.propTypes = {
   label: PropTypes.string,
   classes: PropTypes.object,
   diary: PropTypes.object.isRequired,
-  selectedDate: PropTypes.instanceOf(Date).isRequired
+  selectedDate: PropTypes.instanceOf(Date)
 }
 
 export function AppointmentTime ({

@@ -14,6 +14,9 @@ export const isDayClosed = (diary, date) => {
 }
 
 export const getAppointmentsForDay = (diary, date) => {
+  if (date === null) {
+    return []
+  }
   const dayKey = getDayStringforDate(date.getDay())
   if (!dayIsDefined(diary, dayKey)) {
     return []

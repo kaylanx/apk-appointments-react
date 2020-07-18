@@ -6,7 +6,6 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import { ThemeProvider } from '@material-ui/core/styles'
 
-import startOfTomorrow from 'date-fns/startOfTomorrow'
 import { format } from 'date-fns'
 
 import { theme, useStyles } from './Theme/theme'
@@ -33,7 +32,7 @@ function App ({
 
   const [diary, setDiary] = useState(null)
   const [responseStatus, setResponseStatus] = useState('')
-  const [selectedAppointmentDate, setSelectedAppointmentDate] = useState(startOfTomorrow())
+  const [selectedAppointmentDate, setSelectedAppointmentDate] = useState(null)
   const [selectedEventDate, setSelectedEventDate] = useState(null)
   const [appointmentType, setAppointmentType] = useState('')
   const [dataToLog, setDataToLog] = useState({})

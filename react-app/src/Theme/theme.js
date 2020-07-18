@@ -26,6 +26,9 @@ export const useStyles = makeStyles(theme => ({
   },
   formControl: {
     padding: theme.spacing(1),
-    width: '100%'
+    width: '100%',
+    '.MuiPickersDay-day': {
+      'font-weight': 'bold'
+    }
   }
 }))
