@@ -1,6 +1,14 @@
 import { createMuiTheme, makeStyles } from '@material-ui/core/styles'
+import grey from '@material-ui/core/colors/grey'
 
 export const theme = createMuiTheme({
+  overrides: {
+    MuiPickersDay: {
+      dayDisabled: {
+        color: grey.A100
+      }
+    }
+  },
   palette: {
     primary: {
       light: '#9b7e97',
@@ -26,9 +34,6 @@ export const useStyles = makeStyles(theme => ({
   },
   formControl: {
     padding: theme.spacing(1),
-    width: '100%',
-    '.MuiPickersDay-day': {
-      'font-weight': 'bold'
-    }
+    width: '100%'
   }
 }))

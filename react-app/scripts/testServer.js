@@ -74,3 +74,4 @@ const notFoundResponse = {
 app.post('/invalid-request-appointment', (req, res) => res.send(notFoundResponse))
 
 app.listen(8080)
+console.log('Test Server running on port 8080')
