@@ -3,7 +3,7 @@ Contributors: kayleya
 Tags: calendar, appointment, scheduling
 Requires at least: 5.4.2
 Tested up to: 5.4.2
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 
 Appointment calendar.  Lets you grey out days when you are closed, lets you define how many appointments there are in each day, and will also gray out days if all appointments are already booked.
@@ -31,6 +31,8 @@ A contact form 7 form configured with the following fields:
 [textarea your-message]
 [submit class:enf_button "Book Appointment"]
 
+You can pass in the form id to the shortcode.
+
 Make sure your PHP version is TODO or higher.
 
 = From your WordPress Dashboard =
@@ -50,6 +52,24 @@ Make sure your PHP version is TODO or higher.
 1. Go to Appointments
 2. Add any appointments you already have.
 3. Add any schedule you have in settings.
+
+= Short code =
+
+If you have firebase analytics you can add the configuration block to the shortcode and it will track submission successes and failures
+No PII will be sent to firebase.
+
+You will need to pass the form id of your configured contact form 7 form to the shortcode...
+
+[apk-appointments analytics-config='{
+    "apiKey": "your key",
+    "authDomain": "your-auth-domain.firebaseapp.com",
+    "databaseURL": "https://your-database.firebaseio.com",
+    "projectId": "your project id",
+    "storageBucket": "your-storage-bucket.appspot.com",
+    "messagingSenderId": "your-messaging-sender-id",
+    "appId": "your:app:id",
+    "measurementId": "G-your-measurement_id"
+  }' contact-form-7-form-id='2345']
 
 == Frequently Asked Questions ==
 
@@ -74,3 +94,8 @@ None yet :)
 * Allow the form id from contact form 7 to be passed in to the plugin.
 * Change the way analytics config is passed into the plugin
 * Make the email, telephone and budget fields show up with the correct keyboards on mobile.
+
+= 1.0.3 - 2020-07-18 =
+
+* Make the disabled days fainter so the enabled days are clearer
+* Default the appointment date field to empty instead of tomorrows date (which could be a disabled day).
