@@ -1,20 +1,35 @@
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
-import { EventCalendar } from '../EventCalendar/event-calendar'
+import { EventCalendar } from './event-calendar'
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
 
 describe('event calendar', () => {
-  let container = null
+  let container: HTMLElement | null = null
   beforeEach(() => {
     container = document.createElement('div')
     document.body.appendChild(container)
   })
 
   afterEach(() => {
-    unmountComponentAtNode(container)
-    container.remove()
-    container = null
+    if (container !== null) {
+      unmountComponentAtNode(container)
+      container.remove()
+      container = null
+    }
   })
+
+  async function renderEventCalendar (appointmentType: string): Promise<Element | null | undefined> {
+    const handleDateChange = function (date: MaterialUiPickersDate): void {
+      console.log('handleDateChange.date = ' + date)
+    }
+
+    await act(async () => {
+      render(<EventCalendar id="event-calendar" appointmentType={appointmentType} classes={{ formcontrol: 'dummy' }} handleDateChange={handleDateChange}/>, container)
+    })
+    const eventDateField = container?.querySelector('[id=event-calendar]')
+    return eventDateField
+  }
 
   it('Not rendered if no appointment type ', async () => {
     const eventDateField = await renderEventCalendar('')
@@ -35,12 +50,4 @@ describe('event calendar', () => {
     const eventDateField = await renderEventCalendar('bridesmaids')
     expect(eventDateField).not.toBeNull()
   })
-
-  async function renderEventCalendar (appointmentType) {
-    await act(async () => {
-      render(<EventCalendar id="event-calendar" appointmentType={appointmentType} classes={{ formcontrol: 'dummy' }} handleDateChange={(date) => {}}/>, container)
-    })
-    const eventDateField = container.querySelector('[id=event-calendar]')
-    return eventDateField
-  }
 })

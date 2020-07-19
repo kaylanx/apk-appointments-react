@@ -9,13 +9,13 @@ interface Props {
   appointmentType: string;
 }
 
-export function NumberOfBridesmaids (props: Props): JSX.Element | null {
-  if (props.appointmentType === 'bridesmaids') {
+export function NumberOfBridesmaids ({ id, label, classes, appointmentType }: Props): JSX.Element | null {
+  if (appointmentType === 'bridesmaids') {
     return (
       <TextField
-        id={props.id}
-        label={props.label}
-        className={props.classes?.formControl}
+        id={id}
+        label={label}
+        className={classes?.formControl}
         type="number"
         inputProps={{ inputMode: 'numeric' }}
         variant="filled"

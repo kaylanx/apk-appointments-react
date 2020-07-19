@@ -1,19 +1,20 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import * as React from 'react'
 import {
   DatePicker,
   MuiPickersUtilsProvider
 } from '@material-ui/pickers'
 
 import DateFnsUtils from '@date-io/date-fns'
+import { ClassNameMap } from '@material-ui/core/styles/withStyles'
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
 
-EventCalendar.propTypes = {
-  id: PropTypes.string,
-  label: PropTypes.string,
-  classes: PropTypes.object,
-  appointmentType: PropTypes.string.isRequired,
-  selectedDate: PropTypes.instanceOf(Date),
-  handleDateChange: PropTypes.func.isRequired
+interface Props {
+  id?: string;
+  label?: string;
+  classes?: ClassNameMap;
+  appointmentType: string;
+  selectedDate?: Date;
+  handleDateChange: (date: MaterialUiPickersDate) => void;
 }
 
 export function EventCalendar ({
@@ -23,14 +24,14 @@ export function EventCalendar ({
   appointmentType,
   selectedDate,
   handleDateChange
-}) {
+}: Props): JSX.Element | null {
   if (appointmentType === 'bridal' || appointmentType === 'bridesmaids') {
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <DatePicker
           id={id}
           label={label}
-          className={classes.formControl}
+          className={classes?.formControl}
           required
           autoOk={true}
           value={selectedDate}
