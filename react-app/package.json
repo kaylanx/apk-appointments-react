@@ -13,8 +13,9 @@
     "@svgr/webpack": "4.3.3",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/user-event": "^7.2.1",
-    "@typescript-eslint/eslint-plugin": "^2.34.0",
-    "@typescript-eslint/parser": "^2.34.0",
+    "@types/jest": "^26.0.5",
+    "@types/react": "^16.9.43",
+    "@types/react-dom": "^16.9.8",
     "babel-eslint": "10.0.3",
     "babel-jest": "^26.0.1",
     "babel-loader": "8.0.6",
@@ -41,7 +42,7 @@
     "jest-resolve": "24.9.0",
     "jest-watch-typeahead": "0.4.2",
     "mini-css-extract-plugin": "0.9.0",
-    "npm": "^6.14.5",
+    "npm": "^6.14.6",
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "pnp-webpack-plugin": "1.6.0",
     "postcss-flexbugs-fixes": "4.1.0",
@@ -146,6 +147,8 @@
   "devDependencies": {
     "@testing-library/react": "^10.0.4",
     "@testing-library/react-hooks": "^3.2.1",
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
+    "@typescript-eslint/parser": "^2.34.0",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
@@ -156,6 +159,8 @@
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-testing-library": "^2.2.3",
     "react-test-renderer": "^16.13.1",
-    "typescript": "^3.9.3"
+    "source-map-loader": "^1.0.1",
+    "ts-loader": "^8.0.1",
+    "typescript": "^3.9.7"
   }
 }

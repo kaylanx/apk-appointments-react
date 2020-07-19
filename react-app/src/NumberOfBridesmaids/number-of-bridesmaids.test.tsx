@@ -1,20 +1,30 @@
-import React from 'react'
+import * as React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
-import { NumberOfBridesmaids } from '../NumberOfBridesmaids/number-of-bridesmaids'
+import { NumberOfBridesmaids } from './number-of-bridesmaids'
 
 describe('number of bridesmaids', () => {
-  let container = null
+  let container: HTMLElement | null = null
   beforeEach(() => {
     container = document.createElement('div')
     document.body.appendChild(container)
   })
 
   afterEach(() => {
-    unmountComponentAtNode(container)
-    container.remove()
-    container = null
+    if (container !== null) {
+      unmountComponentAtNode(container)
+      container.remove()
+      container = null
+    }
   })
+
+  async function renderNumberOfBridesmaids (appointmentType: string): Promise<Element | null | undefined> {
+    await act(async () => {
+      render(<NumberOfBridesmaids id="number-of-bridesmaids" appointmentType={appointmentType} classes={{ formcontrol: 'dummy' }}/>, container)
+    })
+    const bridesmaidsField = container?.querySelector('[id=number-of-bridesmaids]')
+    return bridesmaidsField
+  }
 
   it('Not rendered if no appointment type ', async () => {
     const bridesmaidsField = await renderNumberOfBridesmaids('')
@@ -35,12 +45,4 @@ describe('number of bridesmaids', () => {
     const bridesmaidsField = await renderNumberOfBridesmaids('bridesmaids')
     expect(bridesmaidsField).not.toBeNull()
   })
-
-  async function renderNumberOfBridesmaids (appointmentType) {
-    await act(async () => {
-      render(<NumberOfBridesmaids id="number-of-bridesmaids" appointmentType={appointmentType} classes={{ formcontrol: 'dummy' }}/>, container)
-    })
-    const bridesmaidsField = container.querySelector('[id=number-of-bridesmaids]')
-    return bridesmaidsField
-  }
 })
