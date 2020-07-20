@@ -1,24 +1,41 @@
-import React from 'react'
+import * as React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
-import { AppointmentType } from '../AppointmentType/appointment-type'
+import { AppointmentType } from './appointment-type'
 
 describe('appointments type', () => {
-  let container = null
+  let container: HTMLElement | null = null
+
   beforeEach(() => {
     container = document.createElement('div')
     document.body.appendChild(container)
   })
 
   afterEach(() => {
-    unmountComponentAtNode(container)
-    container.remove()
-    container = null
+    if (container !== null) {
+      unmountComponentAtNode(container)
+      container.remove()
+      container = null
+    }
   })
 
+  const clickInput = (input: Element | null): void => {
+    act(() => {
+      if (input !== null) {
+        input.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+      }
+    })
+  }
+
   it('types to contain bridal, bridesmaids and accessories', async () => {
+    const handleAppointmentTypeChange = (event: React.ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+  }>, child: React.ReactNode): void => {
+      console.log('event = ' + event + '; child = ' + child)
+    }
     await act(async () => {
-      render(<AppointmentType id="appointment-type" classes={{ formcontrol: 'dummy' }} appointmentType="" handleAppointmentTypeChange={(appointmentType) => {}}/>, container)
+      render(<AppointmentType id="appointment-type" classes={{ formcontrol: 'dummy' }} appointmentType="" handleAppointmentTypeChange={handleAppointmentTypeChange}/>, container)
     })
     const input = document.querySelector('[id=appointment-type]')
     clickInput(input)
@@ -32,9 +49,3 @@ describe('appointments type', () => {
     expect(actualAppointmentTypes).toEqual(expect.arrayContaining(expectedTypes))
   })
 })
-
-const clickInput = (input) => {
-  act(() => {
-    input.dispatchEvent(new MouseEvent('click', { bubbles: true }))
-  })
-}

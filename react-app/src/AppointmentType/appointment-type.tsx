@@ -1,17 +1,20 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import * as React from 'react'
 import {
   FormControl,
   InputLabel,
   Select
 } from '@material-ui/core'
+import { ClassNameMap } from '@material-ui/core/styles/withStyles'
 
-AppointmentType.propTypes = {
-  id: PropTypes.string,
-  label: PropTypes.string,
-  classes: PropTypes.object,
-  appointmentType: PropTypes.string.isRequired,
-  handleAppointmentTypeChange: PropTypes.func.isRequired
+interface Props {
+  id?: string;
+  label?: string;
+  classes?: ClassNameMap;
+  appointmentType: string;
+  handleAppointmentTypeChange: (
+    event: React.ChangeEvent<{ name?: string; value: unknown }>,
+    child: React.ReactNode
+  ) => void;
 }
 
 export function AppointmentType ({
@@ -20,9 +23,9 @@ export function AppointmentType ({
   classes,
   appointmentType,
   handleAppointmentTypeChange
-}) {
+}: Props): JSX.Element {
   return (
-    <FormControl required variant="filled" className={classes.formControl}>
+    <FormControl required variant="filled" className={classes?.formControl}>
       <InputLabel htmlFor={id}>{label}</InputLabel>
       <Select
         native
