@@ -92,7 +92,6 @@ describe('appointments app', () => {
     const appointmentConfirmYourEmailField = document.querySelector('[id=confirm-your-email]') as HTMLInputElement
 
     const appointmentYourPhoneNoField = document.querySelector('[id=your-phone-no]') as HTMLInputElement
-    const appointmentYourBudgetField = document.querySelector('[id=your-budget]') as HTMLInputElement
     const appointmentHearAboutUsField = document.querySelector('[id=hear-about-us]') as HTMLInputElement
     const appointmentYourMessageField = document.querySelector('[id=your-message]') as HTMLInputElement
 
@@ -103,7 +102,6 @@ describe('appointments app', () => {
       appointmentYourEmailField.value = 'apk-appointment-unit-test@kayley.name'
       appointmentConfirmYourEmailField.value = 'apk-appointment-unit-test@kayley.name'
       appointmentYourPhoneNoField.value = '07900 000000'
-      appointmentYourBudgetField.value = '1 miiiiillllion dollars'
       appointmentHearAboutUsField.value = 'T\'internet'
       appointmentYourMessageField.value = 'Testing testing 1, 2, 1, 2'
     })
@@ -125,7 +123,6 @@ describe('appointments app', () => {
       expectElementToBeNull('your-email')
       expectElementToBeNull('confirm-your-email')
       expectElementToBeNull('your-phone-no')
-      expectElementToBeNull('your-budget')
       expectElementToBeNull('hear-about-us')
       expectElementToBeNull('your-message')
       expectElementToBeNull('request-appointment-button')
@@ -151,7 +148,6 @@ describe('appointments app', () => {
     const appointmentConfirmYourEmailField = document.querySelector('[id=confirm-your-email]') as HTMLInputElement
 
     const appointmentYourPhoneNoField = document.querySelector('[id=your-phone-no]') as HTMLInputElement
-    const appointmentYourBudgetField = document.querySelector('[id=your-budget]') as HTMLInputElement
     const appointmentHearAboutUsField = document.querySelector('[id=hear-about-us]') as HTMLInputElement
     const appointmentYourMessageField = document.querySelector('[id=your-message]') as HTMLInputElement
 
@@ -162,7 +158,6 @@ describe('appointments app', () => {
       appointmentYourEmailField.value = 'apk-appointment-unit-test@kayley.name'
       appointmentConfirmYourEmailField.value = 'apk-appointment-unit-test@kayley.name'
       appointmentYourPhoneNoField.value = '07900 000000'
-      appointmentYourBudgetField.value = '1 miiiiillllion dollars'
       appointmentHearAboutUsField.value = 'T\'internet'
       appointmentYourMessageField.value = 'Testing testing 1, 2, 1, 2'
     })
@@ -184,7 +179,6 @@ describe('appointments app', () => {
       expectElementToBeNotNull('your-email')
       expectElementToBeNotNull('confirm-your-email')
       expectElementToBeNotNull('your-phone-no')
-      expectElementToBeNotNull('your-budget')
       expectElementToBeNotNull('hear-about-us')
       expectElementToBeNotNull('your-message')
       expectElementToBeNotNull('request-appointment-button')

@@ -165,7 +165,6 @@ function App ({
               required
             />
             <TextField id="your-phone-no" label="Your phone number" required variant="filled" type="tel"/>
-            <TextField id="your-budget" label="Budget" variant="filled" type="number" />
             <TextField id="hear-about-us" label="How did you hear about us?" variant="filled" />
             <TextField id="your-message" label="Your message" multiline rowsMax="4" variant="filled" />
             {showErrorMessage()}
