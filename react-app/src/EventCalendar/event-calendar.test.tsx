@@ -3,9 +3,10 @@ import { render, unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 import { EventCalendar } from './event-calendar'
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
+import { startOfTomorrow } from 'date-fns'
 
 describe('event calendar', () => {
-  let container: HTMLElement | null = null
+  let container: HTMLDivElement
   beforeEach(() => {
     container = document.createElement('div')
     document.body.appendChild(container)
@@ -15,7 +16,6 @@ describe('event calendar', () => {
     if (container !== null) {
       unmountComponentAtNode(container)
       container.remove()
-      container = null
     }
   })
 
@@ -25,7 +25,7 @@ describe('event calendar', () => {
     }
 
     await act(async () => {
-      render(<EventCalendar id="event-calendar" appointmentType={appointmentType} classes={{ formcontrol: 'dummy' }} handleDateChange={handleDateChange}/>, container)
+      render(<EventCalendar id="event-calendar" appointmentType={appointmentType} classes={{ formcontrol: 'dummy' }} selectedDate={startOfTomorrow()} handleDateChange={handleDateChange}/>, container)
     })
     const eventDateField = container?.querySelector('[id=event-calendar]')
     return eventDateField

@@ -4,7 +4,7 @@ import { act } from 'react-dom/test-utils'
 import { NumberOfBridesmaids } from './number-of-bridesmaids'
 
 describe('number of bridesmaids', () => {
-  let container: HTMLElement | null = null
+  let container: HTMLDivElement
   beforeEach(() => {
     container = document.createElement('div')
     document.body.appendChild(container)
@@ -14,7 +14,6 @@ describe('number of bridesmaids', () => {
     if (container !== null) {
       unmountComponentAtNode(container)
       container.remove()
-      container = null
     }
   })
 

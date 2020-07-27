@@ -5,7 +5,7 @@ import { EmailField } from './email-field'
 import { fireEvent } from '@testing-library/react'
 
 describe('email field', () => {
-  let container: HTMLElement | null = null
+  let container: HTMLDivElement
   beforeEach(() => {
     container = document.createElement('div')
     document.body.appendChild(container)
@@ -14,7 +14,6 @@ describe('email field', () => {
   afterEach(() => {
     unmountComponentAtNode(container)
     container.remove()
-    container = null
   })
 
   it('Renders email and confirm field', async () => {
@@ -22,12 +21,12 @@ describe('email field', () => {
 
     const emailField = container.querySelector('[id=your-email]')
     expect(emailField).not.toBeNull()
-    const emailFieldLabel = container.querySelector('[id=your-email-label]')
+    const emailFieldLabel = container.querySelector('[id=your-email-label]') as HTMLInputElement
     expect(emailFieldLabel.textContent).toBe('Your Email *')
 
     const confirmEmailField = container.querySelector('[id=confirm-your-email]')
     expect(confirmEmailField).not.toBeNull()
-    const confirmEmailFieldLabel = container.querySelector('[id=confirm-your-email-label]')
+    const confirmEmailFieldLabel = container.querySelector('[id=confirm-your-email-label]') as HTMLInputElement
     expect(confirmEmailFieldLabel.textContent).toBe('Confirm Your Email *')
     expect(confirmEmailFieldLabel.className).not.toContain('Mui-error')
     const confirmEmailFieldHelperText = container.querySelector('[id=confirm-your-email-helper-text]')
@@ -37,10 +36,10 @@ describe('email field', () => {
   it('Given email contains value, When Confirm field gets focus, Confirm field has error message', async () => {
     await renderEmailFieldInContainer(container)
 
-    const emailField = container.querySelector('[id=your-email]')
+    const emailField = container.querySelector('[id=your-email]') as HTMLInputElement
     setFieldValue(emailField, 'somevalue@somedomain.com')
 
-    const confirmEmailField = container.querySelector('[id=confirm-your-email]')
+    const confirmEmailField = container.querySelector('[id=confirm-your-email]') as HTMLInputElement
     confirmEmailField.focus()
 
     expectConfirmEmailContainsError(container)
@@ -49,10 +48,10 @@ describe('email field', () => {
   it('Given email contains value, When confirm field also contains a value and values are not equal, Confirm field has error message', async () => {
     await renderEmailFieldInContainer(container)
 
-    const emailField = container.querySelector('[id=your-email]')
+    const emailField = container.querySelector('[id=your-email]') as HTMLInputElement
     setFieldValue(emailField, 'somevalue@somedomain.com')
 
-    const confirmEmailField = container.querySelector('[id=confirm-your-email]')
+    const confirmEmailField = container.querySelector('[id=confirm-your-email]') as HTMLInputElement
     confirmEmailField.focus()
     setFieldValue(emailField, 'somevalueOtherValue@somedomain.com')
     emailField.focus()
@@ -63,10 +62,10 @@ describe('email field', () => {
   it('Given email contains value, When confirm field also contains a value and values are equal, Confirm field has no error message', async () => {
     await renderEmailFieldInContainer(container)
 
-    const emailField = container.querySelector('[id=your-email]')
+    const emailField = container.querySelector('[id=your-email]') as HTMLInputElement
     setFieldValue(emailField, 'somevalue@somedomain.com')
 
-    const confirmEmailField = container.querySelector('[id=confirm-your-email]')
+    const confirmEmailField = container.querySelector('[id=confirm-your-email]') as HTMLInputElement
     confirmEmailField.focus()
     setFieldValue(confirmEmailField, 'somevalue@somedomain.com')
 
@@ -77,7 +76,7 @@ describe('email field', () => {
   it('Given email contains invalid email address then error field has an error message', async () => {
     await renderEmailFieldInContainer(container)
 
-    const emailField = container.querySelector('[id=your-email]')
+    const emailField = container.querySelector('[id=your-email]') as HTMLInputElement
     setFieldValue(emailField, 'somevalue')
 
     emailField.focus()
@@ -87,7 +86,7 @@ describe('email field', () => {
   it('Given email contains valid email address then error field has an error message', async () => {
     await renderEmailFieldInContainer(container)
 
-    const emailField = container.querySelector('[id=your-email]')
+    const emailField = container.querySelector('[id=your-email]') as HTMLInputElement
     setFieldValue(emailField, 'somevalue@somedomain.com')
 
     emailField.focus()
@@ -95,12 +94,12 @@ describe('email field', () => {
   })
 })
 
-function setFieldValue (field, value) {
+function setFieldValue (field: HTMLInputElement, value: string) {
   fireEvent.change(field, { target: { value: value } })
   expect(field.value).toBe(value)
 }
 
-async function renderEmailFieldInContainer (container) {
+async function renderEmailFieldInContainer (container: HTMLDivElement) {
   await act(async () => {
     render(
       <EmailField
@@ -113,32 +112,32 @@ async function renderEmailFieldInContainer (container) {
   })
 }
 
-function expectEmailContainsError (container) {
-  const emailFieldLabel = container.querySelector('[id=your-email-label]')
+function expectEmailContainsError (container: HTMLDivElement) {
+  const emailFieldLabel = container.querySelector('[id=your-email-label]') as HTMLInputElement
   expect(emailFieldLabel.className).toContain('Mui-error')
-  const emailFieldHelperText = container.querySelector('[id=your-email-helper-text]')
+  const emailFieldHelperText = container.querySelector('[id=your-email-helper-text]') as HTMLInputElement
   expect(emailFieldHelperText).not.toBeNull()
   expect(emailFieldHelperText.className).toContain('Mui-error')
 }
 
-function expectEmailDoesNotContainsError (container) {
-  const emailFieldLabel = container.querySelector('[id=your-email-label]')
+function expectEmailDoesNotContainsError (container: HTMLDivElement) {
+  const emailFieldLabel = container.querySelector('[id=your-email-label]') as HTMLInputElement
   expect(emailFieldLabel.className).not.toContain('Mui-error')
-  const emailFieldHelperText = container.querySelector('[id=your-email-helper-text]')
+  const emailFieldHelperText = container.querySelector('[id=your-email-helper-text]') as HTMLInputElement
   expect(emailFieldHelperText).toBeNull()
 }
 
-function expectConfirmEmailContainsError (container) {
-  const confirmEmailFieldLabel = container.querySelector('[id=confirm-your-email-label]')
+function expectConfirmEmailContainsError (container: HTMLDivElement) {
+  const confirmEmailFieldLabel = container.querySelector('[id=confirm-your-email-label]') as HTMLInputElement
   expect(confirmEmailFieldLabel.className).toContain('Mui-error')
-  const confirmEmailFieldHelperText = container.querySelector('[id=confirm-your-email-helper-text]')
+  const confirmEmailFieldHelperText = container.querySelector('[id=confirm-your-email-helper-text]') as HTMLInputElement
   expect(confirmEmailFieldHelperText).not.toBeNull()
   expect(confirmEmailFieldHelperText.className).toContain('Mui-error')
 }
 
-function expectConfirmEmailDoesNotContainError (container) {
-  const confirmEmailFieldLabel = container.querySelector('[id=confirm-your-email-label]')
+function expectConfirmEmailDoesNotContainError (container: HTMLDivElement) {
+  const confirmEmailFieldLabel = container.querySelector('[id=confirm-your-email-label]') as HTMLInputElement
   expect(confirmEmailFieldLabel.className).not.toContain('Mui-error')
-  const confirmEmailFieldHelperText = container.querySelector('[id=confirm-your-email-helper-text]')
+  const confirmEmailFieldHelperText = container.querySelector('[id=confirm-your-email-helper-text]') as HTMLInputElement
   expect(confirmEmailFieldHelperText).toBeNull()
 }

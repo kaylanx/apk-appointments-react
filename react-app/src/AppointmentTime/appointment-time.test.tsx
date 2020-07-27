@@ -3,9 +3,10 @@ import { render, unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
 import { AppointmentTime } from './appointment-time'
 import { actualSchedule, actualSchedule24Hours } from '../../test_data/fake-appointments'
+import { Diary } from '../Diary/diary'
 
 describe('appointments time', () => {
-  let container = null
+  let container: HTMLDivElement
   beforeEach(() => {
     container = document.createElement('div')
     document.body.appendChild(container)
@@ -14,7 +15,6 @@ describe('appointments time', () => {
   afterEach(() => {
     unmountComponentAtNode(container)
     container.remove()
-    container = null
   })
 
   it('list to contain no options when closed', async () => {
@@ -24,7 +24,7 @@ describe('appointments time', () => {
 
   it('list to contain no options when data is broken', async () => {
     const tuesdaySeventhApril = new Date('2020-04-07')
-    const diary = {}
+    const diary = {} as Diary
     await expectNoOptions(tuesdaySeventhApril, diary)
   })
 
@@ -44,11 +44,11 @@ describe('appointments time', () => {
     await assertExpectedTimesForDateAndSchedule(mondayMarch30th2020, diary, expectedTimes, expectedTimeValues)
   })
 
-  async function expectNoOptions (selectedDate, diary) {
+  async function expectNoOptions (selectedDate: Date, diary: Diary) {
     await act(async () => {
       render(<AppointmentTime id="appointment-time" selectedDate={selectedDate} diary={diary} classes={{ formcontrol: 'dummy' }} />, container)
     })
-    const input = document.querySelector('[id=appointment-time]')
+    const input = document.querySelector('[id=appointment-time]') as HTMLSelectElement
     clickInput(input)
     const times = document.querySelectorAll('option')
     expect(times).not.toBeUndefined()
@@ -57,11 +57,11 @@ describe('appointments time', () => {
     expect(times[index++].textContent).toBe('')
   }
 
-  async function assertExpectedTimesForDateAndSchedule (date, diary, expectedTimes, expectedTimeValues) {
+  async function assertExpectedTimesForDateAndSchedule (date: Date, diary: Diary, expectedTimes: string[], expectedTimeValues: string[]) {
     await act(async () => {
       render(<AppointmentTime id="appointment-time" selectedDate={date} diary={diary} classes={{ formcontrol: 'dummy' }} />, container)
     })
-    const input = document.querySelector('[id=appointment-time]')
+    const input = document.querySelector('[id=appointment-time]') as HTMLSelectElement
     clickInput(input)
     const times = document.querySelectorAll('option')
     expect(times).not.toBeUndefined()
@@ -75,7 +75,7 @@ describe('appointments time', () => {
   }
 })
 
-const clickInput = (input) => {
+const clickInput = (input: HTMLSelectElement) => {
   act(() => {
     input.dispatchEvent(new MouseEvent('click', { bubbles: true }))
   })

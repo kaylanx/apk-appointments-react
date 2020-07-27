@@ -28,7 +28,7 @@ describe('appointments calendar', () => {
 
   it('today is disabled', async () => {
     await act(async () => {
-      render(<AppointmentsCalendar id="appointments-calendar" classes={{ formcontrol: 'dummy' }} diary={fakeAppointments} handleDateChange={(date) => {}} />, container)
+      render(<AppointmentsCalendar id="appointments-calendar" classes={{ formcontrol: 'dummy' }} diary={fakeAppointments} selectedDate={startOfTomorrow()} handleDateChange={(date) => {}} />, container)
     })
 
     const input = document.querySelector('[id=appointments-calendar]')
