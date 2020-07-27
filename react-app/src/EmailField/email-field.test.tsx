@@ -1,11 +1,11 @@
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { act } from 'react-dom/test-utils'
-import { EmailField } from '../EmailField/email-field'
+import { EmailField } from './email-field'
 import { fireEvent } from '@testing-library/react'
 
 describe('email field', () => {
-  let container = null
+  let container: HTMLElement | null = null
   beforeEach(() => {
     container = document.createElement('div')
     document.body.appendChild(container)

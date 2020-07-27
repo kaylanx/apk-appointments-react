@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import * as React from 'react'
+import { useState, useEffect } from 'react'
 
 import { Button, TextField, CircularProgress } from '@material-ui/core'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -8,7 +8,7 @@ import { ThemeProvider } from '@material-ui/core/styles'
 
 import { format } from 'date-fns'
 
-import { theme, useStyles } from './Theme/theme'
+import { theme, useStyles, PropsClasses, StyleProps } from './Theme/theme'
 import { AppointmentsCalendar } from './AppointmentsCalendar/appointments-calendar'
 import { AppointmentTime } from './AppointmentTime/appointment-time'
 import { AppointmentType } from './AppointmentType/appointment-type'
@@ -18,26 +18,27 @@ import { EmailField } from './EmailField/email-field'
 import { getDiary } from './Diary/fetch-diary'
 import { requestAppointment } from './AppointmentRequest/appointment-request'
 import { initializeAnalytics, logEvent } from './Analytics/analytics'
+import { Diary } from './Diary/diary'
 
-App.propTypes = {
-  analyticsConfig: PropTypes.object,
-  contactForm7FormId: PropTypes.string
+interface Props {
+  analyticsConfig?: object;
+  contactForm7FormId: string;
 }
 
 function App ({
   analyticsConfig,
   contactForm7FormId
-}) {
-  const classes = useStyles()
+}: Props): JSX.Element {
+  const classes: PropsClasses = useStyles({} as StyleProps);
 
-  const [diary, setDiary] = useState(null)
+  const [diary, setDiary] = useState<Diary | null>(null)
   const [responseStatus, setResponseStatus] = useState('')
-  const [selectedAppointmentDate, setSelectedAppointmentDate] = useState(null)
-  const [selectedEventDate, setSelectedEventDate] = useState(null)
+  const [selectedAppointmentDate, setSelectedAppointmentDate] = useState<Date | null>(null)
+  const [selectedEventDate, setSelectedEventDate] = useState<Date | null>(null)
   const [appointmentType, setAppointmentType] = useState('')
-  const [dataToLog, setDataToLog] = useState({})
+  const [dataToLog, setDataToLog] = useState(new Map<string, string>())
 
-  async function fetchData () {
+  async function fetchData (): Promise<void> {
     const data = await getDiary()
     setDiary(data)
   }
@@ -51,8 +52,9 @@ function App ({
     logEvent(responseStatus, dataToLog)
   }, [dataToLog, responseStatus])
 
-  const handleAppointmentTypeChange = (event) => {
-    setAppointmentType(event.target.value)
+  const handleAppointmentTypeChange = (event: React.ChangeEvent): void => {
+    const input = event.target as HTMLInputElement
+    setAppointmentType(input.value)
   }
 
   const showLoadingSpinner = (
@@ -71,17 +73,25 @@ function App ({
     </ThemeProvider>
   )
 
-  async function onSubmit (event) {
+  async function onSubmit (event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault()
     setResponseStatus('')
-    const form = event.target
-    const data = {}
-    for (const element of form.elements) {
+    const form = event.currentTarget
+    const data = new Map<string, string>()
+
+    for (let index = 0; index < form.elements.length; index++) {
+      const element = form.elements[index] as HTMLInputElement
       if (element.tagName === 'BUTTON') { continue }
-      data[element.id] = element.value
+      data.set(element.id, element.value)
     }
-    data['appointment-date'] = format(selectedAppointmentDate, 'yyyy-MM-dd')
-    data['event-date'] = selectedEventDate ? format(selectedEventDate, 'yyyy-MM-dd') : ''
+
+    if (selectedAppointmentDate !== null) {
+      data.set('appointment-date', format(selectedAppointmentDate, 'yyyy-MM-dd'))
+    }
+    
+    if (selectedEventDate !== null) {
+      data.set('event-date', format(selectedEventDate, 'yyyy-MM-dd'))
+    }
     setDataToLog(data)
     const response = await requestAppointment(contactForm7FormId, data)
     setResponseStatus(response.status)
@@ -95,10 +105,10 @@ function App ({
     return showMessageSent
   }
 
-  function showErrorMessage () {
+  function showErrorMessage (): JSX.Element | null {
     if (responseStatus === 'failure') {
       return (
-        <div id="error-requesting-appointment" classes={classes.formControl}>Sorry, there was a problem sending the appointment request.  Please try again.</div>
+        <div id="error-requesting-appointment" className={classes.root}>Sorry, there was a problem sending the appointment request.  Please try again.</div>
       )
     }
     return null
@@ -115,7 +125,7 @@ function App ({
               label="Preferred Date"
               classes={classes}
               diary={diary}
-              handleDateChange={setSelectedAppointmentDate}
+              handleDateChange={setSelectedAppointmentDate as any}
               selectedDate={selectedAppointmentDate}
             />
             <AppointmentTime
@@ -129,7 +139,7 @@ function App ({
               id="appointment-type"
               label="Appointment Type"
               classes={classes}
-              handleAppointmentTypeChange={handleAppointmentTypeChange}
+              handleAppointmentTypeChange={handleAppointmentTypeChange as any}
               appointmentType={appointmentType}
             />
             <NumberOfBridesmaids
@@ -144,7 +154,7 @@ function App ({
               classes={classes}
               appointmentType={appointmentType}
               selectedDate={selectedEventDate}
-              handleDateChange={setSelectedEventDate}
+              handleDateChange={setSelectedEventDate as any}
             />
             <TextField id="your-name" label="Your Name" required variant="filled"/>
             <EmailField
@@ -163,7 +173,7 @@ function App ({
               id="request-appointment-button"
               variant="contained"
               color="primary"
-              className={classes.formControl}
+              className={classes.root}
               type="submit"
             >
               Book Appointment

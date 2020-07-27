@@ -2,6 +2,7 @@ import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import format from 'date-fns/format'
 import { act } from 'react-dom/test-utils'
+import '@testing-library/jest-dom/extend-expect'
 
 import startOfTomorrow from 'date-fns/startOfTomorrow'
 
@@ -14,7 +15,7 @@ import {
 } from '../../test_data/fake-appointments'
 
 describe('appointments calendar', () => {
-  let container = null
+  let container: HTMLDivElement
   beforeEach(() => {
     container = document.createElement('div')
     document.body.appendChild(container)
@@ -23,7 +24,6 @@ describe('appointments calendar', () => {
   afterEach(() => {
     unmountComponentAtNode(container)
     container.remove()
-    container = null
   })
 
   it('today is disabled', async () => {
@@ -99,28 +99,28 @@ describe('appointments calendar', () => {
   })
 })
 
-const expectFieldToContainTomorrowsDate = (input) => {
+const expectFieldToContainTomorrowsDate = (input: Element | null) => {
   expectInputToHaveDate(input, startOfTomorrow())
 }
 
-const expectFieldToContainFirstJan = (input) => {
+const expectFieldToContainFirstJan = (input: Element | null) => {
   const firstJan2020 = new Date('2020-01-01')
   expectInputToHaveDate(input, firstJan2020)
 }
 
-const expectFieldToContainFirstApril = (input) => {
+const expectFieldToContainFirstApril = (input: Element | null) => {
   const firstApril2020 = new Date('2020-04-01')
   expectInputToHaveDate(input, firstApril2020)
 }
 
-const expectFieldToContainFirstNovember = (input) => {
+const expectFieldToContainFirstNovember = (input: Element | null) => {
   const firstNovember2020 = new Date('2020-11-01')
   expectInputToHaveDate(input, firstNovember2020)
 }
 
-const expectInputToHaveDate = (input, date) => {
+const expectInputToHaveDate = (input: Element | null, date: Date) => {
   const expectedSelectedDate = format(date, 'EEE, d MMMM yy')
-  expect(input.value).toBe(expectedSelectedDate)
+  expect((input as HTMLInputElement).value).toBe(expectedSelectedDate)
 }
 
 const expectTodayToBeDisabled = () => {
@@ -129,9 +129,8 @@ const expectTodayToBeDisabled = () => {
 
   const button = document.querySelector('.MuiPickersDay-current')
   expect(button).toHaveClass('MuiPickersDay-dayDisabled')
-
-  const paragraph = button.querySelector('p')
-  expect(paragraph.innerHTML).toBe(expectedDate)
+  const paragraph = button?.querySelector('p')
+  expect(paragraph?.innerHTML).toBe(expectedDate)
 }
 
 const expectEleventhOfNovember2020ToBeDisabled = () => {
@@ -148,12 +147,12 @@ const expectEleventhOfNovember2020ToBeDisabled = () => {
   expect(disabledDays).toBeInstanceOf(NodeList)
 
   const actualDate = Array.from(disabledDays).map(disabledDay => disabledDay.querySelector('p'))
-    .filter(paragraph => paragraph.innerHTML === '' + expectedDate)
+    .filter(paragraph => paragraph !== null && paragraph.innerHTML === '' + expectedDate)
 
   expect(actualDate).not.toBeUndefined()
   expect(actualDate).toBeInstanceOf(Array)
   expect(actualDate).toHaveLength(1)
-  expect(actualDate[0].innerHTML).toBe('' + expectedDate)
+  expect(actualDate[0]?.innerHTML).toBe('' + expectedDate)
 }
 
 const expectTueSeventhApril2020ToBeDisabled = () => {
@@ -170,12 +169,12 @@ const expectTueSeventhApril2020ToBeDisabled = () => {
   expect(disabledDays).toBeInstanceOf(NodeList)
 
   const actualDate = Array.from(disabledDays).map(disabledDay => disabledDay.querySelector('p'))
-    .filter(paragraph => paragraph.innerHTML === '' + expectedDate)
+    .filter(paragraph => paragraph !== null && paragraph.innerHTML === '' + expectedDate)
 
   expect(actualDate).not.toBeUndefined()
   expect(actualDate).toBeInstanceOf(Array)
   expect(actualDate).toHaveLength(1)
-  expect(actualDate[0].innerHTML).toBe('' + expectedDate)
+  expect(actualDate[0]?.innerHTML).toBe('' + expectedDate)
 }
 
 const expectThursdaysInJan2020ToBeDisabled = () => {
@@ -189,13 +188,13 @@ const expectThursdaysInJan2020ToBeDisabled = () => {
   let thursday = secondOfJan2020
   for (let i = 0; i < disabledDays.length; i++) {
     const paragraph = disabledDays[i].querySelector('p')
-    expect(paragraph.innerHTML).toBe('' + thursday)
+    expect(paragraph?.innerHTML).toBe('' + thursday)
     thursday += 7
   }
 }
 
-const clickInput = (input) => {
+const clickInput = (input: Element | null) => {
   act(() => {
-    input.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    input?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
   })
 }

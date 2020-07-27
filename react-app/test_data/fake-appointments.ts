@@ -1,4 +1,6 @@
-export const fakeAppointments = {
+import { Diary } from '../src/Diary/diary'
+
+export const fakeAppointments: Diary = {
   schedule: {
     display: {
       format: 12
@@ -82,7 +84,7 @@ export const fakeAppointments = {
   ]
 }
 
-export const multipleDaysClosed = {
+export const multipleDaysClosed: Diary = {
   schedule: {
     display: {
       format: 12
@@ -134,7 +136,6 @@ export const multipleDaysClosed = {
       date: '2020-06-12',
       times: [
         { time: 17 }
-
       ],
       closed: false
     },
@@ -146,7 +147,7 @@ export const multipleDaysClosed = {
     {
       date: '2020-09-23',
       times: [
-        17
+        { time: 17 }
       ],
       closed: false
     },
@@ -177,8 +178,11 @@ export const multipleDaysClosed = {
   ]
 }
 
-export const closedOnThursdays = {
+export const closedOnThursdays: Diary = {
   schedule: {
+    display: {
+      format: 24
+    },
     monday: {
       closed: false,
       availability: [
@@ -220,7 +224,7 @@ export const closedOnThursdays = {
   appointments: []
 }
 
-export const availabilityEveryDay = {
+export const availabilityEveryDay: Diary = {
   schedule: {
     display: {
       format: 12
@@ -278,7 +282,7 @@ Friday    - Closed
 Saturday  - 11:00 - 16:00
 Sunday    - 11:00 - 16:00 (£20 fee)
 */
-export const actualSchedule = {
+export const actualSchedule: Diary = {
   schedule: {
     display: {
       format: 12
@@ -327,7 +331,7 @@ export const actualSchedule = {
   }]
 }
 
-export const actualSchedule24Hours = {
+export const actualSchedule24Hours: Diary = {
   schedule: {
     display: {
       format: 24
@@ -376,7 +380,7 @@ export const actualSchedule24Hours = {
   }]
 }
 
-export const actualScheduleWith1AppointmentBookedOn24March = {
+export const actualScheduleWith1AppointmentBookedOn24March: Diary = {
   schedule: {
     display: {
       format: 12
@@ -425,7 +429,7 @@ export const actualScheduleWith1AppointmentBookedOn24March = {
   }]
 }
 
-export const actualScheduleWith2AppointmentsBookedOn24March = {
+export const actualScheduleWith2AppointmentsBookedOn24March: Diary = {
   schedule: {
     display: {
       format: 12
@@ -474,7 +478,7 @@ export const actualScheduleWith2AppointmentsBookedOn24March = {
   }]
 }
 
-export const actualScheduleWithAllAppointmentsBookedOn24March = {
+export const actualScheduleWithAllAppointmentsBookedOn24March: Diary = {
   schedule: {
     display: {
       format: 12

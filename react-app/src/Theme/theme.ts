@@ -1,7 +1,9 @@
-import { createMuiTheme, makeStyles } from '@material-ui/core/styles'
+import { createMuiTheme, makeStyles, Theme } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
+import { BaseCSSProperties } from '@material-ui/core/styles/withStyles';
 
-export const theme = createMuiTheme({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const theme = (createMuiTheme as any)({
   overrides: {
     MuiPickersDay: {
       dayDisabled: {
@@ -25,7 +27,13 @@ export const theme = createMuiTheme({
   }
 })
 
-export const useStyles = makeStyles(theme => ({
+export interface StyleProps {
+    root: BaseCSSProperties,
+}
+
+export type PropsClasses = Record<keyof StyleProps, string>
+
+export const useStyles = makeStyles<Theme, StyleProps>(theme => ({
   root: {
     '& .MuiTextField-root': {
       padding: theme.spacing(1),

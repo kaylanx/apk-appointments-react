@@ -13,7 +13,7 @@ interface Props {
   label?: string;
   classes?: ClassNameMap;
   appointmentType: string;
-  selectedDate?: Date;
+  selectedDate: Date | null;
   handleDateChange: (date: MaterialUiPickersDate) => void;
 }
 

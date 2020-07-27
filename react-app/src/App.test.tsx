@@ -12,18 +12,26 @@ import { availabilityEveryDay } from '../test_data/fake-appointments'
 import { successfulResponse, notFoundResponse } from '../test_data/fake-appointment-request-responses'
 import * as analytics from './Analytics/analytics'
 
+function mockFetchWithResponse (response: any) {
+  const mockJsonPromise = Promise.resolve(response)
+  const mockFetchPromise = Promise.resolve({
+      json: () => mockJsonPromise,
+  });
+  var globalRef:any = global
+  globalRef.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
+}
+
 describe('appointments app', () => {
-  let container = null
+  let container: HTMLElement
   beforeEach(() => {
     container = document.createElement('div')
     document.body.appendChild(container)
   })
 
   afterEach(() => {
-    global.fetch.mockClear()
+    (global.fetch as jest.Mock).mockClear()
     unmountComponentAtNode(container)
     container.remove()
-    container = null
   })
 
   it('check integration', async () => {
@@ -32,9 +40,9 @@ describe('appointments app', () => {
     mockFetchWithResponse(availabilityEveryDay)
 
     await act(async () => {
-      render(<App />, container)
+      render(<App contactForm7FormId="1234" />, container)
     })
-    const appointmentDateField = document.querySelector('[id=appointment-date]')
+    const appointmentDateField = document.querySelector('[id=appointment-date]')!
     act(() => {
       user.click(appointmentDateField)
     })
@@ -46,7 +54,7 @@ describe('appointments app', () => {
     })
 
     const cal = document.querySelector('h4.MuiTypography-root, h4.MuiPickersToolbarText-toolbarTxt, h4.MuiPickersToolbarText-toolbarBtnSelected, h4.MuiTypography-h4, h4.MuiTypography-alignCenter')
-    expect(cal.innerHTML).toEqual(expectedDate)
+    expect(cal?.innerHTML).toEqual(expectedDate)
     expect(initializeAnalytics).toHaveBeenCalled()
     expect(logEvent).toHaveBeenCalled()
   })
@@ -54,38 +62,39 @@ describe('appointments app', () => {
   it('loading spinner shows if data is delayed', async () => {
     mockFetchWithResponse(null)
 
-    render(<App />, container)
+    render(<App contactForm7FormId="1234" />, container)
 
     const spinner = document.querySelector('[id=appointments-spinner]')
     expect(spinner).toBeDefined()
     expect(spinner).not.toBeNull()
-    const svg = spinner.querySelector('svg.MuiCircularProgress-svg')
+    const svg = spinner?.querySelector('svg.MuiCircularProgress-svg')
     expect(svg).toBeDefined()
     expect(svg).not.toBeNull()
   })
 
   it('Form displays appointment request sent message', async () => {
     mockFetchWithResponse(availabilityEveryDay)
-
+    
     await act(async () => {
-      render(<App />, container)
+      render(<App contactForm7FormId="1234" />, container)
     })
 
-    global.fetch.mockClear()
+    const gobalFetch = global.fetch as jest.Mock
+    gobalFetch.mockClear()
     mockFetchWithResponse(successfulResponse)
 
     openCalendarClickOkButtonToSetDate()
 
-    const appointmentTimeField = document.querySelector('[id=appointment-time]')
-    const appointmentTypeField = document.querySelector('[id=appointment-type]')
-    const appointmentYourNameField = document.querySelector('[id=your-name]')
-    const appointmentYourEmailField = document.querySelector('[id=your-email]')
-    const appointmentConfirmYourEmailField = document.querySelector('[id=confirm-your-email]')
+    const appointmentTimeField = document.querySelector('[id=appointment-time]') as HTMLSelectElement
+    const appointmentTypeField = document.querySelector('[id=appointment-type]') as HTMLSelectElement
+    const appointmentYourNameField = document.querySelector('[id=your-name]') as HTMLInputElement
+    const appointmentYourEmailField = document.querySelector('[id=your-email]') as HTMLInputElement
+    const appointmentConfirmYourEmailField = document.querySelector('[id=confirm-your-email]') as HTMLInputElement
 
-    const appointmentYourPhoneNoField = document.querySelector('[id=your-phone-no]')
-    const appointmentYourBudgetField = document.querySelector('[id=your-budget]')
-    const appointmentHearAboutUsField = document.querySelector('[id=hear-about-us]')
-    const appointmentYourMessageField = document.querySelector('[id=your-message]')
+    const appointmentYourPhoneNoField = document.querySelector('[id=your-phone-no]') as HTMLInputElement
+    const appointmentYourBudgetField = document.querySelector('[id=your-budget]') as HTMLInputElement
+    const appointmentHearAboutUsField = document.querySelector('[id=hear-about-us]') as HTMLInputElement
+    const appointmentYourMessageField = document.querySelector('[id=your-message]') as HTMLInputElement
 
     act(() => {
       appointmentTimeField.selectedIndex = 1
@@ -99,13 +108,13 @@ describe('appointments app', () => {
       appointmentYourMessageField.value = 'Testing testing 1, 2, 1, 2'
     })
 
-    const requestAppointmentButton = document.querySelector('[id=request-appointment-button]')
+    const requestAppointmentButton = document.querySelector('[id=request-appointment-button]')!
     act(() => {
       user.click(requestAppointmentButton)
     })
 
     await waitFor(() => {
-      const successMessage = document.querySelector('[id=success-message]')
+      const successMessage = document.querySelector('[id=success-message]')!
       expect(successMessage).toBeDefined()
       expect(successMessage).not.toBeNull()
       expect(successMessage.innerHTML).toEqual('Thanks, we will confirm your appointment shortly')
@@ -127,23 +136,24 @@ describe('appointments app', () => {
     mockFetchWithResponse(availabilityEveryDay)
 
     await act(async () => {
-      render(<App />, container)
+      render(<App contactForm7FormId="1234" />, container)
     })
 
-    global.fetch.mockClear()
+    const gobalFetch = global.fetch as jest.Mock
+    gobalFetch.mockClear()
     mockFetchWithResponse(notFoundResponse)
     openCalendarClickOkButtonToSetDate()
 
-    const appointmentTimeField = document.querySelector('[id=appointment-time]')
-    const appointmentTypeField = document.querySelector('[id=appointment-type]')
-    const appointmentYourNameField = document.querySelector('[id=your-name]')
-    const appointmentYourEmailField = document.querySelector('[id=your-email]')
-    const appointmentConfirmYourEmailField = document.querySelector('[id=confirm-your-email]')
+    const appointmentTimeField = document.querySelector('[id=appointment-time]') as HTMLSelectElement
+    const appointmentTypeField = document.querySelector('[id=appointment-type]') as HTMLSelectElement
+    const appointmentYourNameField = document.querySelector('[id=your-name]') as HTMLInputElement
+    const appointmentYourEmailField = document.querySelector('[id=your-email]') as HTMLInputElement
+    const appointmentConfirmYourEmailField = document.querySelector('[id=confirm-your-email]') as HTMLInputElement
 
-    const appointmentYourPhoneNoField = document.querySelector('[id=your-phone-no]')
-    const appointmentYourBudgetField = document.querySelector('[id=your-budget]')
-    const appointmentHearAboutUsField = document.querySelector('[id=hear-about-us]')
-    const appointmentYourMessageField = document.querySelector('[id=your-message]')
+    const appointmentYourPhoneNoField = document.querySelector('[id=your-phone-no]') as HTMLInputElement
+    const appointmentYourBudgetField = document.querySelector('[id=your-budget]') as HTMLInputElement
+    const appointmentHearAboutUsField = document.querySelector('[id=hear-about-us]') as HTMLInputElement
+    const appointmentYourMessageField = document.querySelector('[id=your-message]') as HTMLInputElement
 
     act(() => {
       appointmentTimeField.selectedIndex = 1
@@ -157,13 +167,13 @@ describe('appointments app', () => {
       appointmentYourMessageField.value = 'Testing testing 1, 2, 1, 2'
     })
 
-    const requestAppointmentButton = document.querySelector('[id=request-appointment-button]')
+    const requestAppointmentButton = document.querySelector('[id=request-appointment-button]')!
     act(() => {
       user.click(requestAppointmentButton)
     })
 
     await waitFor(() => {
-      const successMessage = document.querySelector('[id=error-requesting-appointment]')
+      const successMessage = document.querySelector('[id=error-requesting-appointment]')!
       expect(successMessage).toBeDefined()
       expect(successMessage).not.toBeNull()
       expect(successMessage.innerHTML).toEqual('Sorry, there was a problem sending the appointment request.  Please try again.')
@@ -183,12 +193,12 @@ describe('appointments app', () => {
 })
 
 const openCalendarClickOkButtonToSetDate = () => {
-  const appointmentDateField = document.querySelector('[id=appointment-date]')
+  const appointmentDateField = document.querySelector('[id=appointment-date]')!
   act(() => {
     user.click(appointmentDateField)
   })
 
-  const calendarActionButtons = document.querySelector('.MuiDialogActions-root').children
+  const calendarActionButtons = document.querySelector('.MuiDialogActions-root')!.children
   expect(calendarActionButtons).not.toBeUndefined()
   expect(calendarActionButtons).toHaveLength(2)
   const okButton = calendarActionButtons[1]
@@ -197,22 +207,14 @@ const openCalendarClickOkButtonToSetDate = () => {
   })
 }
 
-const expectElementToBeNull = (selectorId) => {
+const expectElementToBeNull = (selectorId: string) => {
   const htmlElement = document.querySelector(`[id=${selectorId}]`)
   expect(htmlElement).toBeNull()
 }
 
-const expectElementToBeNotNull = (selectorId) => {
+const expectElementToBeNotNull = (selectorId: string) => {
   const htmlElement = document.querySelector(`[id=${selectorId}]`)
   expect(htmlElement).not.toBeNull()
-}
-
-const mockFetchWithResponse = (response) => {
-  jest.spyOn(global, 'fetch').mockImplementation(() =>
-    Promise.resolve({
-      json: () => Promise.resolve(response)
-    })
-  )
 }
 
 const mockInitializeAnalytics = () => {

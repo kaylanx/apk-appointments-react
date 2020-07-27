@@ -24,11 +24,11 @@ describe('appointment utilities', () => {
   })
 
   it('multiple days closed', () => {
-    let daysClosed = isClosedOnDate(multipleDaysClosed,new Date('2020-02-27'))
+    let daysClosed = isClosedOnDate(multipleDaysClosed, new Date('2020-02-27'))
     expect(daysClosed).toBeTruthy()
-    daysClosed = isClosedOnDate(multipleDaysClosed,new Date('2020-11-11'))
+    daysClosed = isClosedOnDate(multipleDaysClosed, new Date('2020-11-11'))
     expect(daysClosed).toBeTruthy()
-    daysClosed = isClosedOnDate(multipleDaysClosed,new Date('2020-10-24'))
+    daysClosed = isClosedOnDate(multipleDaysClosed, new Date('2020-10-24'))
     expect(daysClosed).toBeTruthy()
   })
 

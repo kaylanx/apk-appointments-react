@@ -1,5 +1,4 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import * as React from 'react'
 import {
   DatePicker,
   MuiPickersUtilsProvider
@@ -11,18 +10,21 @@ import startOfTomorrow from 'date-fns/startOfTomorrow'
 import {
   isDayClosed,
   getAppointmentsForDay,
-  isClosedOnDate
+  isClosedOnDate,
+  Diary
 } from '../Diary/diary'
+import { ClassNameMap } from '@material-ui/core/styles/withStyles'
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
 
-AppointmentsCalendar.propTypes = {
-  id: PropTypes.string,
-  label: PropTypes.string,
-  classes: PropTypes.object,
-  diary: PropTypes.object.isRequired,
-  disablePast: PropTypes.bool,
-  minDate: PropTypes.instanceOf(Date),
-  selectedDate: PropTypes.instanceOf(Date),
-  handleDateChange: PropTypes.func.isRequired
+interface Props {
+  id?: string;
+  label?: string;
+  classes?: ClassNameMap;
+  diary: Diary;
+  disablePast?: boolean;
+  minDate?: Date;
+  selectedDate: Date | null;
+  handleDateChange: (date: MaterialUiPickersDate) => void;
 }
 
 export function AppointmentsCalendar ({
@@ -34,13 +36,14 @@ export function AppointmentsCalendar ({
   minDate = startOfTomorrow(),
   selectedDate = startOfTomorrow(),
   handleDateChange
-}) {
-  const determineDisabledDate = (diary, date) => {
+}: Props): JSX.Element {
+  const determineDisabledDate = (diary: Diary, date: Date): boolean => {
     const remainingTimes = getAppointmentsForDay(diary, date)
     return remainingTimes.length === 0
   }
 
-  const disabledDates = (date) => {
+  const disabledDates = (materialDate: MaterialUiPickersDate): boolean => {
+    const date = materialDate as Date
     if (isClosedOnDate(diary, date)) {
       return true
     }
@@ -58,7 +61,7 @@ export function AppointmentsCalendar ({
         id={id}
         label={label}
         required
-        className={classes.formControl}
+        className={classes?.formControl}
         value={selectedDate}
         onChange={handleDateChange}
         disablePast={disablePast}

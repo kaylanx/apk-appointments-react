@@ -5,16 +5,14 @@ import {
   Select
 } from '@material-ui/core'
 import { ClassNameMap } from '@material-ui/core/styles/withStyles'
+import { SelectInputProps } from '@material-ui/core/Select/SelectInput'
 
 interface Props {
   id?: string;
   label?: string;
   classes?: ClassNameMap;
   appointmentType: string;
-  handleAppointmentTypeChange: (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>,
-    child: React.ReactNode
-  ) => void;
+  handleAppointmentTypeChange: SelectInputProps['onChange'];
 }
 
 export function AppointmentType ({

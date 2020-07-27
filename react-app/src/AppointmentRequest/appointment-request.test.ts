@@ -3,7 +3,7 @@ import { successfulResponse, validationErrorResponse } from '../../test_data/fak
 
 describe('appointment request', () => {
   afterEach(() => {
-    global.fetch.mockClear()
+    (global.fetch as jest.Mock).mockClear()
   })
 
   it('mail sent response', async () => {
@@ -21,12 +21,16 @@ describe('appointment request', () => {
     expect(response).toEqual({ status: 'failure' })
   })
 
-  const sendRequest = async (mockedResponse, mockFetchWithResponse = mockTheFetchWithResponse) => {
+  const sendRequest = async (mockedResponse: { into: string; status: string; message: string; invalidFields?: { into: string; message: string; idref: null }[] }, mockFetchWithResponse = mockTheFetchWithResponse) => {
     const body = new FormData()
+    body.append('some key', 'some value')
     const expectedPostBody = { body: body, cache: 'no-cache', credentials: 'same-origin', method: 'POST', mode: 'cors', redirect: 'follow', referrerPolicy: 'no-referrer' }
 
     mockFetchWithResponse(mockedResponse)
-    const response = await requestAppointment('1', {})
+
+    const map = new Map<string, string>()
+    map.set('some key', 'some value')
+    const response = await requestAppointment('1', map)
 
     expect(global.fetch).toHaveBeenCalledTimes(1)
     expect(global.fetch).toHaveBeenCalledWith('/request-appointment?formId=1', expectedPostBody)
@@ -35,12 +39,15 @@ describe('appointment request', () => {
   }
 })
 
-const mockTheFetchWithResponse = (response) => {
-  jest.spyOn(global, 'fetch').mockImplementation(
-    () => Promise.resolve({
-      json: () => Promise.resolve(response)
-    })
-  )
+const mockTheFetchWithResponse = (response: any): void => {
+
+  const mockJsonPromise = Promise.resolve(response);
+  const mockFetchPromise = Promise.resolve({
+      json: () => mockJsonPromise,
+  });
+  var globalRef:any =global;
+  globalRef.fetch = jest.fn().mockImplementation(() => mockFetchPromise);
+
 }
 
 const mockFetchWithErrorResponse = () => {
