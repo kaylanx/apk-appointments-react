@@ -3,7 +3,7 @@ Contributors: kayleya
 Tags: calendar, appointment, scheduling
 Requires at least: 5.4.2
 Tested up to: 5.4.2
-Stable tag: 1.0.3
+Stable tag: 1.1.0
 License: GPLv2 or later
 
 Appointment calendar.  Lets you grey out days when you are closed, lets you define how many appointments there are in each day, and will also gray out days if all appointments are already booked.
@@ -99,3 +99,7 @@ None yet :)
 
 * Make the disabled days fainter so the enabled days are clearer
 * Default the appointment date field to empty instead of tomorrows date (which could be a disabled day).
+
+= 1.1.0 - 2020-08-01 = 
+
+* Convert React App to TypeScript and remove the budget field.
