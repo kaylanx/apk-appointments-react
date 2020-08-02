@@ -5,6 +5,8 @@ import { Button, TextField, CircularProgress } from '@material-ui/core'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import { ThemeProvider } from '@material-ui/core/styles'
+import Input, { isPossiblePhoneNumber } from 'react-phone-number-input/input'
+import CustomPhoneNumber from './PhoneNumber/phone-number'
 
 import { format } from 'date-fns'
 
@@ -37,6 +39,7 @@ function App ({
   const [selectedEventDate, setSelectedEventDate] = useState<Date | null>(null)
   const [appointmentType, setAppointmentType] = useState('')
   const [dataToLog, setDataToLog] = useState(new Map<string, string>())
+  const [phoneNumber, setPhoneNumber] = useState()
 
   async function fetchData (): Promise<void> {
     const data = await getDiary()
@@ -164,7 +167,17 @@ function App ({
               confirmFieldLabel="Confirm Your Email"
               required
             />
-            <TextField id="your-phone-no" label="Your phone number" required variant="filled" type="tel"/>
+            <Input
+              id='your-phone-no'
+              placeholder='Enter phone number'
+              value={phoneNumber}
+              onChange={setPhoneNumber}
+              inputComponent={CustomPhoneNumber}
+              country="GB"
+              required
+              error={phoneNumber !== undefined && (!isPossiblePhoneNumber(phoneNumber))}
+              helperText={phoneNumber !== undefined ? (isPossiblePhoneNumber(phoneNumber) ? undefined : 'Please check your phone number is correct') : undefined}
+            />
             <TextField id="hear-about-us" label="How did you hear about us?" variant="filled" />
             <TextField id="your-message" label="Your message" multiline rowsMax="4" variant="filled" />
             {showErrorMessage()}
