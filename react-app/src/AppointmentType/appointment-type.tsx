@@ -36,8 +36,8 @@ export function AppointmentType ({
       >
         <option aria-label="None" value="" />
         <option value='bridal'>Bridal</option>
-        <option value='bridesmaids'>Bridesmaids</option>
-        <option value='accessories'>Accessories</option>
+        <option value='bridesmaids' disabled>Bridesmaids - not currently available</option>
+        <option value='accessories' disabled>Accessories - not currently available</option>
       </Select>
     </FormControl>
   )
