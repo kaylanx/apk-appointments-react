@@ -3,7 +3,7 @@ Contributors: kayleya
 Tags: calendar, appointment, scheduling
 Requires at least: 5.4.2
 Tested up to: 5.4.2
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 
 Appointment calendar.  Lets you grey out days when you are closed, lets you define how many appointments there are in each day, and will also gray out days if all appointments are already booked.
@@ -107,3 +107,7 @@ None yet :)
 = 1.2.0 - 2020-08-02 = 
 
 * Phone number validation for UK numbers
+
+= 1.3.0 - 2020-08-04 = 
+
+* Disable bridesmaids and accessories appointments for now.  #covid19
