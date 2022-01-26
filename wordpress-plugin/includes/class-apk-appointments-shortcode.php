@@ -89,16 +89,18 @@ function find_string_after( $string, $after ) {
 	return $remaining_text;
 }
 
-/**
- * Return true if string ends another string
- *
- * @param String $string haystack string we are looking for the needle in.
- * @param String $end_string needle that we're are looking for in the haystack $string.
- */
-function str_ends_with( $string, $end_string ) {
-	$len = strlen( $end_string );
-	if ( 0 === $len ) {
-		return true;
+if ( ! function_exists( 'str_ends_with' ) ) {
+	/**
+	 * Return true if string ends another string
+	 *
+	 * @param String $string haystack string we are looking for the needle in.
+	 * @param String $end_string needle that we're are looking for in the haystack $string.
+	 */
+	function str_ends_with( $string, $end_string ) {
+		$len = strlen( $end_string );
+		if ( 0 === $len ) {
+			return true;
+		}
+		return ( substr( $string, -$len ) === $end_string );
 	}
-	return ( substr( $string, -$len ) === $end_string );
 }
