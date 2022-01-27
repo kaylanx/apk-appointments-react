@@ -3,7 +3,7 @@ Contributors: kayleya
 Tags: calendar, appointment, scheduling
 Requires at least: 5.4.2
 Tested up to: 5.4.2
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 License: GPLv2 or later
 
 Appointment calendar.  Lets you grey out days when you are closed, lets you define how many appointments there are in each day, and will also gray out days if all appointments are already booked.
@@ -115,3 +115,7 @@ None yet :)
 = 1.4.0 - 2022-01-26 = 
 
 * Only define the str_ends_with function if it's not already defined.
+
+= 1.5.0 - 2022-01-27 = 
+
+* Re-enable bridesmaids and accessories appointments, update some dependencies
